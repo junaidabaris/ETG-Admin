@@ -47,6 +47,7 @@ export const ColorVariant = ({ data, deleteRow, pickUp, handleVariant, setVarian
     useEffect(() => {
         setFormData(data)
     }, [])
+    
     const onchangeImagehandle = async (e) => {
         const inpVal = e.target.files;
         const cloneObj = { ...formData, images: inpVal }

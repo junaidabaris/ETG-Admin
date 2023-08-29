@@ -434,6 +434,18 @@ import Reminder from "./Admin-pannel/Pages/reminder";
 import Proposal from "./Admin-pannel/Pages/salescrm/index";
 import NewProposal from "./Admin-pannel/Components/salescrm/NewProposal";
 import NewCustomers from "./Admin-pannel/Components/coustomer/newCustomers/newCustomer";
+import EstimateSales from "./Admin-pannel/Pages/estimateSales";
+import NewEstimate from "./Admin-pannel/Components/estimateSales/NewEstimate";
+import Task from "./Admin-pannel/Pages/taskCrm";
+import TaskOverview from "./Admin-pannel/Components/taskCrm/TaskOverview";
+import Dashboard from "./Admin-pannel/Pages/dashboardCrm";
+import RecruitmentDashboard from "./Admin-pannel/Pages/reqcruitmentDashboard";
+import Project from "./Admin-pannel/Pages/Projects";
+import AddNewProject from "./Admin-pannel/Components/project/AddNewProject";
+import RecruitmentDashNew from "./Admin-pannel/Components/RecruitmentDash/RecruitmentDashNew";
+import ProjectView from "./Admin-pannel/Pages/project/ProjectView";
+import ChartOfAccounts from "./Admin-pannel/Pages/accounts/accounts/ChartOfAccounts";
+import ChartOfAccountGroup from "./Admin-pannel/Pages/accounts/accounts/ChartOfAccountsGroup";
 // {Shaaz import end}
 
 // {daud import start}
@@ -887,8 +899,19 @@ function App() {
           <Route path="AddAgreement" element={<AddAgreement />} />
           <Route path="add-v-tech-purchase" element={<VtechPurchase />} />
           <Route path="list-v-tech-Transfer-stock" element={<ListVPurchaseStock />} />
-
+          <Route path="estimate-sales" element={<EstimateSales/>}/>
+          <Route path="new-estimate" element={<NewEstimate/>}/>
+          <Route path="task-crm" element={<Task/>}/>
+          <Route path="task-overview" element={<TaskOverview/>}/>
+          <Route path="dashboard-crm" element={<Dashboard/>}/>
+          <Route path="reminder-dash" element={<RecruitmentDashNew/>}/>
+          <Route path="project" element={<Project/>}/>
+          <Route path='add-new-project' element={<AddNewProject/>}/>
+          <Route path='project/project-view/:id' element={<ProjectView/>}/>
+          <Route path='accounts' element={<ChartOfAccounts/>}/>
+          <Route path='accounts-group' element={<ChartOfAccountGroup/>}/>
           {/* {nazim Routes end} */}
+
           <Route path="lead-filters" element={<Leadfilter />} />
           <Route path="lead-filters-template" element={<LeadFilters />} />
           <Route path="leads" element={<Lead />} />

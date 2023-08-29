@@ -170,195 +170,199 @@ function ModalLead(props) {
             setTimeout(() => {
                 props.onHide()
             }, 1000);
-           
+
         } catch (error) {
             toastErrorMessage()
         }
         // console.log(state);
     }
 
-    return <Modal
-        {...props}
-        size="xl"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-    >
-          <ToastContainer />
-        <Modal.Header closeButton>
-            <Modal.Title>Add New Lead</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-            <div className='row'>
-                <div className='col-md-4 '>
-                    <label for=""><small>*</small>Status</label>
-                    <div className='showHides' style={{ display: "flex", justifyContent: "space-between" }}>
-                        {show1 ?
-                            <Form.Select onChange={setValues} name='status' aria-label="Default select example">
-                                <option>Open this select menu</option>
-                                {status && status.map((item) => {
-                                    return <option value={item._id}>{item.name ? item.name : '--'}</option>
-                                })}
-                            </Form.Select>
-                            :
-                            <input type="text" className='form-control' value={statusVal} onChange={(e) => { setStatusVal(e.target.value) }} />
-                        }
+    return <>
+        <Modal
+            {...props}
+            size="xl"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <ToastContainer />
+            <Modal.Header closeButton>
+                <Modal.Title>Add New Lead</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <div className='row'>
+                    <div className='col-md-4 '>
+                        <label for=""><small>*</small>Status</label>
+                        <div className='showHides' style={{ display: "flex", justifyContent: "space-between" }}>
+                            {show1 ?
+                                <Form.Select onChange={setValues} name='status' aria-label="Default select example">
+                                    <option>Open this select menu</option>
+                                    {status && status.map((item) => {
+                                        return <option value={item._id}>{item.name ? item.name : '--'}</option>
+                                    })}
+                                </Form.Select>
+                                :
+                                <input type="text" className='form-control' value={statusVal} onChange={(e) => { setStatusVal(e.target.value) }} />
+                            }
 
-                        <button className={`${show1 ? 'btnAdds' : 'btnAdds1'}`} onClick={sendVal} type='button'>{show1 ? <GrFormAdd /> : <TiTick />}</button>
+                            <button className={`${show1 ? 'btnAdds' : 'btnAdds1'}`} onClick={sendVal} type='button'>{show1 ? <GrFormAdd /> : <TiTick />}</button>
+                        </div>
                     </div>
-                </div>
-                <div className='col-md-4'>
-                    <label for=""><small>*</small>Source</label>
-                    <div className='showHides' style={{ display: "flex", justifyContent: "space-between" }}>
-                        {show2 ?
-                            <Form.Select name='source' onChange={setValues} aria-label="Default select example">
-                                <option>Open this select menu</option>
-                                {soures && soures.map((item) => {
-                                    return <option value={item._id}>{item.name ? item.name : '--'}</option>
-                                })}
-                            </Form.Select>
-                            :
-                            <input type="text" onChange={(e) => { setsourseVal(e.target.value) }} value={sourseVal} className='form-control' />
-                        }
-                        <button className={`${show2 ? 'btnAdds' : 'btnAdds1'}`} onClick={sendVal2} type='button'>{show2 ? <GrFormAdd /> : <TiTick />}</button>
+                    <div className='col-md-4'>
+                        <label for=""><small>*</small>Source</label>
+                        <div className='showHides' style={{ display: "flex", justifyContent: "space-between" }}>
+                            {show2 ?
+                                <Form.Select name='source' onChange={setValues} aria-label="Default select example">
+                                    <option>Open this select menu</option>
+                                    {soures && soures.map((item) => {
+                                        return <option value={item._id}>{item.name ? item.name : '--'}</option>
+                                    })}
+                                </Form.Select>
+                                :
+                                <input type="text" onChange={(e) => { setsourseVal(e.target.value) }} value={sourseVal} className='form-control' />
+                            }
+                            <button className={`${show2 ? 'btnAdds' : 'btnAdds1'}`} onClick={sendVal2} type='button'>{show2 ? <GrFormAdd /> : <TiTick />}</button>
+                        </div>
                     </div>
-                </div>
-                <div className='col-md-4'>
-                    <label htmlFor="">Assigned</label>
-                    <Form.Select name='assignTo' onChange={setValues} aria-label="Default select example">
-                        <option>Open this select menu</option>
-                        {staff && staff.map((item) => {
-                            return <option value={item._id}>{item.firstname ? item.firstname + " " + item.lastname : '--'}</option>
-                        })}
-                    </Form.Select>
-
-                </div>
-            </div>
-            <hr className='border border-1 border-secondry opacity-50' />
-            <div className="form-group">
-                <label className="col-md-3 col-from-label">Tags <span className="text-danger">*</span>
-                </label>
-                <div className="col-md-8">
-                    <div className="tags_inp_wrapper">
-                        <div className='tags-input-container'>
-                            {tags.map((tag, index) => {
-                                return <div className='tag-item' key={index}>
-                                    <span className='text'>{tag}</span>
-                                    <span className='close' onClick={() => removetagTag(index)}>&times;</span>
-                                </div>
+                    <div className='col-md-4'>
+                        <label htmlFor="">Assigned</label>
+                        <Form.Select name='assignTo' onChange={setValues} aria-label="Default select example">
+                            <option>Open this select menu</option>
+                            {staff && staff.map((item) => {
+                                return <option value={item._id}>{item.firstname ? item.firstname + " " + item.lastname : '--'}</option>
                             })}
-                            <input type="text" onKeyDown={handleTagKeyDown} placeholder='type some text' className='tags-input' name="attributes" />
+                        </Form.Select>
+
+                    </div>
+                </div>
+                <hr className='border border-1 border-secondry opacity-50' />
+                <div className="form-group">
+                    <label className="col-md-3 col-from-label">Tags <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-8">
+                        <div className="tags_inp_wrapper">
+                            <div className='tags-input-container'>
+                                {tags.map((tag, index) => {
+                                    return <div className='tag-item' key={index}>
+                                        <span className='text'>{tag}</span>
+                                        <span className='close' onClick={() => removetagTag(index)}>&times;</span>
+                                    </div>
+                                })}
+                                <input type="text" onKeyDown={handleTagKeyDown} placeholder='type some text' className='tags-input' name="attributes" />
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <hr className='border border-1 border-secondary opacity-50' />
-            <div className='row'>
-                <div className='col-md-6 mb-3 '>
-                    <label htmlFor=""><span style={{ color: "red" }}>*</span>Name</label>
-                    <input type="text" className='form-control' value={state.name} name='name' onChange={setValues} />
-                </div>
-                <div className='col-md-6 mb-3'>
-                    <label htmlFor="">Address</label>
-                    <textarea id="" cols="" rows="" value={state.address} name='address' onChange={setValues} className='form-control' style={{ height: 40 }}></textarea>
-                </div>
-                <div className='col-md-6 mb-3'>
-                    <label htmlFor="">Position</label>
-                    <input type="text" className='form-control' value={state.position} name='position' onChange={setValues} />
-                </div>
-                <div className='col-md-6 mb-3'>
-                    <label htmlFor="">City</label>
-                    <input type="text" className='form-control' value={state.city} name='city' onChange={setValues} />
-                </div>
-                <div className='col-md-6 mb-3'>
-                    <label htmlFor="">Email Address</label>
-                    <input type="text" className='form-control' value={state.email} name='email' onChange={setValues} />
-                </div>
-                <div className='col-md-6 mb-3'>
-                    <label htmlFor="">State</label>
-                    <input type="text" className='form-control' value={state.state} name='state' onChange={setValues} />
-                </div>
-                <div className='col-md-6 mb-3'>
-                    <label htmlFor="">Website</label>
-                    <input type="text" className='form-control' value={state.website} name='website' onChange={setValues} />
-                </div>
-                <div className='col-md-6 mb-3'>
-                    <label htmlFor="">Country</label>
-                    {/* <input type="text" className='form-control' value={state.country} name='country' onChange={setValues} /> */}
-                    <Form.Select name='country' onChange={setValues} aria-label="Default select example">
-                        <option>Open this select menu</option>
-                        {countrys && countrys.map((item) => {
-                            return <option value={item._id}>{item.name}</option>
-                        })}
-                    </Form.Select>
-                </div>
-                <div className='col-md-6 mb-3'>
-                    <label htmlFor="">Phone</label>
-                    <input type="text" className='form-control' value={state.phone} name='phone' onChange={setValues} />
-                </div>
-                <div className='col-md-6 mb-3'>
-                    <label htmlFor="">Zip Code</label>
-                    <input type="text" className='form-control' value={state.zip} name='zip' onChange={setValues} />
-                </div>
-
-                <div className='col-md-6 mb-3'>
-                    <label htmlFor="">lead Value</label>
-                    <div className='d-flex'>
-                        <input type="number" className='form-control' value={state.leadValue} name='leadValue' onChange={setValues} />
-                        <input type="button" value="INR" />
+                <hr className='border border-1 border-secondary opacity-50' />
+                <div className='row'>
+                    <div className='col-md-6 mb-3 '>
+                        <label htmlFor=""><span style={{ color: "red" }}>*</span>Name</label>
+                        <input type="text" className='form-control' value={state.name} name='name' onChange={setValues} />
                     </div>
-                </div>
-                <div className='col-md-6 mb-3'>
-                    <label htmlFor="">Company</label>
-                    <input type="text" className='form-control' value={state.company} name='company' onChange={setValues} />
-                </div>
-                <div className='col-md-12 mb-3'>
-                    <label htmlFor="">Description</label>
-                    <div>
-                        <textarea id="" cols="100" rows="5" value={state.description} name='description' onChange={setValues} ></textarea>
+                    <div className='col-md-6 mb-3'>
+                        <label htmlFor="">Address</label>
+                        <textarea id="" cols="" rows="" value={state.address} name='address' onChange={setValues} className='form-control' style={{ height: 40 }}></textarea>
+                    </div>
+                    <div className='col-md-6 mb-3'>
+                        <label htmlFor="">Position</label>
+                        <input type="text" className='form-control' value={state.position} name='position' onChange={setValues} />
+                    </div>
+                    <div className='col-md-6 mb-3'>
+                        <label htmlFor="">City</label>
+                        <input type="text" className='form-control' value={state.city} name='city' onChange={setValues} />
+                    </div>
+                    <div className='col-md-6 mb-3'>
+                        <label htmlFor="">Email Address</label>
+                        <input type="text" className='form-control' value={state.email} name='email' onChange={setValues} />
+                    </div>
+                    <div className='col-md-6 mb-3'>
+                        <label htmlFor="">State</label>
+                        <input type="text" className='form-control' value={state.state} name='state' onChange={setValues} />
+                    </div>
+                    <div className='col-md-6 mb-3'>
+                        <label htmlFor="">Website</label>
+                        <input type="text" className='form-control' value={state.website} name='website' onChange={setValues} />
+                    </div>
+                    <div className='col-md-6 mb-3'>
+                        <label htmlFor="">Country</label>
+                        {/* <input type="text" className='form-control' value={state.country} name='country' onChange={setValues} /> */}
+                        <Form.Select name='country' onChange={setValues} aria-label="Default select example">
+                            <option>Open this select menu</option>
+                            {countrys && countrys.map((item) => {
+                                return <option value={item._id}>{item.name}</option>
+                            })}
+                        </Form.Select>
+                    </div>
+                    <div className='col-md-6 mb-3'>
+                        <label htmlFor="">Phone</label>
+                        <input type="text" className='form-control' value={state.phone} name='phone' onChange={setValues} />
+                    </div>
+                    <div className='col-md-6 mb-3'>
+                        <label htmlFor="">Zip Code</label>
+                        <input type="text" className='form-control' value={state.zip} name='zip' onChange={setValues} />
                     </div>
 
-                </div>
-                <div className='col-md-6 mb-3'>
-                    <label htmlFor="">Date Contacted</label>
-                    <input type="date" className='form-control' value={state.date} name='date' onChange={setValues} />
-                </div>
-                <div className='col-md-12 mb-3 d-flex'>
-                    <div className="form-check">
-                        <input
-                            className="form-check-input"
-                            type="checkbox"
-                            name="exampleRadios"
-                            id="exampleRadios1"
-                            defaultValue="option1"
-                            defaultChecked=""
-                        />
-                        <label className="form-check-label" htmlFor="exampleRadios1">
-                            Public
-                        </label>
+                    <div className='col-md-6 mb-3'>
+                        <label htmlFor="">lead Value</label>
+                        <div className='d-flex'>
+                            <input type="number" className='form-control' value={state.leadValue} name='leadValue' onChange={setValues} />
+                            <input type="button" value="INR" />
+                        </div>
                     </div>
-                    <div className="form-check">
-                        <input
-                            className="form-check-input"
-                            type="checkbox"
-                            name="exampleRadios"
-                            id="exampleRadios2"
-                            defaultValue="option2"
-                        />
-                        <label className="form-check-label" htmlFor="exampleRadios2">
-                            Contacted Today
-                        </label>
+                    <div className='col-md-6 mb-3'>
+                        <label htmlFor="">Company</label>
+                        <input type="text" className='form-control' value={state.company} name='company' onChange={setValues} />
+                    </div>
+                    <div className='col-md-12 mb-3'>
+                        <label htmlFor="">Description</label>
+                        <div>
+                            <textarea id="" cols="100" rows="5" value={state.description} name='description' onChange={setValues} ></textarea>
+                        </div>
+
+                    </div>
+                    <div className='col-md-6 mb-3'>
+                        <label htmlFor="">Date Contacted</label>
+                        <input type="date" className='form-control' value={state.date} name='date' onChange={setValues} />
+                    </div>
+                    <div className='col-md-12 mb-3 d-flex'>
+                        <div className="form-check">
+                            <input
+                                className="form-check-input"
+                                type="checkbox"
+                                name="exampleRadios"
+                                id="exampleRadios1"
+                                defaultValue="option1"
+                                defaultChecked=""
+                            />
+                            <label className="form-check-label" htmlFor="exampleRadios1">
+                                Public
+                            </label>
+                        </div>
+                        <div className="form-check">
+                            <input
+                                className="form-check-input"
+                                type="checkbox"
+                                name="exampleRadios"
+                                id="exampleRadios2"
+                                defaultValue="option2"
+                            />
+                            <label className="form-check-label" htmlFor="exampleRadios2">
+                                Contacted Today
+                            </label>
+                        </div>
+                    </div>
+                    <div className='col-md-12 mb-3'>
+                        <label htmlFor="">Father's Name</label>
+                        <input type="text" className='form-control' />
                     </div>
                 </div>
-                <div className='col-md-12 mb-3'>
-                    <label htmlFor="">Father's Name</label>
-                    <input type="text" className='form-control' />
-                </div>
-            </div>
-        </Modal.Body>
-        <Modal.Footer>
-            <Button onClick={sendValues}>Save</Button>
-            <Button onClick={props.onHide}>Close</Button>
-        </Modal.Footer>
-    </Modal>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={sendValues}>Save</Button>
+                <Button onClick={props.onHide}>Close</Button>
+            </Modal.Footer>
+        </Modal>
+
+        
+    </>
 }
 export default ModalLead

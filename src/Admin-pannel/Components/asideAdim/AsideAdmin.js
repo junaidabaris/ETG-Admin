@@ -71,6 +71,8 @@ function AsideAdmin() {
   const isSellerLogin = window.localStorage.getItem('isSellerLogin')
   const isDelevery = window.localStorage.getItem('isDeleveryBoy');
   const [leadFilters, setLeadFiters] = useState(false)
+  const [recruter, setRecruter] = useState(false)
+  const [Accounts, setAccounts] = useState(false)               
 
 
   if (isDelevery === 'true') {
@@ -453,6 +455,29 @@ function AsideAdmin() {
                   <span className="aiz-side-nav-text">Dashboard</span>
                 </Link>
               </li>
+
+              {/* <li className="aiz-side-nav-item" id="dropdownList">
+                <Link to="#" className="aiz-side-nav-link" onClick={() => { setRecruter(!recruter) }}>
+
+                  <i className="las la-shopping-cart aiz-side-nav-icon" />
+                  <span className="aiz-side-nav-text">Recruitment</span>
+                  <span className="aiz-side-nav-arrow" />
+                </Link>
+
+                <div className="dropdownMenu">
+                  <ul className={`aiz-side-nav-list dropdownMenu level-2 mm-collapse ${recruter ? "mm-show" : "extra"}`} id="product">
+
+                    <li className="aiz-side-nav-item">
+                      <Link to="dashboard-crm" className="aiz-side-nav-link">
+                        <span className="aiz-side-nav-text">Crm-Dashbord</span>
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </li> */}
+
+
+
 
               <li className="aiz-side-nav-item" id="dropdownList">
                 {/* onMouseOut={() => { setProducts(false) }}
@@ -2219,6 +2244,11 @@ function AsideAdmin() {
                       <span className="aiz-side-nav-text">Estimate</span>
                     </Link>
                   </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="task-crm">
+                      <span className="aiz-side-nav-text">Task</span>
+                    </Link>
+                  </li>
                 </ul>
               </li>
 
@@ -2288,6 +2318,39 @@ function AsideAdmin() {
               </li>
 
               <li className="aiz-side-nav-item">
+                <Link
+                  className="aiz-side-nav-link"
+                  to="#"
+                  onClick={() => {
+                    setAccounts(!Accounts);
+                  }}
+                >
+                  <i className="las la-user-tie aiz-side-nav-icon" />
+                  <span className="aiz-side-nav-text">Accounts</span>
+                  <span className="aiz-side-nav-arrow" />
+                </Link>
+                <ul
+                  className={`aiz-side-nav-list level-2 mm-collapse ${Accounts ? "mm-show" : "extra"
+                    }`}
+                >
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="accounts">
+                      <span className="aiz-side-nav-text">
+                        Chart Of Accounts
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="accounts-group">
+                      <span className="aiz-side-nav-text">
+                        Chart Of Accounts group
+                      </span>
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+
+              <li className="aiz-side-nav-item">
                 <Link to="#" className="aiz-side-nav-link" onClick={() => { setReportMaster(!reportMaster) }}>
                   <i className="las la-user-tie aiz-side-nav-icon" />
                   <span className="aiz-side-nav-text">CRM</span>
@@ -2300,8 +2363,23 @@ function AsideAdmin() {
                     </Link>
                   </li>
                   <li className="aiz-side-nav-item">
-                    <Link to="#" className="aiz-side-nav-link ">
+                    <Link to="dashboard-crm" className="aiz-side-nav-link ">
                       <span className="labour-charge-type">CRM Dashboard</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link to="reminder-dash" className="aiz-side-nav-link ">
+                      <span className="labour-charge-type">Recruitment Dashboard</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link to="project" className="aiz-side-nav-link ">
+                      <span className="aiz-side-nav-text">Project</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link to="task-crm" className="aiz-side-nav-link ">
+                      <span className="aiz-side-nav-text">Tasks </span>
                     </Link>
                   </li>
                   <li className="aiz-side-nav-item">
@@ -2329,11 +2407,7 @@ function AsideAdmin() {
                       <span className="aiz-side-nav-text">Quotes </span>
                     </Link>
                   </li>
-                  <li className="aiz-side-nav-item">
-                    <Link to="#" className="aiz-side-nav-link ">
-                      <span className="aiz-side-nav-text">Tasks </span>
-                    </Link>
-                  </li>
+
                   <li className="aiz-side-nav-item">
                     <Link to="#" className="aiz-side-nav-link ">
                       <span className="aiz-side-nav-text"> CRM Others</span>

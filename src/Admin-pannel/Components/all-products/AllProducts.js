@@ -6,6 +6,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDeleteProductMutation, useGetAllProductsQuery, useGetCategoriesQuery, useProductActiveMutation } from "./allproductsApi/allProductsApi";
 import { ToastContainer, toast } from "react-toastify";
 import { BsFillPrinterFill } from 'react-icons/bs';
+import axios from 'axios';
 
 
 
@@ -164,16 +165,21 @@ function AllProducts() {
                           <td style={{ display: 'table-cell' }}>
                             <div className="row gutters-5 w-200px w-md-300px mw-100">
                               <div className="col-auto w-50 ">
-                                {item?.mainimage_url?.url ? <img src={item?.mainimage_url?.url} alt="Image" className="img-fluid" /> : <img src="https://reactfront.mmslfashions.in/uploads/products/main/images/chlor.jpg" alt="Image" className="img-fluid" />}
+                                {item?.variations[0]?.mainImage_url?.url ? <img src={item?.variations[0]?.mainImage_url?.url} alt="Image" className="img-fluid" /> : <img src="https://reactfront.mmslfashions.in/uploads/products/main/images/chlor.jpg" alt="Image" className="img-fluid" />}
                               </div>
                               <div className="col">
-                                <span className="text-muted text-truncate-2">{item.name}</span>
+                                <span className="text-muted text-truncate-2" style={{fontSize:"18px",marginBottom:"10px"}}>{item.name}</span>
+                                <div>
+                                 <span>Mrp : Rs {item?.variations[0]?.mrp}</span>,<br/>
+                                 <span>Sale : Rate Rs  {item?.variations[0]?.sale_rate}</span>,<br/>
+                                 <span>Discount : Rs {item?.variations[0]?.discount}</span>
+                                </div>
                               </div>
                             </div>
                           </td>
                           <td style={{ display: 'table-cell' }}>
                             {item.category_id && item.category_id?.map((catItem, i) => {
-                              <span>{catItem.name}</span>
+                             return <span>{catItem.meta_title}</span>
                             })}
                           </td>
 

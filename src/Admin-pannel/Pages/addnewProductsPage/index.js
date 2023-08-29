@@ -87,7 +87,7 @@ const addFile = async (clonedObj, payload, categ ,setspcOr) => {
     // formData.append('attributes', JSON.stringify(categ.attributeSet));
     // formData.append('attributeSet', JSON.stringify(categ.attributes));
     formData.append('flashDeal', JSON.stringify(clonedObj.flashDeal));
-    formData.append('images', JSON.stringify(arr));
+    // formData.append('images', JSON.stringify(arr));
     formData.append('variations', JSON.stringify(varclone));
     console.log('variations---to-send-pul---', clonedObj.variations)
     formData.append('variation_Form', JSON.stringify(clonedObj.variation_Form));
@@ -110,6 +110,7 @@ const addFile = async (clonedObj, payload, categ ,setspcOr) => {
 }
 
 function AddNewProductsPage() {
+    // setspcOr(false)
     const [tags, setTags] = useState([]);
     const [categ, setCateg] = useState([]);
     const [finalCatD, setFinalCatD] = useState();

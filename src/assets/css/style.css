@@ -10594,3 +10594,11 @@ table tbody tr .show-table {
 .sizzings >td >input{
   width: 100px;
 }
+
+.cusModal1 {
+  width: 100% !important;
+  height: 100% !important;
+}
+.htt > div {
+  width: 990px;
+}
