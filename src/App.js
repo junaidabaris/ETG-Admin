@@ -446,6 +446,10 @@ import RecruitmentDashNew from "./Admin-pannel/Components/RecruitmentDash/Recrui
 import ProjectView from "./Admin-pannel/Pages/project/ProjectView";
 import ChartOfAccounts from "./Admin-pannel/Pages/accounts/accounts/ChartOfAccounts";
 import ChartOfAccountGroup from "./Admin-pannel/Pages/accounts/accounts/ChartOfAccountsGroup";
+import Groups from "./Admin-pannel/Pages/accounts/accounts/Groups";
+import AddVochers from "./Admin-pannel/Pages/accounts/Vochers/AddVochers";
+import Ladgers from "./Admin-pannel/Pages/accounts/ladgeradd/ladger/Ladgers";
+import AddCompany from "./Admin-pannel/Pages/accounts/addcompany/listLadger/ListLadger";
 // {Shaaz import end}
 
 // {daud import start}
@@ -910,6 +914,10 @@ function App() {
           <Route path='project/project-view/:id' element={<ProjectView/>}/>
           <Route path='accounts' element={<ChartOfAccounts/>}/>
           <Route path='accounts-group' element={<ChartOfAccountGroup/>}/>
+          <Route path="groups" element={<Groups/>}/>
+          <Route path="add-voucher" element={<AddVochers/>}/>
+          <Route path="add-ladgers" element={<Ladgers/>}/>
+          <Route path='add-company' element={<AddCompany/>}/>
           {/* {nazim Routes end} */}
 
           <Route path="lead-filters" element={<Leadfilter />} />

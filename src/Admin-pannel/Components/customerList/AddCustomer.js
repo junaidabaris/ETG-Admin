@@ -108,6 +108,16 @@ function AddCustomer() {
                                                 <input type="text" placeholder="Last Name" name="lastname" className="form-control" required onChange={onChangeHandler} />
                                             </div>
                                         </div>
+                                        <div className="form-group row">
+                                            <label className="col-sm-3 col-from-label" htmlFor="last name">Under Group</label>
+                                            <div className="col-sm-9">
+                                                <select className="form-select" name="approve" aria-label="Default select example" onChange={onChangeHandler}>
+                                                    <option selected>Select Group</option>
+                                                    <option value={true}>Yes</option>
+                                                    <option value={false}>No</option>
+                                                </select> 
+                                            </div>
+                                        </div>
 
                                         <div className="form-group row">
                                             <label className="col-sm-3 col-from-label" htmlFor="email">Email</label>

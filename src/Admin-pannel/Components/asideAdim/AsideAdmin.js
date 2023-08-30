@@ -2334,6 +2334,13 @@ function AsideAdmin() {
                     }`}
                 >
                   <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="#">
+                      <span className="aiz-side-nav-text">
+                       Accounts Dashboard
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
                     <Link className="aiz-side-nav-link " to="accounts">
                       <span className="aiz-side-nav-text">
                         Chart Of Accounts
@@ -2344,6 +2351,41 @@ function AsideAdmin() {
                     <Link className="aiz-side-nav-link " to="accounts-group">
                       <span className="aiz-side-nav-text">
                         Chart Of Accounts group
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="groups">
+                      <span className="aiz-side-nav-text">
+                        Accounts groups
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="add-ladgers">
+                      <span className="aiz-side-nav-text">
+                        Add Ladger
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="add-company">
+                      <span className="aiz-side-nav-text">
+                      Add Company
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="add-voucher">
+                      <span className="aiz-side-nav-text">
+                        Add Voucher 
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="#">
+                      <span className="aiz-side-nav-text list-voucher">
+                       List Voucher 
                       </span>
                     </Link>
                   </li>

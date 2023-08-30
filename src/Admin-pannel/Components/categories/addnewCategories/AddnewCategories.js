@@ -111,7 +111,7 @@ function AddnewCategories() {
 
                       <div className="col-md-9">
                         <select className="form-select" name='parent_id' onChange={onChangeHandler} required>
-                          <option>Select Perent Catagary</option>
+                          <option>Select Parent Catagary</option>
                           <option value='null'>Null</option>
                           {data && data.map((item, i) => {
                             return <option key={item._id} value={item._id}>{item.name}</option>

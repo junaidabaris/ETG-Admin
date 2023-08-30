@@ -48,7 +48,7 @@ function Task() {
               </Link>
             </div>
             {modalShow && <TaskModal show={modalShow}
-              onHide={() => setModalShow(false)} />}
+              onHide={() => setModalShow(false)} getDatas={getDatas}/>}
           </div>
           <div className="col-md-6 text-end">
             <button className="btn btn-outline-secondary mr-2">

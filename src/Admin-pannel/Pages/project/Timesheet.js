@@ -70,10 +70,10 @@ function Timesheets(){
                             </div>
                             <div className="col-md-8">
                             <div className="">
-                                    <input className="form-control" type="time"/>
+                                    <input className="form-control" type="datetime-local"/>
                                 </div>
                                 <div className="mt-2">
-                                    <input className="form-control" type="time"/>
+                                    <input className="form-control" type="datetime-local"/>
                                 </div>
                                 <div className="mt-2">
                                     <select className="form-select">

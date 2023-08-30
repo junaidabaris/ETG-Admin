@@ -135,6 +135,22 @@ function SellerAddEditForm() {
                 <Form.Label>Last Name</Form.Label>
                 <Form.Control type="text" name='lastname' onChange={onChangeHandle} value={state?.lastname} style={{ width: "50%" }} placeholder="Last Name" required />
             </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label>Under Group</Form.Label>
+                <select className="form-select" name="approve" style={{ width: "50%" }} aria-label="Default select example" >
+                    <option selected>Select Group</option>
+                    <option value={true}>Yes</option>
+                    <option value={false}>No</option>
+                </select>
+            </Form.Group>
+
+
+
+{/* 
+            <label className="col-sm-3 col-from-label" htmlFor="last name"></label>
+            <div className="col-sm-9">
+
+            </div> */}
 
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Longitutde</Form.Label>
@@ -198,6 +214,14 @@ function SellerAddEditForm() {
                 <Form.Label>Mobile Number</Form.Label>
                 <Form.Control type="number" name='mobile' onChange={onChangeHandle} value={state?.mobile} style={{ width: "50%" }} placeholder="Mobile Number" required />
             </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Label>Opening Balance</Form.Label>
+                <Form.Control name='bank_acc_no' type="text" onChange={onChangeHandle} style={{ width: "50%" }} placeholder="Opening Balance" required />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Label>As On Date</Form.Label>
+                <Form.Control name='bank_acc_no' type="date" onChange={onChangeHandle}  style={{ width: "50%" }} placeholder="Opening Balance" required />
+            </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Tax Number </Form.Label>
@@ -212,6 +236,7 @@ function SellerAddEditForm() {
                 <Form.Label>Bank Acount Number</Form.Label>
                 <Form.Control name='bank_acc_no' type="text" onChange={onChangeHandle} value={state?.bank_acc_no} style={{ width: "50%" }} placeholder="Bank Acount Number" required />
             </Form.Group>
+           
 
             <Form.Group className="mb-3 d-flex" controlId="formBasicPassword">
                 <Form.Label>Bank Payment Status</Form.Label>
