@@ -8,14 +8,23 @@ import { ToastContainer, toast } from "react-toastify";
 import { BsFillPrinterFill } from 'react-icons/bs';
 import axios from 'axios';
 
-
-
 function AllProducts() {
   const [inputVal, setInputVal] = useState('');
   const { data, isLoading } = useGetAllProductsQuery()
   const [bArr, setBArr] = useState([]);
   const params = useParams()
 
+  // const getProducts = async () => {
+  //   try {
+
+  //   } catch (error) {
+
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   getProducts()
+  // }, [])
 
   useEffect(() => {
     setBArr(data)
@@ -168,18 +177,18 @@ function AllProducts() {
                                 {item?.variations[0]?.mainImage_url?.url ? <img src={item?.variations[0]?.mainImage_url?.url} alt="Image" className="img-fluid" /> : <img src="https://reactfront.mmslfashions.in/uploads/products/main/images/chlor.jpg" alt="Image" className="img-fluid" />}
                               </div>
                               <div className="col">
-                                <span className="text-muted text-truncate-2" style={{fontSize:"18px",marginBottom:"10px"}}>{item.name}</span>
+                                <span className="text-muted text-truncate-2" style={{ fontSize: "18px", marginBottom: "10px" }}>{item.name}</span>
                                 <div>
-                                 <span>Mrp : Rs {item?.variations[0]?.mrp}</span>,<br/>
-                                 <span>Sale : Rate Rs  {item?.variations[0]?.sale_rate}</span>,<br/>
-                                 <span>Discount : Rs {item?.variations[0]?.discount}</span>
+                                  <span>Mrp : Rs {item?.variations[0]?.mrp}</span>,<br />
+                                  <span>Sale : Rate Rs  {item?.variations[0]?.sale_rate}</span>,<br />
+                                  <span>Discount : Rs {item?.variations[0]?.discount}</span>
                                 </div>
                               </div>
                             </div>
                           </td>
                           <td style={{ display: 'table-cell' }}>
                             {item.category_id && item.category_id?.map((catItem, i) => {
-                             return <span>{catItem.meta_title}</span>
+                              return <span>{catItem.meta_title}</span>
                             })}
                           </td>
 

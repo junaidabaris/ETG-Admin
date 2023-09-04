@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useParams } from 'react-router';
 import { useAddSellerListMutation, useEditSellerListMutation, useGetSellerDetailQuery } from '../../Components/all-products/allproductsApi/allProductsApi';
+import axios from 'axios';
 
 function SellerAddEditForm() {
     const params = useParams()
@@ -38,15 +39,33 @@ function SellerAddEditForm() {
         bank_name: "",
         tax_number: "",
         bank_acc_no: "",
+        amount_type: "Debit",
+        AccLedgerGroupId: "",
+        OpeningBalance: "",
+        asonDate : "",
         bank_payment_status: false
     }
     )
 
     const [update, { isSuccess: upSuss }] = useEditSellerListMutation()
+
+    const token = window.localStorage.getItem('adminToken')
+    const [unders, setUneders] = useState(null)
+    const getAllData = async () => {
+        const res1 = await axios.get(`https://onlineparttimejobs.in/api/accountGroup`, {
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        setUneders(res1.data)
+    }
+
     useEffect(() => {
         if (upSuss) {
             alert('Update Seller')
         }
+        getAllData()
     }, [upSuss])
 
     const onChangeHandle = (e) => {
@@ -137,16 +156,17 @@ function SellerAddEditForm() {
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Under Group</Form.Label>
-                <select className="form-select" name="approve" style={{ width: "50%" }} aria-label="Default select example" >
-                    <option selected>Select Group</option>
-                    <option value={true}>Yes</option>
-                    <option value={false}>No</option>
-                </select>
+                <Form.Select aria-label="Default select example" style={{ width: "50%" }} name="AccLedgerGroupId" onChange={onChangeHandle}>
+                    {/* <option>Open this select menu</option> */}
+                    {unders && unders.map((item) => {
+                        return <option value={item._id}>{item.name}</option>
+                    })}
+                </Form.Select>
             </Form.Group>
 
 
 
-{/* 
+            {/* 
             <label className="col-sm-3 col-from-label" htmlFor="last name"></label>
             <div className="col-sm-9">
 
@@ -215,12 +235,20 @@ function SellerAddEditForm() {
                 <Form.Control type="number" name='mobile' onChange={onChangeHandle} value={state?.mobile} style={{ width: "50%" }} placeholder="Mobile Number" required />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Label>Amount Type</Form.Label>
+                <Form.Select  style={{ width: "50%" }} aria-label="Default select example"  name="amount_type" onChange={onChangeHandle}>
+                    <option selected value='Debit'>Debit</option>
+                    <option value='Credit'>Credit</option>
+                </Form.Select>
+              
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Opening Balance</Form.Label>
-                <Form.Control name='bank_acc_no' type="text" onChange={onChangeHandle} style={{ width: "50%" }} placeholder="Opening Balance" required />
+                <Form.Control name='OpeningBalance' type="text" onChange={onChangeHandle} style={{ width: "50%" }} placeholder="Opening Balance" required />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>As On Date</Form.Label>
-                <Form.Control name='bank_acc_no' type="date" onChange={onChangeHandle}  style={{ width: "50%" }} placeholder="Opening Balance" required />
+                <Form.Control name='asondate' type="date" onChange={onChangeHandle} style={{ width: "50%" }} placeholder="Opening Balance" required />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -236,7 +264,7 @@ function SellerAddEditForm() {
                 <Form.Label>Bank Acount Number</Form.Label>
                 <Form.Control name='bank_acc_no' type="text" onChange={onChangeHandle} value={state?.bank_acc_no} style={{ width: "50%" }} placeholder="Bank Acount Number" required />
             </Form.Group>
-           
+
 
             <Form.Group className="mb-3 d-flex" controlId="formBasicPassword">
                 <Form.Label>Bank Payment Status</Form.Label>

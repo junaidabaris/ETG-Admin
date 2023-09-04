@@ -1,0 +1,11 @@
+.panel-default>.panel-heading {
+    color: #333;
+    background-color: hsl(0, 30%, 78%);
+    border-color: #ddd;
+    padding: 6px 8px;
+    border-radius: 3px;
+}
+.list-group-item p{
+    font-size: 13px;
+    
+}

@@ -450,6 +450,19 @@ import Groups from "./Admin-pannel/Pages/accounts/accounts/Groups";
 import AddVochers from "./Admin-pannel/Pages/accounts/Vochers/AddVochers";
 import Ladgers from "./Admin-pannel/Pages/accounts/ladgeradd/ladger/Ladgers";
 import AddCompany from "./Admin-pannel/Pages/accounts/addcompany/listLadger/ListLadger";
+import Setting from "./Admin-pannel/Pages/accounts/setting/Setting";
+import Generals from "./Admin-pannel/Pages/accounts/setting/Generals";
+import Banking from "./Admin-pannel/Pages/accounts/setting/Banking";
+import AddBanking from "./Admin-pannel/Pages/accounts/setting/AddBanking";
+import DashboarD from "./Admin-pannel/Pages/Dashboard/Dashboard";
+import Report from "./Admin-pannel/Pages/accounts/report/Report";
+import Rpblancesheetcomprasion from "./Admin-pannel/Pages/accounts/rpblancesheetcommp/Rpblancesheetcomprasion";
+import AddCompanys from "./Admin-pannel/Pages/accounts/company/AddCompanys";
+import ListGroups from "./Admin-pannel/Pages/accounts/addcompany/listLadger/ListGroups";
+import ListCompany from "./Admin-pannel/Pages/accounts/company/ListCompany";
+import ListsLegers from "./Admin-pannel/Pages/accounts/ladgeradd/ladger/ListsLegers";
+import ReportsLedgers from "./Admin-pannel/Pages/accounts/ladgeradd/ladger/ReportsLedgers";
+import ReportsGroup from "./Admin-pannel/Pages/accounts/addcompany/listLadger/ReportsGroup";
 // {Shaaz import end}
 
 // {daud import start}
@@ -903,21 +916,43 @@ function App() {
           <Route path="AddAgreement" element={<AddAgreement />} />
           <Route path="add-v-tech-purchase" element={<VtechPurchase />} />
           <Route path="list-v-tech-Transfer-stock" element={<ListVPurchaseStock />} />
-          <Route path="estimate-sales" element={<EstimateSales/>}/>
-          <Route path="new-estimate" element={<NewEstimate/>}/>
-          <Route path="task-crm" element={<Task/>}/>
-          <Route path="task-overview" element={<TaskOverview/>}/>
-          <Route path="dashboard-crm" element={<Dashboard/>}/>
-          <Route path="reminder-dash" element={<RecruitmentDashNew/>}/>
-          <Route path="project" element={<Project/>}/>
-          <Route path='add-new-project' element={<AddNewProject/>}/>
-          <Route path='project/project-view/:id' element={<ProjectView/>}/>
-          <Route path='accounts' element={<ChartOfAccounts/>}/>
-          <Route path='accounts-group' element={<ChartOfAccountGroup/>}/>
-          <Route path="groups" element={<Groups/>}/>
-          <Route path="add-voucher" element={<AddVochers/>}/>
-          <Route path="add-ladgers" element={<Ladgers/>}/>
-          <Route path='add-company' element={<AddCompany/>}/>
+          <Route path="estimate-sales" element={<EstimateSales />} />
+          <Route path="new-estimate" element={<NewEstimate />} />
+          <Route path="task-crm" element={<Task />} />
+          <Route path="task-overview" element={<TaskOverview />} />
+          <Route path="dashboard-crm" element={<Dashboard />} />
+          <Route path="reminder-dash" element={<RecruitmentDashNew />} />
+          <Route path="project" element={<Project />} />
+          <Route path='add-new-project' element={<AddNewProject />} />
+          <Route path='project/project-view/:id' element={<ProjectView />} />
+          <Route path='accounts' element={<ChartOfAccounts />} />
+          <Route path='accounts-group' element={<ChartOfAccountGroup />} />
+          <Route path="groups" element={<Groups />} />
+          <Route path="add-voucher" element={<AddVochers />} />
+          <Route path="add-ledgers" element={<Ladgers />} />
+          <Route path="reports-ledgers" element={<ReportsLedgers />} />
+          <Route path='ledgers-edit/:id' element={<Ladgers />} />
+          <Route path="list-ledgers" element={<ListsLegers />} />
+          <Route path='add-group' element={<AddCompany />} />
+          <Route path='group_edit/:id' element={<AddCompany />} />
+          <Route path='list-group' element={<ListGroups />} />
+          <Route path='reports-group' element={<ReportsGroup />} />
+          <Route path='account-dashbord' element={<DashboarD />} />
+          <Route path='report' element={<Report />} />
+          <Route path='add-company' element={<AddCompanys/>} />
+          <Route path='company_edit/:id' element={<AddCompanys />} />
+          <Route path='list-company' element={<ListCompany/>} />
+          <Route path='/admin/rp_balance_report_sheet' element={<Rpblancesheetcomprasion />} />
+          {/* by Sajid */}
+
+
+          <Route path="setting" element={<Setting />}>
+            <Route path="" element={<Generals />} />
+            <Route path="banking" element={<Banking/>} />
+          </Route>
+          <Route path='add-banking' element={<AddBanking/>} />
+
+
           {/* {nazim Routes end} */}
 
           <Route path="lead-filters" element={<Leadfilter />} />
@@ -934,8 +969,8 @@ function App() {
           <Route path="add-prices" element={<AddPrice />} />
           <Route path="import-leads" element={<ImportLeads />} />
           <Route path="reminder-crm" element={<Reminder />} />
-          <Route path="proposal-sales" element={<Proposal/>} />
-          <Route path="new-proposal-crm" element={<NewProposal/>}/>
+          <Route path="proposal-sales" element={<Proposal />} />
+          <Route path="new-proposal-crm" element={<NewProposal />} />
 
           <Route
             path="amazon-account-info"

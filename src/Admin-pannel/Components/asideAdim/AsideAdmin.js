@@ -72,7 +72,7 @@ function AsideAdmin() {
   const isDelevery = window.localStorage.getItem('isDeleveryBoy');
   const [leadFilters, setLeadFiters] = useState(false)
   const [recruter, setRecruter] = useState(false)
-  const [Accounts, setAccounts] = useState(false)               
+  const [Accounts, setAccounts] = useState(false)
 
 
   if (isDelevery === 'true') {
@@ -2334,9 +2334,9 @@ function AsideAdmin() {
                     }`}
                 >
                   <li className="aiz-side-nav-item">
-                    <Link className="aiz-side-nav-link " to="#">
+                    <Link className="aiz-side-nav-link " to="account-dashbord">
                       <span className="aiz-side-nav-text">
-                       Accounts Dashboard
+                        Accounts Dashboard
                       </span>
                     </Link>
                   </li>
@@ -2362,30 +2362,86 @@ function AsideAdmin() {
                     </Link>
                   </li>
                   <li className="aiz-side-nav-item">
-                    <Link className="aiz-side-nav-link " to="add-ladgers">
+                    <Link className="aiz-side-nav-link " to="add-ledgers">
                       <span className="aiz-side-nav-text">
-                        Add Ladger
+                        Add Ledgers
                       </span>
                     </Link>
                   </li>
                   <li className="aiz-side-nav-item">
-                    <Link className="aiz-side-nav-link " to="add-company">
+                    <Link className="aiz-side-nav-link " to="list-ledgers">
                       <span className="aiz-side-nav-text">
-                      Add Company
+                        List Ledgers
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="reports-ledgers">
+                      <span className="aiz-side-nav-text">
+                         Ledgers Reports
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="add-group">
+                      <span className="aiz-side-nav-text">
+                        Add Group
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="list-group">
+                      <span className="aiz-side-nav-text list-voucher">
+                        List Group
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="reports-group">
+                      <span className="aiz-side-nav-text list-voucher">
+                         Group Reports
                       </span>
                     </Link>
                   </li>
                   <li className="aiz-side-nav-item">
                     <Link className="aiz-side-nav-link " to="add-voucher">
                       <span className="aiz-side-nav-text">
-                        Add Voucher 
+                        Add Voucher
                       </span>
                     </Link>
                   </li>
                   <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="add-company">
+                      <span className="aiz-side-nav-text list-voucher">
+                        Add Company
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="list-company">
+                      <span className="aiz-side-nav-text list-voucher">
+                        List Company
+                      </span>
+                    </Link>
+                  </li>
+                  {/* <li className="aiz-side-nav-item">
                     <Link className="aiz-side-nav-link " to="#">
                       <span className="aiz-side-nav-text list-voucher">
                        List Voucher 
+                      </span>
+                    </Link>
+                  </li> */}
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="report">
+                      <span className="aiz-side-nav-text list-voucher">
+                        Report
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="setting">
+                      <span className="aiz-side-nav-text list-voucher">
+                        Setting
                       </span>
                     </Link>
                   </li>

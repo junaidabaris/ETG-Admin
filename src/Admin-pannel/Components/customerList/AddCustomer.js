@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify';
 import { useAddDCustomerMutation, useAddStaffMutation, useGetCurrencyQuery, useGetCustomerRoleQuery, useGetLanguagesQuery, useGetRolesQuery, useGetTimeFormatQuery } from "../all-products/allproductsApi/allProductsApi";
+import { Form } from "react-bootstrap";
+import axios from "axios";
 // import { useAddStaffMutation, useGetRolesQuery } from "../../all-products/allproductsApi/allProductsApi";
 
 function AddCustomer() {
@@ -20,6 +22,9 @@ function AddCustomer() {
         approve: null,
         // informations: [],
         role_id: '',
+        OpeningBalance: '',
+        asonDate: '',
+        amount_type: 'Debit',
     });
     const params = useParams();
 
@@ -79,8 +84,20 @@ function AddCustomer() {
             toastErrorMessage()
         };
     }, [response]);
-
-
+    const token = window.localStorage.getItem('adminToken')
+    const [unders, setUneders] = useState(null)
+    const getAllData = async () => {
+        const res1 = await axios.get(`https://onlineparttimejobs.in/api/accountGroup`, {
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        setUneders(res1.data)
+    }
+    useEffect(() => {
+        getAllData()
+    }, [])
     return (
         <>
             <div className="aiz-main-content">
@@ -111,11 +128,22 @@ function AddCustomer() {
                                         <div className="form-group row">
                                             <label className="col-sm-3 col-from-label" htmlFor="last name">Under Group</label>
                                             <div className="col-sm-9">
-                                                <select className="form-select" name="approve" aria-label="Default select example" onChange={onChangeHandler}>
-                                                    <option selected>Select Group</option>
-                                                    <option value={true}>Yes</option>
-                                                    <option value={false}>No</option>
-                                                </select> 
+                                                <Form.Select aria-label="Default select example" name="AccLedgerGroupId" onChange={onChangeHandler}>
+                                                    {/* <option>Open this select menu</option> */}
+                                                    {unders && unders.map((item) => {
+                                                        return <option value={item._id}>{item.name}</option>
+                                                    })}
+                                                </Form.Select>
+                                            </div>
+                                        </div>
+                                        <div className="form-group row">
+                                            <label className="col-sm-3 col-from-label" htmlFor="last name">Amount Type</label>
+                                            <div className="col-sm-9">
+                                                <Form.Select aria-label="Default select example" value={inputVal?.amount_type} name="amount_type" onChange={onChangeHandler}>
+                                                    {/* <option>Open this select menu</option> */}
+                                                    <option selected value='Debit'>Debit</option>
+                                                    <option value='Credit'>Credit</option>
+                                                </Form.Select>
                                             </div>
                                         </div>
 
@@ -159,6 +187,25 @@ function AddCustomer() {
                                                 </div>
                                             </div>
                                         </div>
+
+
+
+
+                                        <div className="form-group row">
+                                            <label className="col-sm-3 col-from-label" htmlFor="mobile">Opening Balance Amount</label>
+                                            <div className="col-sm-9">
+                                                <input type="text" placeholder="Opening Balance" name="OpeningBalance" className="form-control" required onChange={onChangeHandler} />
+                                            </div>
+                                        </div>
+
+                                        <div className="form-group row">
+                                            <label className="col-sm-3 col-from-label" htmlFor="mobile">As On Date</label>
+                                            <div className="col-sm-9">
+                                                <input type="date" placeholder="As On Date" name="asonDate" className="form-control" required onChange={onChangeHandler} />
+                                            </div>
+                                        </div>
+
+
 
                                         <div className="form-group row">
                                             <label className="col-sm-3 col-from-label" htmlFor="name">Time Format</label>

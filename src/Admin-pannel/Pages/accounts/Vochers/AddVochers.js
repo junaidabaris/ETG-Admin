@@ -34,6 +34,44 @@ function AddVochers() {
                                     </label>
                                     <input className="form-control" type="date"></input>
                                 </div>
+                               
+
+
+                                <table class="table" style={{margin:"20px 10px"}}>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Account</th>
+                                            <th scope="col">Debit</th>
+                                            <th scope="col">Credit</th>
+                                            <th scope="col">Discription</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th>1</th>
+                                            <td><input className="form-control"/></td>
+                                            <td><input className="form-control"/></td>
+                                            <td><input className="form-control"/></td>
+                                            <td><input className="form-control"/></td>
+                                        </tr>
+                                        <tr>
+                                            <th>2</th>
+                                            <td><input className="form-control"/></td>
+                                            <td><input className="form-control"/></td>
+                                            <td><input className="form-control"/></td>
+                                            <td><input className="form-control"/></td>
+                                        </tr>
+                                        <tr>
+                                            <th>3</th>
+                                            <td><input className="form-control"/></td>
+                                            <td><input className="form-control"/></td>
+                                            <td><input className="form-control"/></td>
+                                            <td><input className="form-control"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
                                 <div className="col-md-12">
                                     <label className="form-label" for="groups-name">
                                         Current Balance<span className="text-danger">*</span>
@@ -55,8 +93,9 @@ function AddVochers() {
                                 {modalShow2 && <SecModal show={modalShow2}
                                     onHide={() => setModalShow2(false)} />}
 
+
                                 {/* */}
-                                <Button style={{margin:"20px 0",width:"200px"} } variant="warning">Save</Button>
+                                <Button style={{ margin: "20px 0", width: "200px" }} variant="warning">Save</Button>
                             </div>
                         </div>
                         <div className="col-4">
