@@ -78,8 +78,8 @@ function ListCompany() {
                                         <th scope="row">{i + 1}</th>
                                         <td>{item?.name}</td>
                                         <td>{item?.directory}</td>
-                                        <td>{item?.mobile}</td>
-                                        <td>{item?.email}</td>
+                                        <td>{item?.staff?.mobile}</td>
+                                        <td>{item?.staff.email}</td>
                                         <td>
                                             <div>{item?.addressLine1} {item?.addressLine2}</div>
                                             <div>{item?.city} {item?.country}</div>

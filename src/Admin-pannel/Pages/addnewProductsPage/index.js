@@ -25,7 +25,7 @@ const toastErrorMessage = () => {
     })
 };
 
-const addFile = async (clonedObj, payload, categ, setspcOr ,token) => {
+const addFile = async (clonedObj, payload, categ, setspcOr, token) => {
     setspcOr(true)
 
 
@@ -195,13 +195,13 @@ function AddNewProductsPage() {
         unit: "",
         company_id: ""
     });
-
+    const token = window.localStorage.getItem('token')
     const changeStatus = (isStatus, key) => {
         const clonedInputVal = { ...inputval }
         clonedInputVal[key] = isStatus;
         setInputVal(clonedInputVal)
     }
-    const brandData = useGetBrandsQuery();
+    const brandData = useGetBrandsQuery(token);
     const { data: sellerD } = useGetSellersQuery()
     // const [addProduct, response] = useAddNewProductMutation();
     const [varianstData, setVariantsData] = useState()
@@ -212,11 +212,16 @@ function AddNewProductsPage() {
     useEffect(() => {
         const getCatData = async () => {
             const getCategoryName = []
-            const reqData = await fetch("https://onlineparttimejobs.in/api/category")
-            const resData = await reqData.json();
-
-            for (let i = 0; i < resData.length; i++) {
-                getCategoryName.push({ name: resData[i].name, _id: resData[i]._id })
+            const resData = await axios.get(`https://onlineparttimejobs.in/api/category/admin`, {
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            // const resData = await reqData.json();
+            // 
+            for (let i = 0; i < resData.data.length; i++) {
+                getCategoryName.push({ name: resData.data[i].name, _id: resData.data[i]._id })
 
             };
             if (getCategoryName.length) {
@@ -225,7 +230,7 @@ function AddNewProductsPage() {
         }
         getCatData();
     }, [])
-
+    console.log(categ);
     const onChangeHandler = (e) => {
         let slug = e.target.value + new Date().getUTCMilliseconds();
         const inpName = e.target.name;
@@ -251,7 +256,7 @@ function AddNewProductsPage() {
 
     const [spinn, setspinn] = useState(false)
     const [spcOr, setspcOr] = useState(false)
-    const token = window.localStorage.getItem('token')
+    
 
     const submitAddProductData = async () => {
         setspinn(true)
@@ -261,7 +266,7 @@ function AddNewProductsPage() {
         const clonedObj = { ...inputval, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, seller_id, slug, productDescription: productDescription };
 
         const clone = { attributes: [proAtt?._id], attributeSet: proAtt?.values }
-        addFile(clonedObj, clonedObj.gallery_image, clone, setspcOr ,token)
+        addFile(clonedObj, clonedObj.gallery_image, clone, setspcOr, token)
 
         setspinn(false)
 

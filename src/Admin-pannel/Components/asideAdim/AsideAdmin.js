@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useGetAllStatusOrdersQuery, useGetPickupPointQuery } from "../all-products/allproductsApi/allProductsApi";
 import './AsideAdmin.css';
+import { AiOutlineBarChart } from "react-icons/ai";
 
 function AsideAdmin() {
   const [Sales, setSales] = useState(false)
@@ -74,6 +75,9 @@ function AsideAdmin() {
   const [leadFilters, setLeadFiters] = useState(false)
   const [recruter, setRecruter] = useState(false)
   const [Accounts, setAccounts] = useState(false)
+  const [manufacturing, setManufacturing] = useState(false)
+  const [salesgstreport, setSalesgstreport] = useState(false)
+  const [myToDo, setMyToDo] = useState(false)
 
 
   if (isDelevery === 'true') {
@@ -2534,6 +2538,7 @@ function AsideAdmin() {
                   </li>
                 </ul>
               </li>
+
               {/* <li className="aiz-side-nav-item">
               <Link
                 className="aiz-side-nav-link"
@@ -2630,101 +2635,266 @@ function AsideAdmin() {
               </ul>
             </li> */}
 
-            <li className="aiz-side-nav-item">
-              <Link
-                className="aiz-side-nav-link"
-                to="#"
-                onClick={() => {
-                  setBillingBook(!billingBook);
-                }}
-              >
+              <li className="aiz-side-nav-item">
+                <Link className="aiz-side-nav-link" to='' onClick={() => { setMyToDo(!myToDo) }}>
+
+                  <i className="las la-user-tie aiz-side-nav-icon" />
+                  <span className="aiz-side-nav-text">My To Do</span>
+                  <span className="aiz-side-nav-arrow" />
+                </Link>
+                <ul className={`aiz-side-nav-list level-2 mm-collapse ${myToDo ? "mm-show" : "extra"}`}>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="to-do-list">
+                      <span className="aiz-side-nav-text"> To Do List</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="to-do-setting">
+                      <span className="aiz-side-nav-text"> Settings</span>
+                    </Link>
+                  </li>
+
+
+                </ul>
+              </li>
+              {/* <li className="aiz-side-nav-item">
+                <Link className="aiz-side-nav-link" to="subscriptions">
+                  <span className="aiz-side-nav-text"> Subscriptions </span>
+                </Link>
+              </li>
+              <li className="aiz-side-nav-item">
+                <Link className="aiz-side-nav-link" to='' onClick={() => { setReport(!report) }}>
                 <i className="las la-user-tie aiz-side-nav-icon" />
-                <span className="aiz-side-nav-text">Billing Book</span>
-                <span className="aiz-side-nav-arrow" />
-              </Link>
-              <ul
-                className={`aiz-side-nav-list level-2 mm-collapse ${
-                  billingBook ? "mm-show" : "extra"
-                }`}
-              >
-                <li className="aiz-side-nav-item">
-                  <Link
-                    className="aiz-side-nav-link "
-                    to="sales-tax-report"
-                  >
-                    <span className="aiz-side-nav-text">Sales Tax Report</span>
-                  </Link>
-                </li>
-                <li className="aiz-side-nav-item">
-                  <Link className="aiz-side-nav-link " to="purchase-tax-report">
-                    <span className="aiz-side-nav-text">
-                      Purchase Tax Report
-                    </span>
-                  </Link>
-                </li>
-                <li className="aiz-side-nav-item">
-                  <Link
-                    className="aiz-side-nav-link "
-                    to="supplier-items-report"
-                  >
-                    <span className="aiz-side-nav-text">
-                    Supplier Items Report
-                    </span>
-                  </Link>
-                </li>
-                <li className="aiz-side-nav-item">
-                  <Link
-                    className="aiz-side-nav-link "
-                    to="sales-report"
-                  >
-                    <span className="aiz-side-nav-text">
-                      {" "}
-                      Sales Report
-                    </span>
-                  </Link>
-                </li>
-                <li className="aiz-side-nav-item">
-                  <Link className="aiz-side-nav-link " to="sales-return-report">
-                    <span className="aiz-side-nav-text"> Sales Return Report</span>
-                  </Link>
-                </li>
-                <li className="aiz-side-nav-item">
-                  <Link className="aiz-side-nav-link " to="seller-point-return">
-                    <span className="aiz-side-nav-text"> Seller Points Return</span>
-                  </Link>
-                </li>
-                <li className="aiz-side-nav-item">
-                  <Link className="aiz-side-nav-link " to="purchase-report">
-                    <span className="aiz-side-nav-text"> Purchase Report </span>
-                  </Link>
-                </li>
-                <li className="aiz-side-nav-item">
-                  <Link className="aiz-side-nav-link " to="purchase-return-report">
-                    <span className="aiz-side-nav-text"> Purchase Return Report </span>
-                  </Link>
-                </li>
-                <li className="aiz-side-nav-item">
-                  <Link className="aiz-side-nav-link " to="expense-report">
-                    <span className="aiz-side-nav-text"> Expense Report </span>
-                  </Link>
-                </li>
-                <li className="aiz-side-nav-item">
-                  <Link className="aiz-side-nav-link " to="stock-report">
-                    <span className="aiz-side-nav-text"> Stock Report  </span>
-                  </Link>
-                </li>
-                <li className="aiz-side-nav-item">
-                  <Link className="aiz-side-nav-link " to="sales-item-report">
-                    <span className="aiz-side-nav-text"> Sales Item report </span>
-                  </Link>
-                </li>
-                <li className="aiz-side-nav-item">
-                  <Link className="aiz-side-nav-link " to="return-item-report">
-                    <span className="aiz-side-nav-text"> Return Items Report  </span>
-                  </Link>
-                </li>
-              </ul>
-            </li>
+                  <span className="aiz-side-nav-text">Report</span>
+                  <span className="aiz-side-nav-arrow" />
+                </Link>
+                <ul className={`aiz-side-nav-list level-2 mm-collapse ${report ? "mm-show" : "extra"}`}>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="profit-and-loss-report">
+                      <span className="aiz-side-nav-text">Profit & Loss Report</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="sales-and-payment-report">
+                      <span className="aiz-side-nav-text">Sales & Payment Report</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="customer-orders">
+                      <span className="aiz-side-nav-text">Customer Orders</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="gstr1-report">
+                      <span className="aiz-side-nav-text">GSTR-1 Report</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="gstr2-report">
+                      <span className="aiz-side-nav-text">GSTR-2 Report</span>
+                    </Link>
+                  </li>
+                </ul>
+              </li> */}
+
+              <li className="aiz-side-nav-item">
+                <Link
+                  className="aiz-side-nav-link"
+                  to="#"
+                  onClick={() => {
+                    setSalesgstreport(!salesgstreport);
+                  }}
+                >
+                  <i className="las la-user-tie aiz-side-nav-icon" />
+                  <span className="aiz-side-nav-text">Reports</span>
+                  <span className="aiz-side-nav-arrow" />
+                </Link>
+                <ul
+                  className={`aiz-side-nav-list level-2 mm-collapse ${salesgstreport ? "mm-show" : "extra"
+                    }`}
+                >
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="sales-gst-report">
+                      <span className="aiz-side-nav-text">Sales GST Report </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="purchase-gst-report">
+                      <span className="aiz-side-nav-text">
+                        Purchase GST Report{" "}
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="sales-summary-report">
+                      <span className="aiz-side-nav-text">
+                        Sales Summary Report{" "}
+                      </span>
+                    </Link>
+                  </li>{" "}
+                  <li className="aiz-side-nav-item">
+                    <Link
+                      className="aiz-side-nav-link"
+                      to="stock-transfer-report"
+                    >
+                      <span className="aiz-side-nav-text">
+                        Stock Transfer Report{" "}
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link
+                      className="aiz-side-nav-link"
+                      to="sales-return-payments-report"
+                    >
+                      <span className="aiz-side-nav-text">
+                        Sales Return Payments Report{" "}
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link
+                      className="aiz-side-nav-link"
+                      to="sales-payments-report"
+                    >
+                      <span className="aiz-side-nav-text">
+                        Sales Payments Report{" "}
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link
+                      className="aiz-side-nav-link"
+                      to="purchase-payments-report"
+                    >
+                      <span className="aiz-side-nav-text">
+                        Purchase Payments Report{" "}
+                      </span>
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+
+              <li className="aiz-side-nav-item">
+                <Link
+                  className="aiz-side-nav-link"
+                  to="#"
+                  onClick={() => {
+                    setManufacturing(!manufacturing);
+                  }}
+                >
+                  <i className="las la-user-tie aiz-side-nav-icon" />
+                  <span className="aiz-side-nav-text">Manufacturing</span>
+                  <span className="aiz-side-nav-arrow" />
+                </Link>
+                <ul
+                  className={`aiz-side-nav-list level-2 mm-collapse ${manufacturing ? "mm-show" : "extra"
+                    }`}
+                >
+                  <li className="aiz-side-nav-item">
+                    <Link
+                      className="aiz-side-nav-link "
+                      to="bills-of-material"
+                    >
+                      <span className="aiz-side-nav-text">Bills of Materials</span>
+                    </Link>
+                  </li></ul>
+              </li>
+
+              <li className="aiz-side-nav-item">
+                <Link
+                  className="aiz-side-nav-link"
+                  to="#"
+                  onClick={() => {
+                    setBillingBook(!billingBook);
+                  }}
+                >
+                  <i className="las la-user-tie aiz-side-nav-icon" />
+                  <span className="aiz-side-nav-text">Billing Book</span>
+                  <span className="aiz-side-nav-arrow" />
+                </Link>
+                <ul
+                  className={`aiz-side-nav-list level-2 mm-collapse ${billingBook ? "mm-show" : "extra"
+                    }`}
+                >
+                  <li className="aiz-side-nav-item">
+                    <Link
+                      className="aiz-side-nav-link "
+                      to="sales-tax-report"
+                    >
+                      <span className="aiz-side-nav-text">Sales Tax Report</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="purchase-tax-report">
+                      <span className="aiz-side-nav-text">
+                        Purchase Tax Report
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link
+                      className="aiz-side-nav-link "
+                      to="supplier-items-report"
+                    >
+                      <span className="aiz-side-nav-text">
+                        Supplier Items Report
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link
+                      className="aiz-side-nav-link "
+                      to="sales-report"
+                    >
+                      <span className="aiz-side-nav-text">
+                        {" "}
+                        Sales Report
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="sales-return-report">
+                      <span className="aiz-side-nav-text"> Sales Return Report</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="seller-point-return">
+                      <span className="aiz-side-nav-text"> Seller Points Return</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="purchase-report">
+                      <span className="aiz-side-nav-text"> Purchase Report </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="purchase-return-report">
+                      <span className="aiz-side-nav-text"> Purchase Return Report </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="expense-report">
+                      <span className="aiz-side-nav-text"> Expense Report </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="stock-report">
+                      <span className="aiz-side-nav-text"> Stock Report  </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="sales-item-report">
+                      <span className="aiz-side-nav-text"> Sales Item report </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="return-item-report">
+                      <span className="aiz-side-nav-text"> Return Items Report  </span>
+                    </Link>
+                  </li>
+                </ul>
+              </li>
 
               <li className="aiz-side-nav-item">
                 <Link

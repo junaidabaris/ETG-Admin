@@ -507,6 +507,18 @@ import ExpenseReport from "./Admin-pannel/Pages/expenseReport";
 import StockReportV from "./Admin-pannel/Pages/stockReport";
 import SaleItemReport from "./Admin-pannel/Pages/salesItemReport";
 import ReturnItemsReport from "./Admin-pannel/Pages/returnItemsReport";
+import BillsofMaterials from "./Admin-pannel/Pages/billsofMaterials";
+import ViewBillsofMaterials from "./Admin-pannel/Components/billsofMaterials/ViewBillsofMaterials";
+import SalesGstreport from "./Admin-pannel/Pages/SalesGstReport";
+import PurchaseGstreport from "./Admin-pannel/Pages/PurchaseGstReport";
+import SalesSummaryreport from "./Admin-pannel/Pages/SalesSummaryReport";
+import SalesSummaryreports from "./Admin-pannel/Pages/SalesSummaryReport";
+import StockTransferreports from "./Admin-pannel/Pages/StockTransferReport";
+import SalesReturnPaymentsreports from "./Admin-pannel/Pages/SalesReturnPaymentsReport";
+import SalesPaymentsreports from "./Admin-pannel/Pages/SalesPaymentsReport";
+import PurchasePaymentsreports from "./Admin-pannel/Pages/PurchasePaymentsReport";
+import MyTodoSetting from "./Admin-pannel/Pages/myTodoSettings";
+import ToDoLists from "./Admin-pannel/Pages/toDolist";
 
 function App() {
   const [show, setshow] = useState(true);
@@ -1017,6 +1029,48 @@ function App() {
           <Route path="return-item-report" element={<ReturnItemsReport />} />
 
 
+          <Route path="to-do-list" element={<ToDoLists />} />
+          <Route path="to-do-setting" element={<MyTodoSetting />} />
+          {/* <Route path="subscriptions" element={<Subscription />} /> */}
+          {/* <Route path="new-subscriptions" element={<NewSubscriptions />} />
+          <Route path="profit-and-loss-report" element={<Profit />} />
+          <Route path="sales-and-payment-report" element={<Salespayment />} />
+          <Route path="customer-orders" element={<Customerorder />} />
+          <Route path="gstr1-report" element={<GSTR />} />
+          <Route path="gstr2-report" element={<GSTR2 />} /> */}
+
+
+
+
+
+
+
+
+
+
+
+          <Route path="bills-of-material" element={<BillsofMaterials />} />
+          <Route path="view-billsofmaterials" element={<ViewBillsofMaterials />} />
+
+          <Route path="sales-gst-report" element={<SalesGstreport />} />
+          <Route path="Purchase-gst-report" element={<PurchaseGstreport />} />
+          <Route path="sales-summary-report" element={<SalesSummaryreports />} />
+          <Route
+            path="stock-transfer-report"
+            element={<StockTransferreports />}
+          />
+          <Route
+            path="sales-return-payments-report"
+            element={<SalesReturnPaymentsreports />}
+          />
+          <Route
+            path="sales-payments-report"
+            element={<SalesPaymentsreports />}
+          />
+          <Route
+            path="purchase-payments-report"
+            element={<PurchasePaymentsreports />}
+          />
 
 
 
