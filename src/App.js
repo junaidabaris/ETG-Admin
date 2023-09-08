@@ -463,7 +463,11 @@ import ListCompany from "./Admin-pannel/Pages/accounts/company/ListCompany";
 import ListsLegers from "./Admin-pannel/Pages/accounts/ladgeradd/ladger/ListsLegers";
 import ReportsLedgers from "./Admin-pannel/Pages/accounts/ladgeradd/ladger/ReportsLedgers";
 import ReportsGroup from "./Admin-pannel/Pages/accounts/addcompany/listLadger/ReportsGroup";
+import ListVochers from "./Admin-pannel/Pages/accounts/Vochers/ListVochers";
+import DayBooks from "./Admin-pannel/Pages/accounts/addcompany/books/DayBooks";
+import CustomFelds from "./Admin-pannel/Pages/settings/custom_fields/CustomFelds";
 // {Shaaz import end}
+
 
 // {daud import start}
 // import AmazonAccountListPage from "./Admin-pannel/Pages/amazonAccount-list/index";
@@ -478,7 +482,31 @@ import ReportsGroup from "./Admin-pannel/Pages/accounts/addcompany/listLadger/Re
 // import CategoryMapPage from "./pages/categoryMap";
 // import CreateMap from "./components/amazon-account/categoryMap/createMap/CreateMap";
 // {daud import end}
-
+import CreateCostCentrePage from "./Admin-pannel/Pages/createCostCentre";
+import CreateCostCentreCategorypage from "./Admin-pannel/Pages/createCostCentreCategory";
+import CreateBudgetPage from "./Admin-pannel/Pages/createBudgetPage";
+import BudgetListpage from "./Admin-pannel/Pages/budgetListPage";
+import EditBudgetPage from "./Admin-pannel/Pages/editBudgetPage";
+import CreateVoucherTypePage from "./Admin-pannel/Pages/createVoucherTypePage";
+import ListVoucherTypePage from "./Admin-pannel/Pages/listVoucherTypePage";
+import EditVoucherTypePage from "./Admin-pannel/Pages/editVoucherTypePage";
+import CostCentreListPage from "./Admin-pannel/Pages/costCentreListpage";
+import EditCostCentrePage from "./Admin-pannel/Pages/editCostCentrePage";
+import ListCostCentreCategoryPage from "./Admin-pannel/Pages/listCostCentreCategoryPage";
+import EditCostCentreCategoryPage from "./Admin-pannel/Pages/editCostCentreCategoryPage";
+import Custom_fields_add from "./Admin-pannel/Pages/settings/custom_fields/Custom_fields_add";
+import SalesTaxRepors from "./Admin-pannel/Pages/salesTaxReport/index";
+import PurchaseTaxReport from "./Admin-pannel/Pages/purchaseTaxReport";
+import SupplierItemsReport from "./Admin-pannel/Pages/supplierItemsReport";
+import SalesReports from "./Admin-pannel/Pages/salesReport/index";
+import SalesReturnReport from "./Admin-pannel/Pages/salesReturnReport";
+import SellerPointsReturn from "./Admin-pannel/Pages/sellerPointsReport";
+import PurchaseReport from "./Admin-pannel/Pages/purchaseReport";
+import PurchaseReturnReport from "./Admin-pannel/Pages/purchaseReturnReport";
+import ExpenseReport from "./Admin-pannel/Pages/expenseReport";
+import StockReportV from "./Admin-pannel/Pages/stockReport";
+import SaleItemReport from "./Admin-pannel/Pages/salesItemReport";
+import ReturnItemsReport from "./Admin-pannel/Pages/returnItemsReport";
 
 function App() {
   const [show, setshow] = useState(true);
@@ -752,6 +780,11 @@ function App() {
           <Route path="list_popup" element={<ListPopups />} />
 
 
+          {/* custom_fields AAP */}
+          <Route path="custom_fields" element={<CustomFelds />} />
+          <Route path="custom_fields/custom_fields_add" element={<Custom_fields_add />} />
+
+
 
           <Route path="system_settings" element={<SystemSettingsPage />} />
           <Route path="add_printer" element={<AddPrinterPage />} />
@@ -806,7 +839,19 @@ function App() {
 
           <Route path="products/all/print_barcodes/:id" element={<PrintBarCode />} />
 
-          {/* {shoaib code} */}
+          {/* {zilani code} */}
+          <Route path="coast-centre-create" element={<CreateCostCentrePage />} />
+          <Route path="cost-centre" element={<CostCentreListPage />} />
+          <Route path="cost-centre/edit/:id" element={<EditCostCentrePage />} />
+          <Route path="coast-centre-category-create" element={<CreateCostCentreCategorypage />} />
+          <Route path="coast-centre-category" element={<ListCostCentreCategoryPage />} />
+          <Route path="coast-centre-category/edit/:id" element={<EditCostCentreCategoryPage />} />
+          <Route path="budget-create" element={<CreateBudgetPage />} />
+          <Route path="budgets" element={<BudgetListpage />} />
+          <Route path="budgets/edit/:id" element={<EditBudgetPage />} />
+          <Route path="vouchertype/create" element={<CreateVoucherTypePage />} />
+          <Route path="vouchertypes" element={<ListVoucherTypePage />} />
+          <Route path="vouchertypes/edit/:id" element={<EditVoucherTypePage />} />
 
           {/* <Route path="add-newasset-category" element={<AddAssetCategories />} />
           <Route path="asset-category" element={<AssetCategorey />} />
@@ -929,6 +974,7 @@ function App() {
           <Route path='accounts-group' element={<ChartOfAccountGroup />} />
           <Route path="groups" element={<Groups />} />
           <Route path="add-voucher" element={<AddVochers />} />
+          <Route path="list-voucher" element={<ListVochers />} />
           <Route path="add-ledgers" element={<Ladgers />} />
           <Route path="reports-ledgers" element={<ReportsLedgers />} />
           <Route path='ledgers-edit/:id' element={<Ladgers />} />
@@ -939,21 +985,40 @@ function App() {
           <Route path='reports-group' element={<ReportsGroup />} />
           <Route path='account-dashbord' element={<DashboarD />} />
           <Route path='report' element={<Report />} />
-          <Route path='add-company' element={<AddCompanys/>} />
+          <Route path='add-company' element={<AddCompanys />} />
           <Route path='company_edit/:id' element={<AddCompanys />} />
-          <Route path='list-company' element={<ListCompany/>} />
+          <Route path='list-company' element={<ListCompany />} />
           <Route path='/admin/rp_balance_report_sheet' element={<Rpblancesheetcomprasion />} />
+          <Route path='day_book' element={<DayBooks str="Day" />} />
+          <Route path='cash_book' element={<DayBooks str="Cash" />} />
+          <Route path='bank_book' element={<DayBooks str="Bank" />} />
           {/* by Sajid */}
 
 
           <Route path="setting" element={<Setting />}>
             <Route path="" element={<Generals />} />
-            <Route path="banking" element={<Banking/>} />
+            <Route path="banking" element={<Banking />} />
           </Route>
-          <Route path='add-banking' element={<AddBanking/>} />
+          <Route path='add-banking' element={<AddBanking />} />
 
 
           {/* {nazim Routes end} */}
+          <Route path="sales-tax-report" element={<SalesTaxRepors />} />
+          <Route path="purchase-tax-report" element={<PurchaseTaxReport />} />
+          <Route path='supplier-items-report' element={<SupplierItemsReport />} />
+          <Route path="sales-report" element={<SalesReports />} />
+          <Route path="sales-return-report" element={<SalesReturnReport />} />
+          <Route path="seller-point-return" element={<SellerPointsReturn />} />
+          <Route path="purchase-report" element={<PurchaseReport />} />
+          <Route path="purchase-return-report" element={<PurchaseReturnReport />} />
+          <Route path="expense-report" element={<ExpenseReport />} />
+          <Route path="stock-report" element={<StockReportV />} />
+          <Route path="sales-item-report" element={<SaleItemReport />} />
+          <Route path="return-item-report" element={<ReturnItemsReport />} />
+
+
+
+
 
           <Route path="lead-filters" element={<Leadfilter />} />
           <Route path="lead-filters-template" element={<LeadFilters />} />

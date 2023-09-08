@@ -71,7 +71,6 @@ function PurchaseVtechModal(props) {
                 <tbody>
 
                     {values && values.map((item, i) => {
-                        console.log(item);
                         return <tr>
                             <td>
                                 <Form>

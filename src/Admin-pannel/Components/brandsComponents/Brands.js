@@ -5,7 +5,8 @@ import { ToastContainer, toast } from "react-toastify";
 
 function Brands() {
     const [inputVal, setInputVal] = useState({ search: '' });
-    const { isLoading, data } = useGetBrandsQuery();
+    const token = window.localStorage.getItem('token')
+    const { isLoading, data } = useGetBrandsQuery(token);
     const copiedData = { ...data }
     const [blankArr, setBlankArr] = useState([])
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast, ToastContainer } from 'react-toastify';
 import { useAddNewAttributeMutation } from "../all-products/allproductsApi/allProductsApi";
 
@@ -17,10 +17,10 @@ function AddNewAttributesAdmin() {
     };
 
     const [addNewAttribute, response] = useAddNewAttributeMutation();
-
+    const token = window.localStorage.getItem('token')
     const addNewAttributeData = (e) => {
         e.preventDefault();
-        addNewAttribute(inputval)
+        addNewAttribute({ data: inputval, token: token })
         document.getElementById("create-course-form").reset();
     };
 
@@ -30,13 +30,15 @@ function AddNewAttributesAdmin() {
         })
     };
 
-    if (response.isSuccess === true) {
-        toastSuccessMessage()
-    };
-    if (response.isError === true) {
-        alert('!Error Attribute not added')
-    }
+    useEffect(() => {
+        if (response.isSuccess === true) {
+            toastSuccessMessage()
+        };
+        if (response.isError === true) {
+            alert('!Error Attribute not added')
+        }
 
+    }, [response])
 
     return (
         <>

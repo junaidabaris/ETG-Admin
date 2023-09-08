@@ -10,7 +10,8 @@ import axios from 'axios';
 
 function AllProducts() {
   const [inputVal, setInputVal] = useState('');
-  const { data, isLoading } = useGetAllProductsQuery()
+  const token = window.localStorage.getItem('adminToken')
+  const { data, isLoading } = useGetAllProductsQuery(token)
   const [bArr, setBArr] = useState([]);
   const params = useParams()
 
@@ -48,7 +49,7 @@ function AllProducts() {
   const [deleteData, response] = useDeleteProductMutation();
 
   function deleteProductData(id) {
-    deleteData(id)
+    deleteData({id ,token})
   };
 
   useEffect(() => {
@@ -173,16 +174,16 @@ function AllProducts() {
                           </td>
                           <td style={{ display: 'table-cell' }}>
                             <div className="row gutters-5 w-200px w-md-300px mw-100">
-                              <div className="col-auto w-50 ">
+                              {item?.variations?.length && <div className="col-auto w-50 ">
                                 {item?.variations[0]?.mainImage_url?.url ? <img src={item?.variations[0]?.mainImage_url?.url} alt="Image" className="img-fluid" /> : <img src="https://reactfront.mmslfashions.in/uploads/products/main/images/chlor.jpg" alt="Image" className="img-fluid" />}
-                              </div>
+                              </div>}
                               <div className="col">
                                 <span className="text-muted text-truncate-2" style={{ fontSize: "18px", marginBottom: "10px" }}>{item.name}</span>
-                                <div>
+                                {item?.variations?.length && <div>
                                   <span>Mrp : Rs {item?.variations[0]?.mrp}</span>,<br />
                                   <span>Sale : Rate Rs  {item?.variations[0]?.sale_rate}</span>,<br />
                                   <span>Discount : Rs {item?.variations[0]?.discount}</span>
-                                </div>
+                                </div>}
                               </div>
                             </div>
                           </td>

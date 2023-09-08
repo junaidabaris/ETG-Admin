@@ -6,7 +6,8 @@ function CategoriesAdmin() {
   const [inputVal, setInputVal] = useState({ search: '' });
   const [blankArr, setBlankArr] = useState([]);
 
-  const { isLoading, data } = useGetCategoriesQuery();
+  const token = window.localStorage.getItem('token')
+  const { isLoading, data } = useGetCategoriesQuery(token);
 
   const onChangeHandler = (e) => {
     const inpVal = e.target.value;

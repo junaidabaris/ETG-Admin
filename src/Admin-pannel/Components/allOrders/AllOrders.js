@@ -208,7 +208,9 @@ function AllOrders() {
                           console.log(item);
                         }
 
-                        return <tr key={item._id} style={{ cursor: "pointer" }} onClick={()=>{navigate(`/admin/all_orders/order-Details/${item._id}`)}}>
+                        return <tr key={item._id} style={{ cursor: "pointer" }}
+                        //  onClick={()=>{navigate(`/admin/all_orders/order-Details/${item._id}`)}}
+                         >
                           <td
                             className="footable-first-visible"
                             style={{ display: "table-cell" }}

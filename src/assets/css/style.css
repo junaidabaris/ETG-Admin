@@ -10602,3 +10602,64 @@ table tbody tr .show-table {
 .htt > div {
   width: 990px;
 }
+.btnMain{
+  margin: 10px 0;
+
+}
+.btnMain > button {
+  margin: 0 4px;
+}
+.dayColor{
+  background-color: rgb(239 223 198) !important;
+}
+.CashColor{
+  background-color: rgb(207 238 207) !important;
+}
+.BankColor{
+  background-color: #f0f0cc !important ;
+}
+.changeRouts{
+  cursor: pointer;
+  padding: 10px 0;
+}
+.changeRouts:hover{
+  background-color:#1cb8ec;
+}
+.extraMrHide{
+  margin-left: 190px !important;
+}
+.Paymentcolor{
+  background-color:  #edf0d3 !important;
+}
+.Paymentcolorbtn{
+  background-color:  #edf0d3 !important;
+  color: black !important;
+}
+.Receiptcolor{
+  background-color:  #e7dbc7 !important;
+}
+.Receiptcolorbtn{
+  background-color:  #e7dbc7 !important;
+  color: black !important;
+}
+.Journalcolor{
+  background-color:  rgb(195 201 179) !important;
+}
+.Journalcolorbtn{
+  background-color:  rgb(195 201 179) !important;
+  color: black !important;
+}
+.Debitcolor{
+  background-color:  rgb(255 252 214) !important;
+}
+.Debitcolorbtn{
+  background-color:  rgb(255 252 214) !important;
+  color: black !important;
+}
+.Creditcolor{
+  background-color:  rgb(255 236 216) !important;
+}
+.Creditcolorbtn{
+  background-color:  rgb(255 236 216) !important;
+  color: black !important;
+}

@@ -1,7 +1,7 @@
 
 import ModalCombo from "../../../Pages/addComboProduct/ModalCombo"
 import { useEffect, useState } from "react";
-import { useAddDeleveryChallanMutation, useAddQuatationVMutation, useGetCustomersQuery, useGetPickupPointQuery, useGetProductSearchQuery } from "../../all-products/allproductsApi/allProductsApi";
+import { useAddDeleveryChallanMutation, useAddQuatationVMutation, useAddpurchaseVcartMutation, useGetCustomersQuery, useGetPickupPointQuery, useGetProductSearchQuery } from "../../all-products/allproductsApi/allProductsApi";
 import axios from "axios";
 import { RxCross1 } from "react-icons/rx";
 import { AiFillDelete } from "react-icons/ai";
@@ -51,6 +51,7 @@ function AddDeliveryChalanReport() {
             setShow(true)
         }
     }
+
     const changeHandelVal = (e) => {
         const clone = { ...values }
         clone[e.target.name] = e.target.value
@@ -70,8 +71,8 @@ function AddDeliveryChalanReport() {
             }
         })
         setShowCombo(abc)
-        const sendInpData = await axios.post('https://onlineparttimejobs.in/api/serviceQuotation/cart', { products: abc })
-        setShowCombo(sendInpData.data.products)
+        // const sendInpData = await axios.post('https://onlineparttimejobs.in/api/serviceQuotation/cart', { products: abc })
+        // setShowCombo(sendInpData.data.products)
     }
 
     const changeHandelAddress = async (e) => {
@@ -82,29 +83,40 @@ function AddDeliveryChalanReport() {
         setBillingAddress(billingRes.data);
         setCustomerId(e.target.value)
     }
-
+    const [cartPurchase, { data, isSuccess: cartSussuss }] = useAddpurchaseVcartMutation()
     const SaveData = (val) => {
         setModalShow(false)
         const arr = [...showCombo, ...val]
-        setShowCombo(arr)
+        const sendArr = arr.map((item) => {
+            console.log(item);
+            return { productId: item.productId, variantId: item.variant, sku: item.sku, qty: item.qty }
+        })
+        cartPurchase({ products: sendArr });
+
     };
+    useEffect(() => {
+        if (data) {
+            setShowCombo(data)
+        }
+    }, [cartSussuss])
 
 
+    const token = window.localStorage.getItem('token')
     const sendComboData = () => {
         const getData = showCombo.map((item) => {
             console.log(item);
-            return { productId: item.productId._id, variantId: item._id, sku: item.sku, unitPrice: item.unitPrice, qty: item.qty, discount: item.discount, tax: item.tax, subtotal: item.subTotal, serial: item.serial, total: item.total }
+            return { productId: item.productId._id, variantId: item.variantId._id, sku: item.sku, unitPrice: item.variantId.unitPrice,  discount: item.variantId.discount, tax: item.variantId.tax, subtotal: item.variantId.subTotal, serial: item.serial, total: item.variantId.total }
         })
         const obj = {
             ...values,
             products: getData,
             userid: customerId,
             isActive: true,
-            shippingAddress: shippingAddress?.address[0]?._id,
-            billingAddress: billingAddress?.address[0]?._id
+            // shippingAddress: shippingAddress?.address[0]?._id,
+            // billingAddress: billingAddress?.address[0]?._id
         }
 
-        addDeleveryChallan(obj)
+        addDeleveryChallan({data:obj , tokenn:token})
     }
 
     const toastSuccessMessage = () => {
@@ -145,6 +157,20 @@ function AddDeliveryChalanReport() {
     }
 
 
+    const onchangeModal = (e, id) => {
+        const vals = e.target.value
+        const clone = { ...cartData }
+        const maped = clone?.variations?.map((val) => {
+            if (val._id == IdleDeadline) {
+                const obj = { ...val, qty: vals }
+                return obj
+            } else {
+                return val
+            }
+        })
+        clone.variations = maped
+        setcartData(clone)
+    }
 
 
     return <div>
@@ -155,6 +181,7 @@ function AddDeliveryChalanReport() {
             cartData={cartData}
             SaveData={SaveData}
             showCombo={showCombo}
+            onchangeModal={onchangeModal}
         />}
 
         <>
@@ -199,18 +226,6 @@ function AddDeliveryChalanReport() {
                                     </div>
                                 </div>
 
-                                {/* <div className="col-4 d-block">
-                                <div>
-                                    <label>Biller *</label>
-                                    <select name="biller" className="form-select" aria-label="Default select example" onChange={changeHandelVal} >
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                    </select>
-                                </div>
-                            </div> */}
-
                                 <div className="col-4 d-block">
                                     <div>
                                         <label>PickupPint</label>
@@ -233,57 +248,10 @@ function AddDeliveryChalanReport() {
                                     </div>
                                 </div>
 
-                                {/* <div className="col-4 d-block">
-                                <div>
-                                    <label>Order Tax *</label>
-                                    <select name="order_tax" className="form-select" aria-label="Default select example" onChange={changeHandelVal} >
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="col-4 d-block">
-                                <div>
-                                    <label>Supplier</label>
-                                    <select name="supplier" className="form-select" aria-label="Default select example" onChange={changeHandelVal} >
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                    </select>
-                                </div>
-                            </div> */}
-
-                                {/* <div className="col-4 d-block">
-                                <div>
-                                    <label>Status</label>
-                                    <select name="status" className="form-select" aria-label="Default select example" onChange={changeHandelVal} >
-                                        <option selected value="active">Active</option>
-                                        <option value="in_active">In Active</option>
-                                    </select>
-                                </div>
-                            </div> */}
-                                {/* 
-                            <div className="col-4 d-block">
-                                <div>
-                                    <label>Discount</label>
-                                    <input value={values.discount} onChange={changeHandelVal} name="discount" className="form-control" type="number" />
-                                </div>
-                            </div> */}
-
-                                {/* <div className="col-4 d-block">
-                                <div>
-                                    <label>Shipping</label>
-                                    <input value={values.shipping} onChange={changeHandelVal} name="shipping" className="form-control" type="number" />
-                                </div>
-                            </div> */}
-
                                 <div className="col-4 d-block">
                                     <div>
                                         <label>Billing Adress</label>
-                                        <select name="billing_address" className="form-select" aria-label="Default select example" onChange={changeHandelVal} >
+                                        <select name="billingAddress" className="form-select" aria-label="Default select example" onChange={changeHandelVal} >
                                             {billingAddress && billingAddress.address?.map((item, i) => {
                                                 return <option selected value={item._id} key={i}>{item?.addressLine1 + ',' + item?.addressLine2 + ' ,' + item?.landmark + ' ,' + item?.zip + ', ' + item?.city + ' ,' + item?.state + ' ,' + item?.country}</option>
                                             })}
@@ -294,7 +262,7 @@ function AddDeliveryChalanReport() {
                                 <div className="col-4 d-block">
                                     <div>
                                         <label>Shipping Adress</label>
-                                        <select name="shipping_adress" className="form-select" aria-label="Default select example" onChange={changeHandelVal} >
+                                        <select name="shippingAddress" className="form-select" aria-label="Default select example" onChange={changeHandelVal} >
                                             {shippingAddress && shippingAddress.address?.map((item, i) => {
                                                 return <option selected value={item._id} key={i}>{item?.addressLine1 + ', ' + item?.addressLine2 + ' ,' + item?.landmark + ',' + item?.zip + ',' + item?.city + ',' + item?.state + ',' + item?.country}</option>
                                             })}
@@ -341,14 +309,14 @@ function AddDeliveryChalanReport() {
                                                         <td><label className="control-label">#</label></td>
                                                         <td><label className="control-label">Product Name</label></td>
                                                         <td><label className="control-label">SKU</label></td>
-                                                        <td><label className="control-label">Serial </label></td>
                                                         <td><label className="control-label">Variant</label></td>
-                                                        <td><label className="control-label">Unit Price</label></td>
+                                                        <td><label className="control-label">Serial </label></td>
+                                                        {/* <td><label className="control-label">Unit Price</label></td>
                                                         <td><label className="control-label">Quantity</label></td>
                                                         <td><label className="control-label">Sub Total</label></td>
                                                         <td><label className="control-label">Tax</label></td>
                                                         <td><label className="control-label">Tax Type</label></td>
-                                                        <td><label className="control-label">Total</label></td>
+                                                        <td><label className="control-label">Total</label></td> */}
                                                     </tr>
 
                                                 </thead>
@@ -367,12 +335,13 @@ function AddDeliveryChalanReport() {
                                                                 <input type="text" disabled value={item?.sku} name="sku" className="form-control" />
                                                             </td>
                                                             <td>
-                                                                <input type="text" value={item?.serial} name="serial" onChange={handleInputItem} className="form-control" />
+                                                                <input type="text" disabled value={item?.variantId?.weight} name="rate" className="form-control" />
                                                             </td>
                                                             <td>
-                                                                <input type="text" disabled value={item?.weight} name="rate" className="form-control" />
+                                                                <input type="text" value={item?.serial} id={i} name="serial" onChange={handleInputItem} className="form-control" />
                                                             </td>
-                                                            <td>
+
+                                                            {/* <td>
                                                                 <input type="text" id={i} name="unitPrice" className="form-control" onChange={handleInputItem} />
                                                             </td>
 
@@ -394,7 +363,7 @@ function AddDeliveryChalanReport() {
                                                             </td>
                                                             <td>
                                                                 <input type="text" disabled name="total" value={item?.total} className="form-control" />
-                                                            </td>
+                                                            </td> */}
 
                                                         </tr>
                                                     })}

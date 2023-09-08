@@ -27,11 +27,16 @@ function AddProductAttributes({ getDatas }) {
             position: "top-center"
         })
     };
-
+    const token = window.localStorage.getItem('token')
     const sendData = async () => {
         const obj = { name: state.name, values: finalCatD }
         try {
-            const res = await axios.post(`https://onlineparttimejobs.in/api/attributeSetMaster/add_attributeSetMasters`, obj)
+            const res = await axios.post(`https://onlineparttimejobs.in/api/attributeSetMaster/add_attributeSetMasters`, obj,{
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                    Authorization: `Bearer ${token}`,
+                },
+            })
             toastSuccessMessage()
             setState({ name: '' })
             

@@ -1,12 +1,16 @@
 import axios from "axios"
+import Multiselect from "multiselect-react-dropdown"
 import { useEffect, useState } from "react"
+import { AiFillDelete } from "react-icons/ai"
+import { GrAdd } from "react-icons/gr"
 import { useParams } from "react-router-dom"
 import { ToastContainer, toast } from "react-toastify"
 
 function AddCompanys() {
     const [state, setState] = useState({
         name: "",
-        // alias: "",
+        firstname: "",
+        lastname: "",
         directory: "",
 
         primaryMailingName: "",
@@ -19,7 +23,7 @@ function AddCompanys() {
         mobile: "",
         email: "",
         faxNo: "",
-        website: "",
+        websites: [],
 
         financialYear: "",
         bookBeginning: "",
@@ -33,7 +37,43 @@ function AddCompanys() {
         addSpaceBet: false,
         amountInMil: false,
         numberOfDecimal: "",
+        vouPrefix: "",
+        vouSequence: "",
+        roles: [],
     })
+    const [finalCatD, setFinalCatD] = useState();
+    const [companys, setCompanys] = useState([{ id: Math.random(), value: "" }])
+
+    const changeHandleCompany = (e, id) => {
+        const val = e.target.value
+        const maped = companys.map((item) => {
+            if (item.id == id) {
+                const obj = { ...item, value: val }
+                return obj
+            } else {
+                return item
+            }
+        })
+        setCompanys(maped)
+    }
+    const AddRows = () => {
+        const clone = [...companys]
+        clone.push({ id: Math.random(), value: "" })
+        setCompanys(clone)
+
+    }
+    const deleteData = (id) => {
+        const filterd = companys.filter((item) => {
+            return item.id !== id
+        })
+        setCompanys(filterd)
+    }
+
+
+
+
+
+
 
     const changeHandle = (e) => {
         const clone = { ...state }
@@ -56,33 +96,33 @@ function AddCompanys() {
 
     const token = window.localStorage.getItem('adminToken')
     const sendData = async () => {
-       if (param?.id) {
-        try {
-            const res = await axios.put(`https://onlineparttimejobs.in/api/accountCompany/update_company/${param.id}`, state, {
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8",
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-            toastSuccessMessage1('Update')
+        if (param?.id) {
+            try {
+                const res = await axios.put(`https://onlineparttimejobs.in/api/accountCompany/update_company/${param.id}`, { ...state, websites: companys ,roles:finalCatD }, {
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8",
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                toastSuccessMessage1('Update')
 
-        } catch (error) {
-            toastErrorMessage1('Update')
-        }
-       } else {
-        try {
-            const res = await axios.post(`https://onlineparttimejobs.in/api/accountCompany/add_Company`, state, {
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8",
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-            toastSuccessMessage1('Create')
+            } catch (error) {
+                toastErrorMessage1('Update')
+            }
+        } else {
+            try {
+                const res = await axios.post(`https://onlineparttimejobs.in/api/accountCompany/add_Company`, { ...state, websites: companys ,roles:finalCatD }, {
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8",
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                toastSuccessMessage1('Create')
 
-        } catch (error) {
-            toastErrorMessage1('Created')
+            } catch (error) {
+                toastErrorMessage1('Created')
+            }
         }
-       }
     }
 
     const param = useParams()
@@ -94,12 +134,30 @@ function AddCompanys() {
                 Authorization: `Bearer ${token}`,
             },
         })
-        setState(res.data)
+        const clone = { ...res.data.getCompany, firstname: res.data.found.firstname, lastname: res.data.found.lastname, email: res.data.found.email, mobile: res.data.found.mobile, password: res.data.found.password }
+        setState(clone)
+
+        const mapedata = res.data?.getCompany.website?.map((item) => {
+            return { id: Math.random(), value: item }
+        })
+        setCompanys(mapedata)
+    }
+    const [rolesV, setRolsV] = useState()
+    const getDatas2 = async () => {
+        const res = await axios.get(`https://onlineparttimejobs.in/api/roleParent`, {
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                Authorization: `Bearer ${token}`,
+            },
+        })
+
+        setRolsV(res.data)
     }
     useEffect(() => {
         if (param?.id) {
             getDatas()
         }
+        getDatas2()
     }, [param])
     return <div className="p-4">
         <ToastContainer />
@@ -114,9 +172,38 @@ function AddCompanys() {
                             <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={state.directory} name="directory" onChange={changeHandle} />
                         </div>
                         <div className="col-4">
-                            <label for="exampleInputEmail1" className="form-label">Name</label>
+                            <label for="exampleInputEmail1" className="form-label"> Name</label>
                             <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={state.name} name="name" onChange={changeHandle} />
                         </div>
+                        <div className="col-4">
+                            <label for="exampleInputEmail1" className="form-label">* Role</label>
+                            {/* <select class="form-select" aria-label="Default select example" name="roles" value={state.roles} onChange={changeHandle}>
+                                <option selected>Open this select menu</option>
+                                {rolesV && rolesV.map((item) => {
+                                    return <option value={item._id} >{item.name}</option>
+                                })}
+                            </select> */}
+                            <Multiselect
+                                isObject={true}
+                                displayValue="name"
+                                options={rolesV}
+                                showCheckbox
+                                selectedValues={[]}
+                                onRemove={(selectedCat) => {
+                                    const selectedIds = selectedCat.map((cat) => {
+                                        return cat._id
+                                    })
+                                    setFinalCatD(selectedIds)
+                                }}
+                                onSelect={(selectedCat) => {
+                                    const selectedIds = selectedCat.map((cat) => {
+                                        return cat._id
+                                    })
+                                    setFinalCatD(selectedIds)
+                                }}
+                            />
+                        </div>
+
                     </div>
                     <div className="row">
                         <h6>Primary Mailing Details</h6>
@@ -165,10 +252,26 @@ function AddCompanys() {
                             <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={state.faxNo} name="faxNo" onChange={changeHandle} />
                         </div>
                         <div className="col-4">
-                            <label for="exampleInputEmail1" className="form-label">Website</label>
-                            <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={state.website} name="website" onChange={changeHandle} />
+                            <label for="exampleInputEmail1" className="form-label">First Name</label>
+                            <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={state.firstname} name="firstname" onChange={changeHandle} />
                         </div>
+                        <div className="col-4">
+                            <label for="exampleInputEmail1" className="form-label">Last Name</label>
+                            <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={state.lastname} name="lastname" onChange={changeHandle} />
+                        </div>
+
                     </div>
+
+                    <div className="row" style={{ margin: "25px 0" }}>
+                        <h6>Website</h6>
+                        {companys && companys.map((item, i) => {
+                            return <div style={{ margin: "10px 0" }} className="col-4 d-flex">
+                                <input type="text" className="form-control" value={item?.value} name="website" onChange={(e) => { changeHandleCompany(e, item.id) }} />
+                                <button style={{ margin: "0 10px" }} type="button" class="btn btn-danger" onClick={() => deleteData(item.id)}><AiFillDelete /></button>
+                            </div>
+                        })}
+                    </div>
+                    <button style={{ margin: "20px 10px", width: "100px" }} type="button" class="btn btn-info" onClick={AddRows}><GrAdd /></button>
 
                     <div className="row">
                         <h6>Books and Financial Year</h6>
@@ -176,7 +279,7 @@ function AddCompanys() {
                             <label for="exampleInputEmail1" className="form-label">Financial Year from</label>
                             <input type="date" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={state.financialYear} name="financialYear" onChange={changeHandle} />
                         </div>
-                        <div className="col-4">
+                        <div className="col-4 ">
                             <label for="exampleInputEmail1" className="form-label">Books Beginning from</label>
                             <input type="date" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={state.bookBeginning} name="bookBeginning" onChange={changeHandle} />
                         </div>
@@ -194,7 +297,17 @@ function AddCompanys() {
                             <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" style={{ padding: "10px", marginTop: "30px" }} />
                         </div>
                     </div>
-
+                    <div className="row" style={{ margin: "20px 0" }}>
+                        <h6>Vochers Settings</h6>
+                        <div className="col-4">
+                            <label for="exampleInputEmail1" className="form-label">Vochers Prefix</label>
+                            <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={state.vouPrefix} name="vouPrefix" onChange={changeHandle} />
+                        </div>
+                        <div className="col-4">
+                            <label for="exampleInputEmail1" className="form-label">Vochers Sequence</label>
+                            <input type="number" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={state.vouSequence} name="vouSequence" onChange={changeHandle} />
+                        </div>
+                    </div>
 
                     <h6 style={{ margin: "20px 0" }}>Base Currency Imformation</h6>
                     <div className="row">
@@ -224,6 +337,9 @@ function AddCompanys() {
                         </div>
                         <button type="button" style={{ width: "200px" }} onClick={sendData} className="btn btn-primary">{param?.id ? 'Update' : 'Save'}</button>
                     </div>
+
+
+
                 </div>
             </div>
         </div>

@@ -1452,7 +1452,7 @@ function DashboardAdminComp() {
               <div className="card-body">
                 <div className="aiz-carousel gutters-10 half-outside-arrow slick-initialized slick-slider" data-items={6} data-xl-items={5} data-lg-items={4} data-md-items={3} data-sm-items={2} data-arrows="true">
                   <div className="slick-list draggable"><div className="slick-track" style={{ opacity: 1, width: 2352, transform: 'translate3d(0px, 0px, 0px)' }}>
-                    {allDashboardData && allDashboardData?.latestProducts.map((item) => {
+                    {allDashboardData && allDashboardData?.latestProducts?.map((item) => {
                       return <div className="slick-slide slick-current slick-active" data-slick-index={0} aria-hidden="false" style={{ width: 196 }}>
                         <div>
                           <div className="carousel-box" style={{ width: '100%', display: 'inline-block' }}>
@@ -1464,7 +1464,7 @@ function DashboardAdminComp() {
                               </div>
                               <div className="p-md-3 p-2 text-left">
                                 <div className="fs-15">
-                                  <span className="fw-700 text-primary">ZK {item?.variations[0].mrp}</span>
+                                 {item.variations?.length &&  <span className="fw-700 text-primary">ZK {item?.variations[0]?.mrp}</span>}
                                 </div>
 
                                 <h3 className="fw-600 fs-13 text-truncate-2 lh-1-4 mb-0">

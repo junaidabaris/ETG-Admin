@@ -15,8 +15,8 @@ function AddnewCategories() {
   // const [validated, setValidated] = useState(false);
 
   const [inputval, setInputVal] = useState({ name: '', parent_id: null, order_level: '', type: '1', banner: '', image: '', meta_title: '', meta_description: '', commision_rate: '', filtering_attributes: '', level: '', top: '', featured: '' });
-
-  const { data } = useGetCategoriesQuery();
+  const token = window.localStorage.getItem('token')
+  const { data } = useGetCategoriesQuery(token);
   const [addCategory, response] = useAddNewCategoryMutation();
 
 
@@ -55,10 +55,16 @@ function AddnewCategories() {
     formData.append('level', clonedObj.level);
     formData.append('top', clonedObj.top);
     formData.append('featured', clonedObj.featured);
-    formData.append('image', file);
+    // formData.append('image', file);
+    console.log(file);
 
     try {
-      const res = await axios.post(url, formData);
+      const res = await axios.post(url, formData, {
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       alert('Category Request Send Successfully')
       document.getElementById("create-course-form").reset();
     } catch (error) {
@@ -82,7 +88,7 @@ function AddnewCategories() {
       alert('!Category not added')
     };
   }, [response])
-  
+
 
   return (
     <>

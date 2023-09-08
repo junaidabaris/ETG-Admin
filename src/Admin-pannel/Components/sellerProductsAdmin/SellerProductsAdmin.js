@@ -17,11 +17,6 @@ function SellerProductsAdmin() {
     // } else {
     //     setIdProduct(sellerid)
     // }
-
-    console.log('idProduct--------', idProduct)
-    console.log('sellerid--------', sellerid)
-    console.log('EtgId--------', EtgId)
-
     const [inputval, setInputVal] = useState({
         todays_deal: false,
         featured: false,
@@ -46,7 +41,6 @@ function SellerProductsAdmin() {
     }
 
     const onchangeClick = (item) => {
-        console.log('item--check---', item)
         setIdProduct({ id: item._id, name: item.firstname + " " + item.lastname })
         setShowDrop(false)
     }

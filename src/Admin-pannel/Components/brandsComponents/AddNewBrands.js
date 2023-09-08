@@ -19,8 +19,8 @@ function AddnewBrandsAdmin() {
         clonedObj[inpName] = inpval;
         setInputval(clonedObj)
     };
-
-    const addNewBrandData =async (e) => {
+    const token = window.localStorage.getItem('token')
+    const addNewBrandData = async (e) => {
         e.preventDefault();
         // const formData = new FormData();
         // formData.append('image', file);
@@ -41,7 +41,12 @@ function AddnewBrandsAdmin() {
         formData.append('image', file);
 
         try {
-            const res = await axios.post(url, formData);
+            const res = await axios.post(url, formData, {
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             alert('Brnad Request Send Successfully')
         } catch (error) {
             alert('Brnad Request Send Fail !')

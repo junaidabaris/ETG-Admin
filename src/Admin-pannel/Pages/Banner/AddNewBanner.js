@@ -21,7 +21,7 @@ function AddNewBanner() {
         clonedObj[inpName] = inpval;
         setInputval(clonedObj)
     };
-
+    const token = window.localStorage.getItem('token')
     const imgHandle = (e) => {
         setFile(e.target.files[0])
         setInputval({ ...inputval, image: e.target.files[0] })
@@ -45,7 +45,12 @@ function AddNewBanner() {
 
         if (params.id) {
             try {
-                const res = await axios.put(` https://onlineparttimejobs.in/api/banner/update/${params.id}`, formData)
+                const res = await axios.put(` https://onlineparttimejobs.in/api/banner/update/${params.id}`, formData, {
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8",
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
                 setLoader(false)
                 setIssusses(true)
             } catch (error) {
@@ -54,7 +59,12 @@ function AddNewBanner() {
             }
         } else {
             try {
-                const res = await axios.post(`https://onlineparttimejobs.in/api/banner/add`, formData)
+                const res = await axios.post(`https://onlineparttimejobs.in/api/banner/admin`, formData, {
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8",
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
                 setLoader(false)
                 setIssusses(true)
             } catch (error) {

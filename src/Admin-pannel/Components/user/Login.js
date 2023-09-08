@@ -22,6 +22,7 @@ const Login = () => {
     const resp = await dispatch(addUser(values));
     if (resp.payload.message === "success") {
       setLoader(false);
+      window.localStorage.setItem('token',resp.token)
       window.localStorage.setItem('admintoken',resp.token)
       window.location.href = "/admin/dashboard";
     } else {

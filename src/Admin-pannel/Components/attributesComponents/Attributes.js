@@ -4,7 +4,8 @@ import { useEffect } from "react";
 
 function AttributesAdmin() {
 
-    const { isLoading, data } = useGetAttributesQuery();
+    const token = window.localStorage.getItem('token')
+    const { isLoading, data } = useGetAttributesQuery(token);
 
     const [deleteAttribute, response] = useDeleteAttributesMutation();
 

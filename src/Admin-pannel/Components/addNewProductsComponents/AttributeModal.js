@@ -54,7 +54,6 @@ function AttributeModal(props) {
         
         clone.splice(indx , 1 ,getobj)
 
-        console.log(clone);
 
     }
 

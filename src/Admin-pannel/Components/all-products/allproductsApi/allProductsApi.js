@@ -7,25 +7,38 @@ export const productsApi = createApi({
     tagTypes: ['allOrders', 'sellers', 'sellerOwn', 'setList', 'purchaseList', 'reqList', 'allProducts', 'getBrand', 'customer', 'catagary', 'attribuits', 'getAffiliateWithdraw', 'getAffiliateLogs', 'getRefferalUsers', 'getaffiliateUsers', 'getaffiliateBasic', 'updateAffilliateUser', 'updateVerificationInfo', 'editAllPointsTable', 'getOTPConfiguration', 'updateOTPConfiguration', 'getOTPCredentialLists', 'updateOtpCredential', 'getPayFastCredentialLists', 'updatePayFastCredential', 'getFlutterCredential', 'updateFlutterCredential', 'getTingoCredential', 'updateTingoCredential', 'getFlutterActivation', 'updateFlutterActivation', 'getPayFastActivation', 'updatePayFastActivation', 'getTingoActivationF', 'updateTingoActivation', 'getRazorPayActivation', 'updateRazorPayActivation', 'getPayuMoneyActivation', 'updatePayumoneyActivation', 'getPayTmActivation', 'updatePayTmActivation', 'getRazorPayCredential', 'updateRazorPayCredential', 'getPayuMoneyCredential', 'updatePayuMoneyCredential', 'getPayTmCredential', 'updatePayTmCredential', 'getDeliveryBoyStatus', 'deliveryBoypaymentconfig', 'pickupLocationForDelivery', 'NotificationConfigurationForDelivery', 'SettingSiteConfiguration', 'MoneyAndNumberFormat', 'weighingScale', 'settingEmail', 'AwardPoint', 'SystemSettingPrefix', 'FacebookCredentail', 'TwitterCredentail', 'LinkedInCredentail', 'InstagramCredentail', 'GoogleCredentail', 'posCategory', 'posBrands'],
     endpoints: (builder) => ({
         getAllProducts: builder.query({
-            query: () => ({
+            query: (token) => ({
                 url: 'product/admin',
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                }
+                
             }),
             providesTags: ['allProducts']
         }),
 
         getCategories: builder.query({
-            query: () => ({
-                url: 'category',
-                method: 'GET'
+            query: (token) => ({
+                url: 'category/admin',
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                }
             }),
             providesTags: ['catagary']
         }),
 
         getBrands: builder.query({
-            query: () => ({
-                url: 'brand',
-                method: 'GET'
+            query: (token) => ({
+                url: 'brand/admin',
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                }
             }),
             providesTags: ['getBrand']
         }),
@@ -117,9 +130,13 @@ export const productsApi = createApi({
         }),
 
         getAttributes: builder.query({
-            query: () => ({
-                url: 'attributes',
-                method: 'GET'
+            query: (token) => ({
+                url: 'attributes/admin',
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                }
             }),
             providesTags: ['attribuits']
         }),
@@ -380,9 +397,10 @@ export const productsApi = createApi({
             query: (payload) => ({
                 url: 'attributes/add_attributes',
                 method: 'POST',
-                body: payload,
+                body: payload.data,
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
+                    Authorization: `Bearer ${payload.token}`,
                 },
             }),
             invalidatesTags: ['attribuits']
@@ -463,10 +481,16 @@ export const productsApi = createApi({
         }),
 
         deleteProduct: builder.mutation({
-            query: (id) => ({
-                url: `product/${id}`,
+            query: (val) => ({
+                url: `product/${val.id}`,
                 method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + val.token
+                },
             }),
+            invalidatesTags:['allProducts']
+          
         }),
 
         deleteSize: builder.mutation({
@@ -2550,10 +2574,14 @@ export const productsApi = createApi({
         }),
         
         addDeleveryChallan: builder.mutation({
-            query: (data) => ({
+            query: (val) => ({
                 url: `serviceDeliveryChalan/addDeliveryChallan`,
                 method: 'POST',
-                body: data
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + val.tokenn
+                },
+                body: val.data
             }),
         }),
         

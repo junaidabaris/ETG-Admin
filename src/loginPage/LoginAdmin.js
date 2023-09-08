@@ -85,6 +85,14 @@ function LoginSection({ setshow }) {
         else if (data?.findStaff?.role_id.name === 'Super Admin') {
             window.localStorage.setItem('showMainadmin', true)
             window.localStorage.setItem('adminToken', data?.token)
+            window.localStorage.setItem('token', data?.token)
+            window.localStorage.setItem('adminId', data?.findStaff?._id)
+            window.localStorage.setItem('superAdminName', data?.findStaff?.firstname + " " + data?.findStaff?.lastname)
+        }
+        else if (data?.findStaff?.role_id.role_name === 'Super Admin') {
+            window.localStorage.setItem('showMainadmin', true)
+            window.localStorage.setItem('adminToken', data?.token)
+            window.localStorage.setItem('token', data?.token)
             window.localStorage.setItem('adminId', data?.findStaff?._id)
             window.localStorage.setItem('superAdminName', data?.findStaff?.firstname + " " + data?.findStaff?.lastname)
         }

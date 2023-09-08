@@ -83,9 +83,13 @@ function ListCompany() {
                                         <td>
                                             <div>{item?.addressLine1} {item?.addressLine2}</div>
                                             <div>{item?.city} {item?.country}</div>
-                                            
+
                                         </td>
-                                        <td>{item?.website}</td>
+                                        <td>{typeof item?.website === "object" ? item.website?.map((item) => {
+                                            return <div>
+                                                {item}
+                                            </div>
+                                        }) : <>{item.website}</>}</td>
                                         <td>{item?.financialYear}</td>
                                         <td>
                                             <Link
@@ -107,12 +111,12 @@ function ListCompany() {
                                 })}
 
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div >
+        </div >
     </>
 }
 export default ListCompany

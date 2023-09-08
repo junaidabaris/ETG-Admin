@@ -16,51 +16,6 @@ function ProductsVariation({ handleVariantData, productData, setattributesVal, s
 
 
     const [variationArr, setVariationArr] = useState([]);
-    // console.log('....prod', productData)
-    // const [inputval, setInputVal] = useState({
-    //     unit_price: '',
-    //     minimum_purchase_qty: '',
-    //     variations: [],
-    //     attributes: '',
-    //     size: '',
-    //     current_stock: '',
-    //     minimum_order_qty: '',
-    //     shipping_cost: '',
-    //     purchase_price: '',
-    //     variant: '',
-    //     variant_price: '',
-    //     quantity: '',
-    //     total_quantity: '',
-    //     minimum_order_quantity: '',
-    //     shipping_coast: '',
-    //     Shipping_cost_multiply_with_quantity: '',
-    //     mrp: '',
-    //     purchase_rate: '',
-    //     sale_rate: '',
-    //     tax: '',
-    //     tax_type: '',
-    //     discount: '',
-    //     discount_type: '',
-    //     sku: '',
-    //     pickup_points: '',
-    //     current_qty: '',
-    //     Quantity: '',
-    // });
-
-    // const onChangeHandler = (e) => {
-    //     let slug = e.target.value + new Date().getUTCMilliseconds();
-    //     const inpName = e.target.name;
-    //     const inpVal = e.target.value;
-    //     variationArr.map((item, i) => {
-    //         if (item.id == e.target.getAttribute('data_id')) {
-    //             item[inpName] = inpVal;
-    //             console.log(variationArr)
-    //         }
-    //     })
-    //     const clonedObj = { ...inputval, slug };
-    //     clonedObj[inpName] = inpVal;
-    //     setInputVal(clonedObj)
-    // };
 
     const { data: pickUp } = useGetPickupPointQuery();
 
@@ -74,7 +29,8 @@ function ProductsVariation({ handleVariantData, productData, setattributesVal, s
         }
     }, [isVariantLoading, variationsData, isSuccess])
 
-    const { data: attributesData } = useGetAttributesQuery()
+    const token = window.localStorage.getItem('token')
+    const { data: attributesData } = useGetAttributesQuery(token)
     const [colorVariant, setColorVariant] = useState([]);
     const [allAttributes, setAllAttributes] = useState(null);
     const [allChoices, setAllChoices] = useState(null);
@@ -102,6 +58,7 @@ function ProductsVariation({ handleVariantData, productData, setattributesVal, s
         const filteredData = sendPayload.filter(item => item.data.length)
         if (filteredData.length) {
             form_variatio({ attributes: filteredData, variations: updatedVariants })
+            console.log(filteredData);
             setattributesVal(filteredData)
         }
         if (!filteredData.length) {

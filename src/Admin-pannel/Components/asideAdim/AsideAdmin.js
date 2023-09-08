@@ -7,6 +7,7 @@ function AsideAdmin() {
   const [Sales, setSales] = useState(false)
   const [state, setState] = useState(false)
   const [agreement, setAgreement] = useState(false)
+  const [billingBook, setBillingBook] = useState(false);
   const [products, setProducts] = useState(false)
   const [wholeSale, setWholsale] = useState(false)
   const [rentVtech, setrentVtech] = useState(false)
@@ -236,7 +237,217 @@ function AsideAdmin() {
                   <span className="aiz-side-nav-text">Seller Orders</span>
                 </Link>
               </li>
+              <li className="aiz-side-nav-item">
+                <Link
+                  className="aiz-side-nav-link"
+                  to="#"
+                  onClick={() => {
+                    setAccounts(!Accounts);
+                  }}
+                >
+                  {/* <i className="las la-user-tie aiz-side-nav-icon" /> */}
+                  <span className="aiz-side-nav-text">Accounts</span>
+                  <span className="aiz-side-nav-arrow" />
+                </Link>
+                <ul
+                  className={`aiz-side-nav-list level-2 mm-collapse ${Accounts ? "mm-show" : "extra"
+                    }`}
+                >
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="account-dashbord">
+                      <span className="aiz-side-nav-text">
+                        Accounts Dashboard
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="accounts">
+                      <span className="aiz-side-nav-text">
+                        Chart Of Accounts
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="accounts-group">
+                      <span className="aiz-side-nav-text">
+                        Chart Of Accounts group
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="groups">
+                      <span className="aiz-side-nav-text">
+                        Accounts groups
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="add-ledgers">
+                      <span className="aiz-side-nav-text">
+                        Add Ledgers
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="list-ledgers">
+                      <span className="aiz-side-nav-text">
+                        List Ledgers
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="reports-ledgers">
+                      <span className="aiz-side-nav-text">
+                        Ledgers Reports
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="add-group">
+                      <span className="aiz-side-nav-text">
+                        Add Group
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="list-group">
+                      <span className="aiz-side-nav-text list-voucher">
+                        List Group
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="reports-group">
+                      <span className="aiz-side-nav-text list-voucher">
+                        Group Reports
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="add-voucher">
+                      <span className="aiz-side-nav-text">
+                        Add Voucher
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="list-voucher">
+                      <span className="aiz-side-nav-text">
+                        List Voucher
+                      </span>
+                    </Link>
+                  </li>
 
+
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="day_book">
+                      <span className="aiz-side-nav-text">
+                        Day Book
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="cash_book">
+                      <span className="aiz-side-nav-text">
+                        Cash Book
+
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="bank_book">
+                      <span className="aiz-side-nav-text">
+                        Bank Book
+
+                      </span>
+                    </Link>
+                  </li>
+
+
+
+
+
+
+
+
+
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="add-company">
+                      <span className="aiz-side-nav-text list-voucher">
+                        Add Company
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="list-company">
+                      <span className="aiz-side-nav-text list-voucher">
+                        List Company
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="coast-centre-create">
+                      <span className="aiz-side-nav-text">Create Cost Centre</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="cost-centre">
+                      <span className="aiz-side-nav-text">List Cost Centre</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="coast-centre-category-create">
+                      <span className="aiz-side-nav-text">Create Cost Centre category</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="coast-centre-category">
+                      <span className="aiz-side-nav-text">List Cost Centre category</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="budget-create">
+                      <span className="aiz-side-nav-text">Create Budget</span>
+                    </Link>
+                  </li>
+                  {/* <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="budgets">
+                      <span className="aiz-side-nav-text">Budgets List</span>
+                    </Link>
+                  </li> */}
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="vouchertype/create">
+                      <span className="aiz-side-nav-text">create Voucher Type</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="vouchertypes">
+                      <span className="aiz-side-nav-text">Voucher Type List</span>
+                    </Link>
+                  </li>
+                  {/* <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="#">
+                      <span className="aiz-side-nav-text list-voucher">
+                       List Voucher 
+                      </span>
+                    </Link>
+                  </li> */}
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="report">
+                      <span className="aiz-side-nav-text list-voucher">
+                        Report
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="setting">
+                      <span className="aiz-side-nav-text list-voucher">
+                        Setting
+                      </span>
+                    </Link>
+                  </li>
+                </ul>
+              </li>
 
 
               <li className="aiz-side-nav-item">
@@ -250,6 +461,8 @@ function AsideAdmin() {
                   <span className="aiz-side-nav-text">Add Seller Brnads</span>
                 </Link>
               </li>
+
+
 
 
               {/* {data && data.map((item) => {
@@ -1682,8 +1895,13 @@ function AsideAdmin() {
                     </Link>
                   </li>
                   <li className="aiz-side-nav-item">
-                    <Link to="roles" className="aiz-side-nav-link ">
-                      <span className="aiz-side-nav-text">Staff permissions</span>
+                    <Link to="offical-sell" className="aiz-side-nav-link ">
+                      <span className="aiz-side-nav-text">offical-sell</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link to="custom_fields" className="aiz-side-nav-link ">
+                      <span className="aiz-side-nav-text">Custom Fields</span>
                     </Link>
                   </li>
                   <li className="aiz-side-nav-item">
@@ -2316,6 +2534,197 @@ function AsideAdmin() {
                   </li>
                 </ul>
               </li>
+              {/* <li className="aiz-side-nav-item">
+              <Link
+                className="aiz-side-nav-link"
+                to="#"
+                onClick={() => {
+                  setBillingBook(!billingBook);
+                }}
+              >
+                <i className="las la-user-tie aiz-side-nav-icon" />
+                <span className="aiz-side-nav-text">Billing Book</span>
+                <span className="aiz-side-nav-arrow" />
+              </Link>
+              <ul
+                className={`aiz-side-nav-list level-2 mm-collapse ${
+                  billingBook ? "mm-show" : "extra"
+                }`}
+              >
+                <li className="aiz-side-nav-item">
+                  <Link
+                    className="aiz-side-nav-link "
+                    to="sales-tax-report"
+                  >
+                    <span className="aiz-side-nav-text">Sales Tax Report</span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link className="aiz-side-nav-link " to="purchase-tax-report">
+                    <span className="aiz-side-nav-text">
+                      Purchase Tax Report
+                    </span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link
+                    className="aiz-side-nav-link "
+                    to="supplier-items-report"
+                  >
+                    <span className="aiz-side-nav-text">
+                    Supplier Items Report
+                    </span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link
+                    className="aiz-side-nav-link "
+                    to="sales-report"
+                  >
+                    <span className="aiz-side-nav-text">
+                      {" "}
+                      Sales Report
+                    </span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link className="aiz-side-nav-link " to="sales-return-report">
+                    <span className="aiz-side-nav-text"> Sales Return Report</span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link className="aiz-side-nav-link " to="seller-point-return">
+                    <span className="aiz-side-nav-text"> Seller Points Return</span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link className="aiz-side-nav-link " to="purchase-report">
+                    <span className="aiz-side-nav-text"> Purchase Report </span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link className="aiz-side-nav-link " to="purchase-return-report">
+                    <span className="aiz-side-nav-text"> Purchase Return Report </span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link className="aiz-side-nav-link " to="expense-report">
+                    <span className="aiz-side-nav-text"> Expense Report </span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link className="aiz-side-nav-link " to="stock-report">
+                    <span className="aiz-side-nav-text"> Stock Report  </span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link className="aiz-side-nav-link " to="sales-item-report">
+                    <span className="aiz-side-nav-text"> Sales Item report </span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link className="aiz-side-nav-link " to="return-item-report">
+                    <span className="aiz-side-nav-text"> Return Items Report  </span>
+                  </Link>
+                </li>
+              </ul>
+            </li> */}
+
+            <li className="aiz-side-nav-item">
+              <Link
+                className="aiz-side-nav-link"
+                to="#"
+                onClick={() => {
+                  setBillingBook(!billingBook);
+                }}
+              >
+                <i className="las la-user-tie aiz-side-nav-icon" />
+                <span className="aiz-side-nav-text">Billing Book</span>
+                <span className="aiz-side-nav-arrow" />
+              </Link>
+              <ul
+                className={`aiz-side-nav-list level-2 mm-collapse ${
+                  billingBook ? "mm-show" : "extra"
+                }`}
+              >
+                <li className="aiz-side-nav-item">
+                  <Link
+                    className="aiz-side-nav-link "
+                    to="sales-tax-report"
+                  >
+                    <span className="aiz-side-nav-text">Sales Tax Report</span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link className="aiz-side-nav-link " to="purchase-tax-report">
+                    <span className="aiz-side-nav-text">
+                      Purchase Tax Report
+                    </span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link
+                    className="aiz-side-nav-link "
+                    to="supplier-items-report"
+                  >
+                    <span className="aiz-side-nav-text">
+                    Supplier Items Report
+                    </span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link
+                    className="aiz-side-nav-link "
+                    to="sales-report"
+                  >
+                    <span className="aiz-side-nav-text">
+                      {" "}
+                      Sales Report
+                    </span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link className="aiz-side-nav-link " to="sales-return-report">
+                    <span className="aiz-side-nav-text"> Sales Return Report</span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link className="aiz-side-nav-link " to="seller-point-return">
+                    <span className="aiz-side-nav-text"> Seller Points Return</span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link className="aiz-side-nav-link " to="purchase-report">
+                    <span className="aiz-side-nav-text"> Purchase Report </span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link className="aiz-side-nav-link " to="purchase-return-report">
+                    <span className="aiz-side-nav-text"> Purchase Return Report </span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link className="aiz-side-nav-link " to="expense-report">
+                    <span className="aiz-side-nav-text"> Expense Report </span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link className="aiz-side-nav-link " to="stock-report">
+                    <span className="aiz-side-nav-text"> Stock Report  </span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link className="aiz-side-nav-link " to="sales-item-report">
+                    <span className="aiz-side-nav-text"> Sales Item report </span>
+                  </Link>
+                </li>
+                <li className="aiz-side-nav-item">
+                  <Link className="aiz-side-nav-link " to="return-item-report">
+                    <span className="aiz-side-nav-text"> Return Items Report  </span>
+                  </Link>
+                </li>
+              </ul>
+            </li>
 
               <li className="aiz-side-nav-item">
                 <Link
@@ -2378,7 +2787,7 @@ function AsideAdmin() {
                   <li className="aiz-side-nav-item">
                     <Link className="aiz-side-nav-link " to="reports-ledgers">
                       <span className="aiz-side-nav-text">
-                         Ledgers Reports
+                        Ledgers Reports
                       </span>
                     </Link>
                   </li>
@@ -2399,7 +2808,7 @@ function AsideAdmin() {
                   <li className="aiz-side-nav-item">
                     <Link className="aiz-side-nav-link " to="reports-group">
                       <span className="aiz-side-nav-text list-voucher">
-                         Group Reports
+                        Group Reports
                       </span>
                     </Link>
                   </li>
@@ -2410,6 +2819,50 @@ function AsideAdmin() {
                       </span>
                     </Link>
                   </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="list-voucher">
+                      <span className="aiz-side-nav-text">
+                        List Voucher
+                      </span>
+                    </Link>
+                  </li>
+
+
+
+
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="day_book">
+                      <span className="aiz-side-nav-text">
+                        Day Book
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="cash_book">
+                      <span className="aiz-side-nav-text">
+                        Cash Book
+
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="bank_book">
+                      <span className="aiz-side-nav-text">
+                        Bank Book
+
+                      </span>
+                    </Link>
+                  </li>
+
+
+
+
+
+
+
+
+
+
                   <li className="aiz-side-nav-item">
                     <Link className="aiz-side-nav-link " to="add-company">
                       <span className="aiz-side-nav-text list-voucher">
@@ -2422,6 +2875,47 @@ function AsideAdmin() {
                       <span className="aiz-side-nav-text list-voucher">
                         List Company
                       </span>
+                    </Link>
+                  </li>
+
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="coast-centre-create">
+                      <span className="aiz-side-nav-text">Create Cost Centre</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="cost-centre">
+                      <span className="aiz-side-nav-text">List Cost Centre</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="coast-centre-category-create">
+                      <span className="aiz-side-nav-text">Create Cost Centre category</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="coast-centre-category">
+                      <span className="aiz-side-nav-text">List Cost Centre category</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="budget-create">
+                      <span className="aiz-side-nav-text">Create Budget</span>
+                    </Link>
+                  </li>
+                  {/* <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="budgets">
+                      <span className="aiz-side-nav-text">Budgets List</span>
+                    </Link>
+                  </li> */}
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="vouchertype/create">
+                      <span className="aiz-side-nav-text">create Voucher Type</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="vouchertypes">
+                      <span className="aiz-side-nav-text">Voucher Type List</span>
                     </Link>
                   </li>
                   {/* <li className="aiz-side-nav-item">

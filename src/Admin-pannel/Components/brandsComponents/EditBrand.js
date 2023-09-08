@@ -14,7 +14,6 @@ function EditBrand() {
 
     const params = useParams();
     const { data } = useGetBrandByIdQuery(params.id);
-    console.log(data)
 
     const onChangeHandler = (e) => {
         const inpName = e.target.name;

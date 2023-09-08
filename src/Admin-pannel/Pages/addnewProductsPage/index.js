@@ -25,7 +25,7 @@ const toastErrorMessage = () => {
     })
 };
 
-const addFile = async (clonedObj, payload, categ ,setspcOr) => {
+const addFile = async (clonedObj, payload, categ, setspcOr ,token) => {
     setspcOr(true)
 
 
@@ -94,13 +94,19 @@ const addFile = async (clonedObj, payload, categ ,setspcOr) => {
     formData.append('productDescription', JSON.stringify(clonedObj.productDescription))
     formData.append('weights', clonedObj.weights)
     formData.append('unit', clonedObj.unit)
+    // formData.append('company_id', clonedObj.company_id)
     formData.append('barcode', clonedObj.barcode)
     formData.append('minimum_purchase_qty', clonedObj.minimum_purchase_qty)
     formData.append('minimum_order_qty', clonedObj.minimum_order_qty)
 
 
     try {
-        const res = await axios.post(url, formData);
+        const res = await axios.post(url, formData, {
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                Authorization: `Bearer ${token}`,
+            },
+        });
         toastSuccessMessage()
         setspcOr(false)
     } catch (error) {
@@ -186,7 +192,8 @@ function AddNewProductsPage() {
         // low stock quantity
         Quantity: '',
         seller_id: '',
-        unit: ""
+        unit: "",
+        company_id: ""
     });
 
     const changeStatus = (isStatus, key) => {
@@ -196,7 +203,7 @@ function AddNewProductsPage() {
     }
     const brandData = useGetBrandsQuery();
     const { data: sellerD } = useGetSellersQuery()
-    const [addProduct, response] = useAddNewProductMutation();
+    // const [addProduct, response] = useAddNewProductMutation();
     const [varianstData, setVariantsData] = useState()
     const { productDescription } = useSelector((state) => {
         return state.textEditorData
@@ -205,7 +212,7 @@ function AddNewProductsPage() {
     useEffect(() => {
         const getCatData = async () => {
             const getCategoryName = []
-            const reqData = await fetch("https://etg-backend-project-node-abarisapp.vercel.app/api/category")
+            const reqData = await fetch("https://onlineparttimejobs.in/api/category")
             const resData = await reqData.json();
 
             for (let i = 0; i < resData.length; i++) {
@@ -244,7 +251,7 @@ function AddNewProductsPage() {
 
     const [spinn, setspinn] = useState(false)
     const [spcOr, setspcOr] = useState(false)
-    
+    const token = window.localStorage.getItem('token')
 
     const submitAddProductData = async () => {
         setspinn(true)
@@ -254,7 +261,7 @@ function AddNewProductsPage() {
         const clonedObj = { ...inputval, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, seller_id, slug, productDescription: productDescription };
 
         const clone = { attributes: [proAtt?._id], attributeSet: proAtt?.values }
-        addFile(clonedObj, clonedObj.gallery_image, clone ,setspcOr)
+        addFile(clonedObj, clonedObj.gallery_image, clone, setspcOr ,token)
 
         setspinn(false)
 
@@ -279,61 +286,61 @@ function AddNewProductsPage() {
 
 
     const [data1, setData1] = useState()
+    const [data2, setData2] = useState()
     const getDatas = async () => {
         const res = await axios.get('https://onlineparttimejobs.in/api/attributeSetMaster')
         setData1(res.data)
     }
 
+    // const token = window.localStorage.getItem('adminToken')
+    const getDatas1 = async () => {
+        const res = await axios.get(`https://onlineparttimejobs.in/api/accountCompany`, {
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        setData2(res.data)
+    }
+
     useEffect(() => {
-        getDatas()
+        // getDatas()
+        // getDatas1()
     }, [])
 
 
-    useEffect(() => {
-        if (response.isSuccess === true) {
-            toastSuccessMessage()
-        };
-    }, [response]);
 
-    useEffect(() => {
-        if (response.isError === true) {
-            toastErrorMessage()
-        };
-    }, [response])
+    // const changettriPro = (e) => {
+    //     const maped = data1.find((item) => {
+    //         return item._id === e.target.value
+    //     })
+    //     setProAtt(maped);
+    // }
 
-
-
-    const changettriPro = (e) => {
-        const maped = data1.find((item) => {
-            return item._id === e.target.value
-        })
-        setProAtt(maped);
-    }
-
-    const changeValues = (e) => {
-        const clone = { ...proAtt }
-        const filterd = clone.values.map((item) => {
-            if (item._id === e.target.name) {
-                return { ...item, value: e.target.value }
-            } else {
-                return item
-            }
-        })
-        clone.values = filterd
-        setProAtt(clone)
-    }
-    const removeRowAt = (id) => {
-        const clone = { ...proAtt }
-        const filterd = clone.values.filter((item) => {
-            if (item._id === id) {
-                return
-            } else {
-                return item
-            }
-        })
-        clone.values = filterd
-        setProAtt(clone)
-    }
+    // const changeValues = (e) => {
+    //     const clone = { ...proAtt }
+    //     const filterd = clone.values.map((item) => {
+    //         if (item._id === e.target.name) {
+    //             return { ...item, value: e.target.value }
+    //         } else {
+    //             return item
+    //         }
+    //     })
+    //     clone.values = filterd
+    //     setProAtt(clone)
+    // }
+    // const removeRowAt = (id) => {
+    //     const clone = { ...proAtt }
+    //     const filterd = clone.values.filter((item) => {
+    //         if (item._id === id) {
+    //             return
+    //         } else {
+    //             return item
+    //         }
+    //     })
+    //     clone.values = filterd
+    //     setProAtt(clone)
+    // }
 
     return (
         <>
@@ -393,7 +400,6 @@ function AddNewProductsPage() {
                                                             setFinalCatD(selectedIds)
                                                         }}
                                                         onSelect={(selectedCat) => {
-                                                            // setFinalCatD(event)
                                                             const selectedIds = selectedCat.map((cat) => {
                                                                 return cat._id
                                                             })
@@ -438,6 +444,17 @@ function AddNewProductsPage() {
                                                     </select>
                                                 </div>
                                             </div>
+                                            {/* <div className="form-group row">
+                                                <label className="col-md-3 col-from-label">Company</label>
+                                                <div className="col-md-8">
+                                                    <select className="form-select" value={inputval?.company_id} aria-label="Default select example" name="company_id" onChange={onChangeHandler}>
+                                                        <option value={1}>Select Unit</option>
+                                                        {data2 && data2.map((item) => {
+                                                            return <option value={item.name} key={item._id}>{item.name}</option>
+                                                        })}
+                                                    </select>
+                                                </div>
+                                            </div> */}
 
                                             <div className="form-group row">
                                                 <label className="col-md-3 col-from-label">Weight <small>(In Kg)</small></label>
@@ -532,7 +549,7 @@ function AddNewProductsPage() {
                                     </div>
                                     {/* <ProductsInformationAdmin /> */}
 
-                               
+
 
                                     {/* <ProductsImages /> */}
 

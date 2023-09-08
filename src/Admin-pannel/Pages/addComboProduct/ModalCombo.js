@@ -1,10 +1,11 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import { useState } from 'react';
 
 function ModalCombo(props) {
     let selectedVariants = []
-
+    const [values, setValues] = useState(props?.cartData?.variations)
     const sendData = (data, i) => {
         let flag = false
         let index;
@@ -21,11 +22,24 @@ function ModalCombo(props) {
                 selectedVariants.splice(index, 1)
             }
             if (!flag) {
-                selectedVariants.push({ productName: props?.cartData?.name, ...data, productId: props?.cartData?._id , variant: props?.cartData?.variations[i]._id})
+                selectedVariants.push({ productName: props?.cartData?.name, ...data, productId: props?.cartData?._id, variant: props?.cartData?.variations[i]._id })
             }
         }
 
     }
+
+    const setQty = (i) => {
+        const maped = values.map((item) => {
+            if (item._id === i.target.id) {
+                const obj = { ...item, qty: +i.target.value }
+                return obj
+            }else{
+                return item
+            }
+        })
+        setValues(maped)
+    }
+
 
     return <Modal
         {...props}
@@ -48,13 +62,14 @@ function ModalCombo(props) {
                         <td><label className="control-label">SKU</label></td>
                         <td><label className="control-label">Variant</label></td>
                         <td><label className="control-label">Actual Rate</label></td>
+                        <td><label className="control-label">Quantity</label></td>
                     </tr>
 
                 </thead>
 
                 <tbody>
 
-                    {props?.cartData && props?.cartData?.variations.map((item, i) => {
+                    {values && values?.map((item, i) => {
                         return <tr>
                             <td>
                                 <Form>
@@ -78,6 +93,9 @@ function ModalCombo(props) {
                             </td>
                             <td>
                                 <input type="text" disabled value={item?.mrp} name="actual_rate" className="form-control" />
+                            </td>
+                            <td>
+                            <input type="text" value={item?.qty} name="qty" id={item?._id} onChange={setQty} className="form-control" />
                             </td>
 
                         </tr>
