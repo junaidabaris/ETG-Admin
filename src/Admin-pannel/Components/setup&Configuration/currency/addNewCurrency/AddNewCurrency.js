@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { toast, ToastContainer } from 'react-toastify';
 import { useAddNewCurrencyMutation } from '../../../all-products/allproductsApi/allProductsApi';
+import { token } from '../../../../common/TokenArea';
 
 function AddNewCurrency() {
 
@@ -19,7 +20,7 @@ function AddNewCurrency() {
     const addNewCurrencyData = (e) => {
         e.preventDefault();
         console.log(inputval)
-        addNewCurrency(inputval)
+        addNewCurrency({ data: inputval, token: token })
         document.getElementById("create-course-form").reset();
     };
 

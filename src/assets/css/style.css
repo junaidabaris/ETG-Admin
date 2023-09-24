@@ -10663,3 +10663,37 @@ table tbody tr .show-table {
   background-color:  rgb(255 236 216) !important;
   color: black !important;
 }
+.innerAddr{
+ padding: 10px;
+ border-radius: 10px;
+}
+.innerAddr:hover{
+  cursor: pointer;
+  box-shadow: 7px 7px lightblue;
+}
+.editoresec{
+  display: flex;
+  justify-content: end;
+}
+.mainbox{
+  padding: 10px;
+  background-color: white;
+  border: 0px solid black;
+
+}
+.mainbox > div{
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 6px;
+  margin: 10px 0;
+  color: #1a55b7;
+}
+.changeRoutss >td{
+  padding: 10px;
+  border: 1px solid black;
+}
+.simples >th{
+  justify-content: center;
+  padding: 5px;
+  border: 1px solid gray;
+}

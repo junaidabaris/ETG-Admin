@@ -2,9 +2,10 @@ import { useEffect, useState } from "react"
 import Multiselect from "multiselect-react-dropdown";
 import { useParams } from "react-router-dom";
 let count = 0
-export const MultiselectOption = ({ allAttributes, children, data, showCheckbox, getSelectedOptions }) => {
+export const MultiselectOption = ({ allAttributes, children, data, showCheckbox, getSelectedOptions, item }) => {
     const params = useParams()
     const [selectedOptions, setSelectedOptions] = useState([]);
+    const [selectedOptions2, setSelectedOptions2] = useState([]);
     const handleRemove = (option) => {
         setSelectedOptions([...option])
     }
@@ -14,20 +15,31 @@ export const MultiselectOption = ({ allAttributes, children, data, showCheckbox,
 
     useEffect(() => {
         count++
+        if (params) {
+            const filterd = item?.variation_Form?.map((item) => {
+                return { ...item, name: item.title, title: item.title }
+            })
+            setSelectedOptions2(filterd)
+
+        }
         if (count === 3) {
             if (params) {
                 if (allAttributes) {
                     const filterd = allAttributes?.map((item) => {
-                        return { ...item, name: item.title }
+                        return { ...item, name: item.title, title: item.title }
                     })
                     getSelectedOptions(filterd);
                 }
+                const filterd = item?.variation_Form?.map((item) => {
+                    return { ...item, name: item.title, title: item.title }
+                })
+                setSelectedOptions2(filterd)
             }
         } else {
             return
         }
 
-    }, [allAttributes])
+    }, [allAttributes, item])
 
     if (!params) {
         return (
@@ -58,7 +70,7 @@ export const MultiselectOption = ({ allAttributes, children, data, showCheckbox,
                     displayValue="name"
                     options={data}
                     showCheckbox={showCheckbox}
-                    selectedValues={allAttributes}
+                    selectedValues={selectedOptions2}
                     onRemove={(option) => {
                         handleRemove(option)
                     }}

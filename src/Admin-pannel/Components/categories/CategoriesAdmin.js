@@ -7,7 +7,7 @@ function CategoriesAdmin() {
   const [blankArr, setBlankArr] = useState([]);
 
   const token = window.localStorage.getItem('token')
-  const { isLoading, data } = useGetCategoriesQuery(token);
+  const { isLoading, data ,refetch } = useGetCategoriesQuery(token);
 
   const onChangeHandler = (e) => {
     const inpVal = e.target.value;
@@ -33,12 +33,13 @@ function CategoriesAdmin() {
   const [deleteCategory, res] = useDeleteCategoryMutation();
 
   function deleteCategoryData(id) {
-    deleteCategory(id)
+    deleteCategory({id,token})
   };
 
   useEffect(() => {
     if (res.isSuccess == true) {
       alert('Category deleted successfully')
+      refetch()
     }
   }, [res.isSuccess])
 
@@ -162,10 +163,10 @@ function CategoriesAdmin() {
                         <td style={{ display: 'table-cell' }}>{item.commision_rate}</td>
 
                         <td className="text-right footable-last-visible" style={{ display: 'table-cell' }}>
-                          <Link to={`edit/${item._id}`} className="btn btn-soft-primary btn-icon btn-circle btn-sm" title="Edit">
+                          <Link to={`edit/${item.uid}`} className="btn btn-soft-primary btn-icon btn-circle btn-sm" title="Edit">
                             <i className="las la-edit" />
                           </Link>
-                          <button type="button" onClick={() => { deleteCategoryData(item._id) }} className="btn btn-soft-danger btn-icon btn-circle btn-sm ms-1">
+                          <button type="button" onClick={() => { deleteCategoryData(item?.uid) }} className="btn btn-soft-danger btn-icon btn-circle btn-sm ms-1">
                             <i className="las la-trash" />
                           </button>
                         </td>

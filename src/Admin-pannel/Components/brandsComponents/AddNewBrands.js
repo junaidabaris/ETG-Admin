@@ -1,59 +1,61 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
-import { useAddNewBrandMutation } from '../all-products/allproductsApi/allProductsApi';
+import { useAddNewBrandMutation, useGetLanguagesQuery } from '../all-products/allproductsApi/allProductsApi';
 import axios from 'axios';
-
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import FormsMultiLang from './FormMultiLag';
 function AddnewBrandsAdmin() {
     const [inputval, setInputval] = useState({ name: '', image: null, meta_title: '', meta_description: '' });
     const [file, setFile] = useState(null);
+    const token = window.localStorage.getItem('token')
     const [addNewBrand, response] = useAddNewBrandMutation();
-
+    const { data, refetch } = useGetLanguagesQuery(token);
     const handleFile = (event) => {
         setFile(event.target.files[0])
     }
-
-    const onChangeHandler = (e) => {
-        const inpName = e.target.name;
-        const inpval = e.target.value;
-        const clonedObj = { ...inputval };
-        clonedObj[inpName] = inpval;
-        setInputval(clonedObj)
-    };
-    const token = window.localStorage.getItem('token')
-    const addNewBrandData = async (e) => {
-        e.preventDefault();
-        // const formData = new FormData();
-        // formData.append('image', file);
-        // formData.append('name', inputval.name);
-        // const clonedObj = { ...inputval, image: formData }
-        // setInputval(clonedObj)
-        // addNewBrand(formData)
-        // document.getElementById("create-course-form").reset();
-
-
-
-        const clonedObj = { ...inputval };
-
-        const url = 'https://onlineparttimejobs.in/api/brand/add'
-        const formData = new FormData();
-
-        formData.append('name', clonedObj.name);
-        formData.append('image', file);
-
-        try {
-            const res = await axios.post(url, formData, {
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8",
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            alert('Brnad Request Send Successfully')
-        } catch (error) {
-            alert('Brnad Request Send Fail !')
+    const [value, setValue] = useState(0);
+    const [val, setVal] = useState(data)
+    const onChangeHandler = (e, id, bul) => {
+        if (bul) {
+            const maped = val.map((item) => {
+                if (item.language_id == id) {
+                    const obj = { ...item, logo: e.target.files[0] }
+                    return obj
+                } else {
+                    return item
+                }
+            })
+            setVal(maped)
+        } else {
+            const maped = val.map((item) => {
+                if (item.language_id == id) {
+                    const obj = { ...item, [e.target.name]: e.target.value }
+                    return obj
+                } else {
+                    return item
+                }
+            })
+            setVal(maped)
         }
+    }
 
+
+    useEffect(() => {
+        if (data) {
+            const maped = data.map((item) => {
+                return { name: "", language_id: item._id, meta_title: '', meta_description: '', lable: item.name }
+            })
+            setVal(maped)
+        }
+    }, [data])
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
     };
-
 
 
     const toastSuccessMessage = () => {
@@ -69,64 +71,61 @@ function AddnewBrandsAdmin() {
     //     alert('!Error Brand not added')
     // }
 
+    const addNewAttributeData = async (e) => {
+        e.preventDefault();
+        const images = new FormData();
+        const clone  = [...val]
+
+        for (let i = 0; i < clone.length; i++) {
+            let element = clone[i];
+            if (element?.logo) {
+                images.append('image', element?.logo);
+                const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+                images.delete('image');
+                const obj = { ...element, logo: { public_id: res2.data.public_id, url: res2.data.url } }
+                clone.splice(i ,1, obj)
+            }
+        }
+        const url = 'https://onlineparttimejobs.in/api/brand/add'
+        try {
+            const res = await axios.post(url, {list:clone}, {
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            alert('brand  Request Send Successfully')
+        } catch (error) {
+            alert('brand  Request Send Fail !')
+        }
+
+    };
+
 
     return (
         <>
             <div className="col-md-5">
-                <div className="card">
-                    <div className="card-header">
-                        <h5 className="mb-0 h6">Add New Brand</h5>
-                    </div>
-                    <div className="card-body">
-                        <form id="create-course-form" onSubmit={addNewBrandData}>
-                            <input type="hidden" name="_token" defaultValue="6klBhNOhEcSYzHAP1WU8ctR90lIocmkKBETVGkNx" required />
-                            <div className="form-group mb-3">
-                                <label htmlFor="name">Name</label>
-                                <input type="text" placeholder="Name" name="name" onChange={onChangeHandler} className="form-control" required />
-                            </div>
+                <Box sx={{ width: '100%', typography: 'body1' }}>
+                    <TabContext value={value}>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                            <TabList onChange={handleChange} aria-label="lab API tabs example">
+                                {data && data.map((item, i) => {
+                                    return <Tab label={item?.name} value={i} />
+                                })}
 
-                            <div className="form-group mb-3">
-                                <label htmlFor="name">Logo <small>(120x80)</small></label>
-                                <div className="input-group" data-type="image" >
-                                    <div className="input-group-prepend">
-                                        <div className="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
-                                    </div>
-                                    <div className="form-control file-amount">
-                                        <input type="file" className="selected-files" name='image' onChange={handleFile} required />
-                                    </div>
+                            </TabList>
+                        </Box>
+                        {val && val.map((item, i) => {
+                            return <TabPanel value={i}>
+                                <div className="card">
+                                    <FormsMultiLang setValue={setValue} data={val} item={item} i={i} addNewAttributeData={addNewAttributeData} onChangeHandler={onChangeHandler} handleFile={handleFile} />
                                 </div>
-                                <div className="file-preview box sm">
-                                </div>
-                            </div>
 
-                            {/* <div className="form-group mb-3">
-                                <label htmlFor="name">Proof <small>(120x80)</small></label>
-                                <div className="input-group" data-type="image" >
-                                    <div className="input-group-prepend">
-                                        <div className="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
-                                    </div>
-                                    <div className="form-control file-amount">
-                                        <input type="file" className="selected-files" name='image' onChange={handleFile} required />
-                                    </div>
-                                </div>
-                                <div className="file-preview box sm">
-                                </div>
-                            </div> */}
+                            </TabPanel>
+                        })}
 
-                            <div className="form-group mb-3">
-                                <label htmlFor="name">Meta Title</label>
-                                <input type="text" name='meta_title' className="form-control" placeholder="Meta Title" onChange={onChangeHandler} required />
-                            </div>
-                            <div className="form-group mb-3">
-                                <label htmlFor="name">Meta description</label>
-                                <textarea name="meta_description" rows={5} className="form-control" onChange={onChangeHandler} required />
-                            </div>
-                            <div className="form-group mb-3 text-right">
-                                <button type="submit" className="btn btn-primary">Save</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                    </TabContext>
+                </Box>
                 <ToastContainer />
             </div>
         </>

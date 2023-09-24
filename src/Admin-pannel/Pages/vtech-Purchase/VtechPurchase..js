@@ -22,12 +22,13 @@ import { RxCross1 } from "react-icons/rx";
 import { Spinner } from "react-bootstrap";
 import PurchaseVtechModal from "./PurchaseVtechModal";
 import VtechTr from "./VtechTr";
+import { token } from "../../common/TokenArea";
 function VtechPurchase() {
     const [modalShow, setModalShow] = useState(false);
     const [showCombo, setShowCombo] = useState([])
     const [searchs, setSearch] = useState('')
     const { data: searchPro } = useGetProductSearchQuery(searchs)
-    const { data: sellers } = useGetSellersQuery()
+    const { data: sellers } = useGetSellersQuery(token)
 
     const [show, setShow] = useState(true)
     const [finalCatD, setFinalCatD] = useState();
@@ -50,8 +51,7 @@ function VtechPurchase() {
     const [storeValue, setStoreValue] = useState({
         date: "",
         referenceNo: "",
-        pickupPoints: "6412fbd218fa66a37ed430d1",
-        seller_id: "64269f0df127906d53878d3d",
+        seller_id: "",
         shipping: "",
         staff: window.localStorage.getItem('adminId')
     })
@@ -138,6 +138,7 @@ function VtechPurchase() {
 
     useEffect(() => {
         if (cartSussuss) {
+            console.log(data);
             setShowCombo(data);
         }
     }, [cartSussuss])
@@ -189,33 +190,6 @@ function VtechPurchase() {
                                 </div>
 
 
-                                {/* <div className="col-4">
-                                    <div>
-                                        <label>Pickup Point*</label>
-                                        <Multiselect
-                                            isObject={true}
-                                            displayValue="pickupPoint_name"
-                                            options={pickUp}
-                                            showCheckbox
-                                            selectedValues={[]}
-                                            onRemove={(selectedCat) => {
-                                                const selectedIds = selectedCat.map((cat) => {
-                                                    return cat._id
-                                                })
-                                                setFinalCatD(selectedIds)
-                                            }}
-                                            onSelect={(selectedCat) => {
-                                                const selectedIds = selectedCat.map((cat) => {
-                                                    return cat._id
-                                                })
-                                                setFinalCatD(selectedIds)
-                                            }}
-                                        />
-                                    </div>
-                                </div> */}
-
-
-
                                 <div className="col-4">
                                     <div>
                                         <label>attachments</label>
@@ -226,8 +200,9 @@ function VtechPurchase() {
                                 <div className="col-4">
                                     <label>Supplier</label>
                                     <select className="form-select" aria-label="Default select example" onChange={changeHandelVal} name="seller_id">
-                                        {/* <option value={'64269f0df127906d53878d3d'}>ETG Seller</option> */}
+                                        <option>Select Selelr</option>
                                         {sellers && sellers.map((item) => {
+                                            <option>Select Seller</option>
                                             return <option key={item._id} value={item._id}>{item.firstname + " " + item.lastname}</option>
                                         })}
 
@@ -274,7 +249,7 @@ function VtechPurchase() {
                                                         <td><label className="control-label">Variant</label></td>
                                                         <td><label className="control-label">SKU</label></td>
                                                         <td><label className="control-label">Pickup Point</label></td>
-                                                        <td><label className="control-label">Serial</label></td>
+                                                        <td><label className="control-label">Serial/Service Tag No</label></td>
                                                     </tr>
 
                                                 </thead>

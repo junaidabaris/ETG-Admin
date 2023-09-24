@@ -27,7 +27,8 @@ import { ToastContainer, toast } from "react-toastify";
 // ];
 
 function AllSeller() {
-  const { data } = useGetSellersQuery();
+  const token = window.localStorage.getItem('token')
+  const { data } = useGetSellersQuery(token);
 
 
   const [deleteItem, { isLoading }] = useDeleteSellerListMutation()
@@ -241,7 +242,6 @@ function AllSeller() {
                         <td style={{ display: "table-cell" }}>
                           <SlideshowLightbox>
                             {data.map((item) => {
-                              console.log('item----Sellerimage', item)
                               return <img
                                 key={item.url}
                                 className="w-full rounded"

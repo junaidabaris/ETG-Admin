@@ -4,9 +4,12 @@ import { DatabaseFilled, QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Popconfirm } from 'antd';
 import { AiTwotoneDelete } from "react-icons/ai";
 import AttributeModal from "./AttributeModal";
-export const ColorVariant = ({ data, deleteRow, pickUp, handleVariant, setVariantsData, bringSelectedVariantImage, index }) => {
+import { GiPriceTag } from "react-icons/gi";
+import PriceModal from "./PriceModal";
+import { useParams } from "react-router-dom";
+export const ColorVariant = ({ data, deleteRow, pickUp, handleVariant, setVariantsData, bringSelectedVariantImage, index, item }) => {
     const [formData, setFormData] = useState(data);
-
+    const [prices, setprices] = useState(data.prices);
     const onChangeHandler = (e) => {
         const inputName = e.target.name;
         const inputVal = e.target.value;
@@ -39,6 +42,7 @@ export const ColorVariant = ({ data, deleteRow, pickUp, handleVariant, setVarian
         }
     };
 
+    const params = useParams()
     useEffect(() => {
         if (formData) {
             handleVariant(formData)
@@ -47,7 +51,8 @@ export const ColorVariant = ({ data, deleteRow, pickUp, handleVariant, setVarian
     useEffect(() => {
         setFormData(data)
     }, [])
-    
+
+    const [shoing, setShping] = useState(false)
     const onchangeImagehandle = async (e) => {
         const inpVal = e.target.files;
         const cloneObj = { ...formData, images: inpVal }
@@ -56,13 +61,23 @@ export const ColorVariant = ({ data, deleteRow, pickUp, handleVariant, setVarian
         setFormData({ ...cloneObj });
     }
     const onchangeImagehandle1 = async (e) => {
+        setShping(false)
         const inpVal = e.target.files[0];
         const cloneObj = { ...formData, mainImage_url: inpVal }
         setVariantsData(cloneObj)
         setFormData({ ...cloneObj });
     }
-
+    const setData = (data, i) => {
+        const clone = { ...formData, prices: data, id: Math.random() }
+        setFormData(clone)
+    }
     const [modalShow, setModalShow] = useState(false);
+    const [modalShow2, setModalShow2] = useState(false);
+    useEffect(() => {
+        if (params) {
+            setShping(true)
+        }
+    }, [params])
     return (
         <tr className="sizzings">
             <td>
@@ -86,60 +101,38 @@ export const ColorVariant = ({ data, deleteRow, pickUp, handleVariant, setVarian
                 <label name="varient" className="control-label">{data.weight}</label>
             </td>
             <td>
-                <input type="number" name="mrp" value={formData?.mrp} className="form-control" required onChange={onChangeHandler} />
-            </td>
+                <input type="text" name="uid" value={data.uid} className="form-control" onChange={onChangeHandler} />
 
-            <td>
-                <input type="text" name="purchase_rate" value={formData?.purchase_rate} className="form-control" defaultValue={""} onChange={onChangeHandler} />
-            </td>
-
-            <td>
-                <input type="number" name="tax" value={formData?.tax} className="form-control" required onChange={onChangeHandler} />
-            </td>
-
-            <td>
-                <select className="selectOptions" name="tax_type" aria-label="Default select example" onChange={onChangeHandler}>
-                    <option value={'Inclusive'}>Inclusive</option>
-                    <option value={'Exclusive'}>Exclusive</option>
-                </select>
-            </td>
-
-
-            <td>
-                <input type="number" name="sale_rate" value={formData?.sale_rate} className="form-control" required onChange={onChangeHandler} />
-            </td>
-
-            <td>
-                <input type="number" name="discount" value={formData?.discount} className="form-control" required onChange={onChangeHandler} />
-            </td>
-
-            <td>
-                <select className="selectOptions" value={formData?.discount_type} name="discount_type" aria-label="Default select example" onChange={onChangeHandler}>
-                    <option value={'Amount'}>Amount</option>
-                    <option value={'Percent'}>Percent</option>
-                </select>
             </td>
             <td>
-                <input type="text" name="sku" value={formData?.sku} className="form-control" onChange={onChangeHandler} />
-            </td>
-
-            <td>
-                <input type="text" name="hsn_code" value={formData?.hsn_code} className="form-control" onChange={onChangeHandler} />
-            </td>
-            <td>
-                <input type="text" name="sale_rp" value={formData?.sale_rp} className="form-control" onChange={onChangeHandler} />
-            </td>
-            <td>
-                <input type="text" name="share_rp" value={formData?.share_rp} className="form-control" onChange={onChangeHandler} />
+                <label name="varient" className="control-label" style={{ cursor: "pointer" }} onClick={() => setModalShow2(true)}><GiPriceTag style={{ fontSize: "20px" }} /></label>
             </td>
             <td>
                 <DatabaseFilled onClick={() => setModalShow(true)} />
             </td>
             <td>
-                <input type="file" name="gallery_image" multiple accept="image/*" className="selected-files" onChange={onchangeImagehandle} />
+                {params?.id ?
+                    <>
+                        {data?.images[0]?.url && data?.images?.map((item) => {
+                            return <img key={item.url} style={{ width: "100px", height: "100px" }} src={item?.url} />
+                        })}
+                        <input type="file" name="gallery_image" multiple accept="image/*" className="form-control" onChange={onchangeImagehandle} />
+                    </>
+
+                    : <input type="file" name="gallery_image" multiple accept="image/*" className="form-control" onChange={onchangeImagehandle} />
+                }
             </td>
             <td>
-                <input type="file" name="mainImage_url" accept="image/*" className="selected-files" onChange={onchangeImagehandle1} />
+                {params?.id ?
+                    <>
+                        {shoing && <img style={{ width: "100px", height: "100px" }} src={data?.mainImage_url?.url} />}
+                        <input type="file" name="mainImage_url" accept="image/*" className="form-control" onChange={onchangeImagehandle1} />
+                    </>
+
+                    :
+                    <input type="file" name="mainImage_url" accept="image/*" className="form-control" onChange={onchangeImagehandle1} />
+                }
+
             </td>
 
             {modalShow && <AttributeModal show={modalShow}
@@ -147,6 +140,12 @@ export const ColorVariant = ({ data, deleteRow, pickUp, handleVariant, setVarian
                 setFormData={setFormData}
                 formData={formData}
                 data={data}
+            />}
+            {modalShow2 && <PriceModal show={modalShow2}
+                onHide={() => setModalShow2(false)}
+                prices={prices}
+                setData={setData}
+                index={index}
             />}
         </tr>
 

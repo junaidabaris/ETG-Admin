@@ -15,6 +15,7 @@ function EditCategories() {
     meta_description: "",
     commision_rate: "",
     filtering_attribute: "",
+    order_level: "",
   });
 
   const onChangeHandler = (e) => {
@@ -32,9 +33,9 @@ function EditCategories() {
     const inpVal = e.target.files[0];
     clonedObj[inpName] = inpVal;
     setInputVal(clonedObj)
-}
+  }
 
-
+  const token = window.localStorage.getItem('token')
   const submitEditCategoryData = async () => {
 
     const url = `https://onlineparttimejobs.in/api/category/${params.id}`
@@ -47,9 +48,15 @@ function EditCategories() {
     formData.append('meta_description', inputval.meta_description);
     formData.append('parent_category', inputval.parent_category);
     formData.append('commision_rate', inputval.commision_rate);
+    formData.append('order_level', inputval.order_level);
 
     try {
-      const res = await axios.put(url, formData);
+      const res = await axios.put(url, formData,{
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ' + token
+        }
+      });
       alert('Edit Catagary Successfully')
     } catch (error) {
       alert('Catagary not Edit')
@@ -59,7 +66,9 @@ function EditCategories() {
   }
 
   const params = useParams()
-
+  // const token = window.localStorage.getItem('token')
+  const { data } = useGetCategoriesQuery(token);
+  
   const getDetailCat = async () => {
     try {
       const res = await axios.get(`https://onlineparttimejobs.in/api/category/${params.id}`)
@@ -73,6 +82,7 @@ function EditCategories() {
         meta_title: res?.data?.meta_title,
         meta_description: res?.data?.meta_description,
         commision_rate: res?.data?.commision_rate,
+        order_level: res?.data?.order_level,
         filtering_attribute: "",
       })
     } catch (error) {
@@ -112,25 +122,23 @@ function EditCategories() {
                     <div className="form-group row">
                       <label className="col-md-3 col-form-label">Parent Category</label>
                       <div className="col-md-9">
-                        <Form.Select aria-label="Default select example" className='form-control' name='parent_category' onChange={onChangeHandler}>
-                          <option>Open this select menu</option>
-                          <option value="1">-- Straight Fertilizer</option>
-                          <option value="2">Specialty Fertilizer</option>
-                          <option value="3">-- Foliar Fertilizer</option>
-                          <option value="4">-- Water Soluble Fertilizer</option>
-                          <option value="5">-- Blended Fartilizer</option>
-                          <option value="6">-- Enhanced Granular Blends</option>
-                        </Form.Select>
+                      <select className="form-select" name='parent_id' onChange={onChangeHandler} required>
+                          <option>Select Parent Catagary</option>
+                          <option value='null'>Null</option>
+                          {data && data.map((item, i) => {
+                            return <option key={item._id} value={item._id}>{item.name}</option>
+                          })}
+                        </select>
                       </div>
                     </div>
-                    
+
 
                     <div className="form-group row">
                       <label className="col-md-3 col-form-label">
                         Ordering Number
                       </label>
                       <div className="col-md-9">
-                        <input type="number" name="ordering_number" className="form-control" id="order_level" placeholder="Order Level" onChange={onChangeHandler} />
+                        <input type="number" name="order_level" value={inputval?.order_level} className="form-control" id="order_level" placeholder="Order Level" onChange={onChangeHandler} />
                         <small>Higher number has high priority</small>
                       </div>
                     </div>

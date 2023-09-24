@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 function ListCompany() {
     const token = window.localStorage.getItem('adminToken')
+  
     const [underSelect, SetUnder] = useState(null)
     const getData = async () => {
         const res = await axios.get(`https://onlineparttimejobs.in/api/accountCompany`, {

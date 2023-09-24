@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import { useGetCurrencyQuery, useGetLanguagesQuery, useGetSettingSiteConfigurationQuery, useUpdateFlutterCredentialMutation, useUpdateSettingSiteConfigurationMutation } from '../../all-products/allproductsApi/allProductsApi'
+import { useGetCountryQuery, useGetCurrencyQuery, useGetLanguagesQuery, useGetSettingSiteConfigurationQuery, useUpdateFlutterCredentialMutation, useUpdateSettingSiteConfigurationMutation } from '../../all-products/allproductsApi/allProductsApi'
 import { ToastContainer, toast } from 'react-toastify';
+import { token } from '../../../common/TokenArea';
 
 function SystemSiteConfiguration() {
 
     const [inputVal, setInputval] = useState({
-        SiteName: "", Language: "", DefaultCurrency: "", AccountingMethod: "", DefaultEmail: "", NumberOfDaysTodisableEditing: '', DefaultCustomerGroup: "", DefaultPriceGroup: "", MaintenanceMode: null, Theme: "", LoginCaptcha: null, Rowsperpage: "", DateFormat: "", Timezone: "", Calender: "", DefaultWarehouse: "", DefaultBiller: "", PDFLibrary: "", APIsFeature: null, Usecodeforslug: "",
+        SiteName: "", Language: "", Currency: "", Country: '', AccountingMethod: "", DefaultEmail: "", NumberOfDaysTodisableEditing: '', DefaultCustomerGroup: "", DefaultPriceGroup: "", MaintenanceMode: null, Theme: "", LoginCaptcha: null, Rowsperpage: "", DateFormat: "", Timezone: "", Calender: "", DefaultWarehouse: "", DefaultBiller: "", PDFLibrary: "", APIsFeature: null, Usecodeforslug: "",
     });
 
+    // const token = window.localStorage.getItem('adminToken');
+    console.log('tokenn1111', token)
 
-    const { data: languageData } = useGetLanguagesQuery();
-    const { data: currencyData } = useGetCurrencyQuery();
+    const { data: languageData } = useGetLanguagesQuery(token);
+    const { data: currencyData } = useGetCurrencyQuery(token);
+    const { data: countryData } = useGetCountryQuery(token);
 
-    const { data: siteConfigData } = useGetSettingSiteConfigurationQuery();
-    console.log('siteConfigData----', siteConfigData)
+    const { data: siteConfigData } = useGetSettingSiteConfigurationQuery(token);
+    console.log('countryData----', countryData)
 
     useEffect(() => {
         const clon = { ...siteConfigData }
@@ -35,7 +39,7 @@ function SystemSiteConfiguration() {
     const submitUpdateSystemSiteConfig = () => {
         console.log('inputVal---site', inputVal)
         const abc = { ...inputVal }
-        updateSystemSiteConfigD(abc)
+        updateSystemSiteConfigD({ data: abc, token: token })
         document.getElementById("create-course-form").reset();
     };
 
@@ -82,6 +86,7 @@ function SystemSiteConfiguration() {
                     <div className="col-lg-4">
                         <label htmlFor="site_name">Language *</label>
                         <select className="form-select" value={inputVal?.Language} name='Language' onChange={onChangeHandler}>
+                            <option selected >Select Language</option>
                             {languageData && languageData.map((item, i) => {
                                 console.log('languageItem----', item._id)
                                 return <option value={item._id} key={i}>{item.name}</option>
@@ -90,8 +95,18 @@ function SystemSiteConfiguration() {
                     </div>
                     <div className="col-lg-4">
                         <label htmlFor="site_name">Default Currency *</label>
-                        <select className="form-select" name='DefaultCurrency' value={inputVal?.DefaultCurrency} onChange={onChangeHandler}>
+                        <select className="form-select" name='Currency' value={inputVal?.Currency} onChange={onChangeHandler}>
+                            <option selected >Select Currency</option>
                             {currencyData && currencyData.map((item, i) => {
+                                return <option value={item._id} key={item._id}>{item.name}</option>
+                            })}
+                        </select>
+                    </div>
+                    <div className="col-lg-4">
+                        <label htmlFor="site_name">Default Country *</label>
+                        <select className="form-select" name='Country' value={inputVal?.Country} onChange={onChangeHandler}>
+                            <option selected >Select Country</option>
+                            {countryData && countryData.map((item, i) => {
                                 return <option value={item._id} key={item._id}>{item.name}</option>
                             })}
                         </select>

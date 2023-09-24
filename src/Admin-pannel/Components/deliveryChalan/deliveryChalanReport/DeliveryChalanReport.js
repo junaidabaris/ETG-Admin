@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom"
+import { useGetChallanListQuery } from "../../all-products/allproductsApi/allProductsApi"
+import { token } from "../../../common/TokenArea"
 // import AddDeliveryChalanReport from "./addDeliveryChalanReport/AddDeliveryChalanReport"
 
 function DeliveryChalanReport() {
+    const { data } = useGetChallanListQuery(token)
     return (
         <>
             <div className="aiz-main-content">
@@ -25,7 +28,7 @@ function DeliveryChalanReport() {
                                 />
                             </div>
                             <div className="down">
-                            <input
+                                <input
                                     type="date"
                                     className="aiz-date-range form-control"
                                     name="date"
@@ -51,7 +54,7 @@ function DeliveryChalanReport() {
                         </div>
                     </div>
                     <div className="card">
-                        
+
                         <form>
                             {/* <AddDeliveryChalanReport/> */}
                             <div className="card-body">
@@ -67,156 +70,48 @@ function DeliveryChalanReport() {
                                 <table className="table table-striped table-2">
                                     <thead>
                                         <tr>
+                                            <th scope="col">#</th>
                                             <th scope="col">Challan No</th>
                                             <th scope="col">Date</th>
-                                            <th scope="col">Customer Name</th>
-                                            <th scope="col">Location</th>
-                                            <th scope="col">No. Of Item</th>
+                                            <th scope="col">Total Item</th>
+                                            <th scope="col">Invoice Date</th>
                                             <th scope="col">Type</th>
                                             <th scope="col">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>
-                                                <Link
-                                                    className="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                                    to='#'
-                                                    title="View"
-                                                >
-                                                    <i className="las la-eye" />
-                                                </Link>
-                                                <a
-                                                    className="btn btn-soft-info btn-icon btn-circle btn-sm"
-                                                    href="https://mmslfashions.in/invoice/8"
-                                                    title="Download Invoice"
-                                                >
-                                                    <i className="las la-download" />
-                                                </a>
+                                        {data && data?.map((item, i) => {
+                                            return <tr>
+                                                <td>{i + 1}</td>
+                                                <th scope="row">{item?.chalanNo ? item?.chalanNo : 'NA'}</th>
+                                                <td>{item?.chalanDate ? item?.chalanDate : 'NA'}</td>
+                                                <td>{item?.totalItem ? item.totalItem : "NA"}</td>
+                                                <td>{item?.invoiceDate ? item?.invoiceDate : "NA"}</td>
+                                                <td>Otto</td>
+                                                <td>
+                                                    <Link
+                                                        className="btn btn-soft-primary btn-icon btn-circle btn-sm"
+                                                        to='#'
+                                                        title="View"
+                                                    >
+                                                        <i className="las la-eye" />
+                                                    </Link>
+                                                    <a
+                                                        className="btn btn-soft-info btn-icon btn-circle btn-sm"
+                                                        // href="https://mmslfashions.in/invoice/8"
+                                                        href="#"
+                                                        title="Download Invoice"
+                                                    >
+                                                        <i className="las la-download" />
+                                                    </a>
 
-                                                <button type="button" className="btn btn-soft-danger btn-icon btn-circle btn-sm">
-                                                    <i className="las la-trash" />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>
-                                                <Link
-                                                    className="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                                    to='#'
-                                                    title="View"
-                                                >
-                                                    <i className="las la-eye" />
-                                                </Link>
-                                                <a
-                                                    className="btn btn-soft-info btn-icon btn-circle btn-sm"
-                                                    href="https://mmslfashions.in/invoice/8"
-                                                    title="Download Invoice"
-                                                >
-                                                    <i className="las la-download" />
-                                                </a>
+                                                    <button type="button" className="btn btn-soft-danger btn-icon btn-circle btn-sm">
+                                                        <i className="las la-trash" />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        })}
 
-                                                <button type="button" className="btn btn-soft-danger btn-icon btn-circle btn-sm">
-                                                    <i className="las la-trash" />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>
-                                                <Link
-                                                    className="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                                    to='#'
-                                                    title="View"
-                                                >
-                                                    <i className="las la-eye" />
-                                                </Link>
-                                                <a
-                                                    className="btn btn-soft-info btn-icon btn-circle btn-sm"
-                                                    href="https://mmslfashions.in/invoice/8"
-                                                    title="Download Invoice"
-                                                >
-                                                    <i className="las la-download" />
-                                                </a>
-
-                                                <button type="button" className="btn btn-soft-danger btn-icon btn-circle btn-sm">
-                                                    <i className="las la-trash" />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>
-                                                <Link
-                                                    className="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                                    to='#'
-                                                    title="View"
-                                                >
-                                                    <i className="las la-eye" />
-                                                </Link>
-                                                <a
-                                                    className="btn btn-soft-info btn-icon btn-circle btn-sm"
-                                                    href="https://mmslfashions.in/invoice/8"
-                                                    title="Download Invoice"
-                                                >
-                                                    <i className="las la-download" />
-                                                </a>
-
-                                                <button type="button" className="btn btn-soft-danger btn-icon btn-circle btn-sm">
-                                                    <i className="las la-trash" />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>
-                                                <Link
-                                                    className="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                                    to='#'
-                                                    title="View"
-                                                >
-                                                    <i className="las la-eye" />
-                                                </Link>
-                                                <a
-                                                    className="btn btn-soft-info btn-icon btn-circle btn-sm"
-                                                    href="https://mmslfashions.in/invoice/8"
-                                                    title="Download Invoice"
-                                                >
-                                                    <i className="las la-download" />
-                                                </a>
-
-                                                <button type="button" className="btn btn-soft-danger btn-icon btn-circle btn-sm">
-                                                    <i className="las la-trash" />
-                                                </button>
-                                            </td>
-                                        </tr>
 
                                     </tbody>
                                 </table>

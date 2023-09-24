@@ -3,8 +3,8 @@ import { useDeleteColorMutation, useGetColorsQuery } from "../all-products/allpr
 
 function Colors() {
 
-    const { isLoading, data } = useGetColorsQuery();
-    console.log(data);
+    const token = window.localStorage.getItem('token')
+    const { isLoading, data } = useGetColorsQuery(token);
 
     const [deleteData, response] = useDeleteColorMutation();
 

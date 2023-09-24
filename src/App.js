@@ -519,6 +519,70 @@ import SalesPaymentsreports from "./Admin-pannel/Pages/SalesPaymentsReport";
 import PurchasePaymentsreports from "./Admin-pannel/Pages/PurchasePaymentsReport";
 import MyTodoSetting from "./Admin-pannel/Pages/myTodoSettings";
 import ToDoLists from "./Admin-pannel/Pages/toDolist";
+import Routings from "./Admin-pannel/Pages/routings";
+import WorkCenter from "./Admin-pannel/Pages/workCenter";
+import ManufacturingOrder from "./Admin-pannel/Pages/manufacturingOrder";
+import WorkOrder from "./Admin-pannel/Pages/workOrder";
+import ViewWorkOrder from "./Admin-pannel/Components/workOrder/ViewWorkOrder";
+import JobDesc from "./Admin-pannel/Pages/jobDescriptions";
+import GroupManagement from "./Admin-pannel/Components/jobDescription/groupManagement/GroupManagement";
+import ImportExcel from "./Admin-pannel/Components/jobDescription/importExcel/ImportExcel";
+import ViewJob from "./Admin-pannel/Components/jobDescription/viewJob/ViewJob";
+import ORGChart from "./Admin-pannel/Pages/orgchart";
+import Onboardings from "./Admin-pannel/Pages/onBoarding";
+import Hrrecords from "./Admin-pannel/Pages/hrRecord";
+import NewStaffMember from "./Admin-pannel/Components/hrRecords/newStaffMembers/NewStaffMember";
+import ImportFromExcel from "./Admin-pannel/Components/hrRecords/importFromExcel/ImportExcel";
+import ViewRecords from "./Admin-pannel/Components/hrRecords/ViewHrRecords/View";
+import SettingManfucture from "./Admin-pannel/Pages/settingManufacture";
+import WorkingHours from "./Admin-pannel/Components/settingManufacture/WorkingHours";
+import UnitOfMeasureCat from "./Admin-pannel/Components/settingManufacture/UnitOfMeasureCat";
+import UnitOfMeasure from "./Admin-pannel/Components/settingManufacture/UnitOfMeasure";
+// import GeneralSetting from "./Admin-pannel/Components/settingManufacture/GeneralSetting";
+import GeneralSettings from "./Admin-pannel/Components/settingManufacture/GeneralSetting";
+import AddWorkingHours from "./Admin-pannel/Components/settingManufacture/AddWorkingHours";
+import SerialWiseStockReport from "./Admin-pannel/Pages/reports/SerialWiseStockReport";
+import SerialCodeTracking from "./Admin-pannel/Pages/reports/SerialCodeTracking";
+import AddvTechPurchase from "./Admin-pannel/Pages/vtech-Purchase/ListvTechPurchase";
+import ListvTechPurchase from "./Admin-pannel/Pages/vtech-Purchase/ListvTechPurchase";
+import Country from "./Admin-pannel/Pages/setup&Configuration/country/Country";
+import UnitPage from "./Admin-pannel/Pages/unit/UnitPage";
+import Trainings from "./Admin-pannel/Pages/hrRecord/Training";
+import Trainingprograms from "./Admin-pannel/Components/HRrecord/Training/Trainingprograms";
+import Traininglibraries from "./Admin-pannel/Components/HRrecord/Training/Traininglibraries";
+import Trainingresults from "./Admin-pannel/Components/HRrecord/Training/Trainingresults";
+import ContractS from "./Admin-pannel/Pages/hrRecord/Contracts";
+import ContractSV from "./Admin-pannel/Pages/hrRecord/Contracts";
+import NewContracts from "./Admin-pannel/Components/HRrecord/Contracts/NewContract";
+import DependantS from "./Admin-pannel/Pages/hrRecord/Dependant";
+import AddTimeSlote from "./Admin-pannel/Pages/timeSlote/AddTimeSlote";
+import SAles from "./Admin-pannel/Pages/sales";
+import PRoduct from "./Admin-pannel/Pages/Products";
+import Pointofsale from "./Admin-pannel/Pages/pointofsale";
+import REntal from "./Admin-pannel/Pages/rental";
+import Subscrip from "./Admin-pannel/Pages/subscription";
+import Salesperson from "./Admin-pannel/Pages/salesperson";
+import LeadsCRM from "./Admin-pannel/Pages/leadsCrm";
+import PipeLine from "./Admin-pannel/Pages/pipeLine";
+import Account from "./Admin-pannel/Pages/accounting";
+import ProjectDashBord from "./Admin-pannel/Pages/projectDashbord";
+import ReportExl from "./Admin-pannel/Pages/reportExl";
+import ReportEx2 from "./Admin-pannel/Pages/reportEx2";
+import Fareenas from "./Admin-pannel/Pages/fareenasM";
+import Odoo from "./Admin-pannel/Pages/odOO";
+import EditBrands from "./Admin-pannel/Components/brandsComponents/EditBrand";
+import Timesheet from "./Admin-pannel/Pages/timesheets";
+import HelpDesk from "./Admin-pannel/Pages/helpDesk";
+import HrEmployee from "./Admin-pannel/Pages/hrEmpoloyee";
+import Invoice from "./Admin-pannel/Pages/invoice";
+import BenchMark from "./Admin-pannel/Pages/benchmark";
+import Expenses from "./Admin-pannel/Pages/expense";
+import Purchas from "./Admin-pannel/Pages/purchase";
+import Vender from "./Admin-pannel/Pages/venders";
+import Inventoryof from "./Admin-pannel/Pages/inventory";
+import Inventoryfl from "./Admin-pannel/Pages/Inventoryflow";
+import Marketing from "./Admin-pannel/Pages/marketing";
+import Ecommers from "./Admin-pannel/Pages/ecommerse";
 
 function App() {
   const [show, setshow] = useState(true);
@@ -532,11 +596,25 @@ function App() {
         <Route path="/admin" element={<DashboardRightSectionAdmin setshow={setshow} />}>
           <Route path="" element={<DashboardAdminPage />} />
           <Route path="products/all/products/create" element={<AddNewProductsPage />} />
+          <Route path="products/all/edit/:id" element={< EditProducts />} />
+          {/* <Route path="products/all/edit/:id" element={< AddNewProductsPage />} /> */}
 
           <Route path="products/all/products/create/comboProduct" element={<AddComboProduct />} />
           <Route path="products/all/comboProduct" element={<ListComboProdust />} />
           <Route path="products/all/comboProduct/edit/:id" element={<EditComboProducts />} />
 
+
+
+
+          <Route path="task-project-dash" element={<ProjectDashBord />} />
+          <Route path="time-sheets" element={<Timesheet />} />
+          <Route path="help-desk" element={<HelpDesk />} />
+          <Route path="hr-resources" element={<HrEmployee />} />
+          <Route path="event-marketing" element={<Marketing />} />
+          <Route path="ecommerse" element={< Ecommers />} />
+
+
+          <Route path="unit" element={<UnitPage />} />
           <Route path="stock_report" element={<StockReport />} />
           <Route path="sales_report" element={<SalesReport />} />
           <Route path="register_report" element={<RegisterReport />} />
@@ -579,11 +657,14 @@ function App() {
           {/* <Route path="products/all/products/edit/:id" element={<AddNewProductsPage />} /> */}
           <Route path="products/seller" element={<SellerProductsPage />} />
           <Route path="brands" element={<BrandPageAdmin />} />
+          <Route path="brands/edit/:id" element={<EditBrands />} />
           <Route path="brands_requested" element={<BrandRequest />} />
-
 
           <Route path="sellerBrand_List" element={<SellerBrnadList />} />
           <Route path="add_Seller_brand" element={<AddSellerBrnad />} />
+
+          <Route path="time-slote" element={<AddTimeSlote />} />
+          <Route path="time-group" element={'add-time-sloteadd-time-slote'} />
 
           {/* Front Ui */}
           <Route path="add_banner" element={<AddNewBanner />} />
@@ -591,7 +672,7 @@ function App() {
           <Route path="list_banner" element={<ListBanner />} />
 
 
-          <Route path="brands/edit/:id" element={<EditBrand />} />
+
 
           <Route path="attributes" element={<AttributeAdminPage />} />
           <Route path="product_attributes" element={<IndexPages />} />
@@ -599,7 +680,7 @@ function App() {
           <Route path="attributes/edit/:id" element={<EditAttribute />} />
           <Route path="pos-activation" element={< PosConfigurationPage />} />
           <Route path="products/all" element={< AllProductsPage />} />
-          <Route path="products/all/edit/:id" element={< EditProducts />} />
+
           <Route path="list-purchase" element={< ListPurchasePage />} />
           <Route path="add-purchase-list" element={< AddPurchaseListPage />} />
 
@@ -639,6 +720,9 @@ function App() {
           <Route path="seller" element={<AllSellerPage />} />
 
           {/* <Route path="customer" element={<AllCustomerPage />} /> */}
+
+          <Route path="serial-wise-stock-report" element={<SerialWiseStockReport />} />
+          <Route path="serial-code-tracking" element={<SerialCodeTracking />} />
 
           <Route path="in_house_sale_report" element={<InHouseProductsSalePage />} />
           <Route path="seller_sale_report" element={<SellerProductsSalePage />} />
@@ -738,6 +822,7 @@ function App() {
           <Route path="languages/app-translation" element={<AppTranslationPage />} />
           <Route path="languages/edit/:id" element={<LanguageEditPage />} />
           <Route path="currency" element={<CurrencyPage />} />
+          <Route path="country" element={<Country />} />
           <Route path="currency/create" element={<AddNewCurrency />} />
           <Route path="currency/edit/:id" element={<EditCurrency />} />
 
@@ -766,7 +851,7 @@ function App() {
 
           <Route path="categories" element={<CategoriesPageAdmin />} />
           <Route path="categories/create" element={<AddnewCategories />} />
-          <Route path="categories/edit/:id" element={<EditCategories />} />
+          <Route path="categories/edit/:id" element={<AddnewCategories />} />
 
           {/* junaid routes */}
 
@@ -792,9 +877,45 @@ function App() {
           <Route path="list_popup" element={<ListPopups />} />
 
 
+
+
           {/* custom_fields AAP */}
           <Route path="custom_fields" element={<CustomFelds />} />
           <Route path="custom_fields/custom_fields_add" element={<Custom_fields_add />} />
+
+          <Route path="training" element={<Trainings />}>
+            <Route path="" element={<Trainingprograms />} />
+            <Route path="t-libraries" element={<Traininglibraries />} />
+            <Route path="t-result" element={<Trainingresults />} />
+          </Route>
+          <Route path="contract" element={<ContractSV />} />
+          <Route path="new-contract" element={<NewContracts />} />
+          <Route path="dependant" element={<DependantS />} />
+
+          <Route path="sales" element={<SAles />} />
+          <Route path="product" element={<PRoduct />} />
+          <Route path="point-of-sale" element={<Pointofsale />} />
+          <Route path="rental" element={<REntal />} />
+          <Route path="subscrip" element={< Subscrip />} />
+          <Route path="salesperson" element={< Salesperson />} />
+          <Route path="lead-crm" element={< LeadsCRM />} />
+          <Route path="pipeline" element={< PipeLine />} />
+          <Route path="accounting" element={< Account />} />
+          <Route path="invoicing" element={< Invoice />} />
+          <Route path="benchmark" element={< BenchMark />} />
+          <Route path="expenses" element={< Expenses />} />
+          <Route path="purchase" element={< Purchas />} />
+          <Route path="venders" element={< Vender />} />
+          <Route path="inventory" element={< Inventoryof />} />
+          <Route path="inventory-flow" element={< Inventoryfl />} />
+
+          {/* <Route path="task-project-dash" element={<ProjectDashBord />} /> */}
+          <Route path="report-exl" element={<ReportExl />} />
+          <Route path="report-exl2s" element={<ReportEx2 />} />
+          <Route path="fareenas" element={<Fareenas />} />
+
+          <Route path="new-dashboard" element={<Odoo />} />
+
 
 
 
@@ -956,6 +1077,18 @@ function App() {
           <Route path="marketplace-event-ticket" element={<MarketTicket />} />
           <Route path="marketplace-validator" element={<MarketplaceValidator />} />
 
+
+          <Route path="job-descriptions" element={<JobDesc />} />
+          <Route path="group-management" element={<GroupManagement />} />
+          <Route path="import-excel" element={<ImportExcel />} />
+          <Route path="view-job" element={<ViewJob />} />
+          <Route path="org-chart" element={<ORGChart />} />
+          <Route path="onboarding" element={<Onboardings />} />
+          <Route path="hr-records" element={<Hrrecords />} />
+          <Route path="new-staff-members" element={<NewStaffMember />} />
+          <Route path="import-from-excel" element={<ImportFromExcel />} />
+          <Route path="view-hr-records" element={<ViewRecords />} />
+
           {/* {Nizam Routes end} */}
 
           {/* {Shhaz Routes start} */}
@@ -972,6 +1105,7 @@ function App() {
           <Route path="call-centre-dashboard" element={<CallOverView />} />
           <Route path="AddAgreement" element={<AddAgreement />} />
           <Route path="add-v-tech-purchase" element={<VtechPurchase />} />
+          <Route path="list-v-tech-purchase" element={<ListvTechPurchase />} />
           <Route path="list-v-tech-Transfer-stock" element={<ListVPurchaseStock />} />
           <Route path="estimate-sales" element={<EstimateSales />} />
           <Route path="new-estimate" element={<NewEstimate />} />
@@ -1004,7 +1138,21 @@ function App() {
           <Route path='day_book' element={<DayBooks str="Day" />} />
           <Route path='cash_book' element={<DayBooks str="Cash" />} />
           <Route path='bank_book' element={<DayBooks str="Bank" />} />
+
+          <Route path="routings" element={<Routings />} />
+          <Route path="work-center" element={<WorkCenter />} />
+          <Route path="manufacturing-order" element={<ManufacturingOrder />} />
+          <Route path="work-order" element={<WorkOrder />} />
+          <Route path="view-work-order" element={<ViewWorkOrder />} />
           {/* by Sajid */}
+
+          <Route path="settingmanufacture" element={<SettingManfucture />}>
+            <Route path="" element={<WorkingHours />} />
+            <Route path="unit-categories" element={<UnitOfMeasureCat />} />
+            <Route path="unit-measure" element={<UnitOfMeasure />} />
+            <Route path="genral" element={<GeneralSettings />} />
+          </Route>
+          <Route path="add-working-hours" element={<AddWorkingHours />} />
 
 
           <Route path="setting" element={<Setting />}>
@@ -1147,8 +1295,9 @@ function App() {
         </Route>
 
 
-      </Routes>
-      {show && <Footer />}
+      </Routes >
+      {show && <Footer />
+      }
     </>
   );
 }

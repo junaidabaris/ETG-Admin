@@ -8,6 +8,7 @@ export const AttributeItem = ({ item, handleChoiceValues, isSuccess,isLoading,se
 
     function handleTagKeyDown(e) {
         if (e.key !== 'Enter') return
+        // debugger
         const value = e.target.value
         if (!value.trim()) return
 
@@ -25,6 +26,7 @@ export const AttributeItem = ({ item, handleChoiceValues, isSuccess,isLoading,se
         }
         e.target.value = ''
     };
+   
 
     const removetagTag = (index) => [
         setTags(tags.filter((el, i) => i !== index))
@@ -51,6 +53,7 @@ export const AttributeItem = ({ item, handleChoiceValues, isSuccess,isLoading,se
 
     useEffect(() => {
         if (isSuccess) {
+            console.log(tags);
             // handleChoiceValues(tags, { id: item._id, title: item.name ? item.name : item.title, data: tags ? [...tags] : '' })
         }
     }, [isSuccess])

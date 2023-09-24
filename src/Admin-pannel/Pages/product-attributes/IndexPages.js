@@ -7,7 +7,7 @@ function IndexPages() {
     const [data, setData] = useState()
     const token = window.localStorage.getItem('token')
     const getDatas = async () => {
-        const res = await axios.get('https://onlineparttimejobs.in/api/attributeSetMaster', {
+        const res = await axios.get('https://onlineparttimejobs.in/api/attributeSetMaster/admin', {
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 Authorization: `Bearer ${token}`,
@@ -31,8 +31,12 @@ function IndexPages() {
                         </div>
                     </div>
                     <div className="row">
+                    <AddProductAttributes getDatas={getDatas} />
+                       
+                    </div>
+                    <div className="row">
                         <ListinSide data={data} getDatas={getDatas} />
-                        <AddProductAttributes getDatas={getDatas} />
+                       
                     </div>
                 </div>
                 <div className="bg-white text-center py-3 px-15px px-lg-25px mt-auto">

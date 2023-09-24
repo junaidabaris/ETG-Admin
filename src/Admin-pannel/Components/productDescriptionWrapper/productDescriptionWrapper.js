@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import TextEditor from '../../common/TextEditor'
 import { setDataDescription } from './textEditorSlice';
 
-function ProductDescriptionWrapper() {
+function ProductDescriptionWrapper({item}) {
     const dispatch = useDispatch();
     const handleData = (htmlValue)=> {
         dispatch(setDataDescription(htmlValue))

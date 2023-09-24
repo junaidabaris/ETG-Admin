@@ -3,19 +3,19 @@ import { Button, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useCustomerActiveMutation, useDeleteCustomerMutation, useGetCustomersQuery } from "../all-products/allproductsApi/allProductsApi";
 import { ToastContainer, toast } from "react-toastify";
+import { token } from "../../common/TokenArea";
 function CustomerList() {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const { isLoading, data } = useGetCustomersQuery();
-  console.log('allCustomerListData', data)
+  const { isLoading, data } = useGetCustomersQuery(token);
 
   const [deleteCustomer, response] = useDeleteCustomerMutation();
 
   const deleteCustomerData = (id) => {
-    deleteCustomer(id)
+    deleteCustomer({ id: id, token: token })
   };
 
   useEffect(() => {

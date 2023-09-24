@@ -134,7 +134,7 @@ function AddCompanys() {
                 Authorization: `Bearer ${token}`,
             },
         })
-        const clone = { ...res.data.getCompany, firstname: res.data.found.firstname, lastname: res.data.found.lastname, email: res.data.found.email, mobile: res.data.found.mobile, password: res.data.found.password }
+        const clone = { ...res.data.getCompany, firstname: res.data.getCompany.firstname, lastname: res.data.getCompany.lastname, email: res.data.getCompany.email, mobile: res.data.getCompany.mobile, password: res.data.getCompany.password }
         setState(clone)
 
         const mapedata = res.data?.getCompany.website?.map((item) => {
@@ -150,7 +150,8 @@ function AddCompanys() {
                 Authorization: `Bearer ${token}`,
             },
         })
-
+        // const ides = [res.data[0]._id]
+        // setFinalCatD(ides)
         setRolsV(res.data)
     }
     useEffect(() => {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { useEditCurrencyMutation, useGetCurrencyByIdQuery, useGetPlaceByIdQuery } from '../../../all-products/allproductsApi/allProductsApi';
+import { token } from '../../../../common/TokenArea';
 
 function EditCurrency() {
     const [inputval, setInputval] = useState({
@@ -29,9 +30,7 @@ function EditCurrency() {
         setInputval(clonedObj)
     };
     const submitEditBrandData = () => {
-        console.log(params.id);
-        editCurr({ id: params.id, data: inputval })
-        console.log(inputval)
+        editCurr({ id: params.id, data: inputval, token: token })
         document.getElementById("create-course-form").reset();
     };
 

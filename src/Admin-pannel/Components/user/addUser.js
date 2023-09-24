@@ -322,7 +322,7 @@ const AddUser = () => {
                       width: "100%",
                     }}
                   >
-                    {bloodGroups.map((bloodGroup) => (
+                    {bloodGroups?.map((bloodGroup) => (
                       <Option key={bloodGroup} value={bloodGroup}>
                         {bloodGroup}
                       </Option>
@@ -347,7 +347,7 @@ const AddUser = () => {
                     size={"middle"}
                   >
                     {employmentStatus &&
-                      employmentStatus.map((employmentStatus) => (
+                      employmentStatus?.map((employmentStatus) => (
                         <Option
                           key={employmentStatus.id}
                           value={employmentStatus.id}
@@ -372,7 +372,7 @@ const AddUser = () => {
                     size={"middle"}
                   >
                     {department &&
-                      department.map((department) => (
+                      department?.map((department) => (
                         <Option key={department.id} value={department.id}>
                           {department.name}
                         </Option>
@@ -397,12 +397,12 @@ const AddUser = () => {
                     }}
                     placeholder='Please select'
                   >
-                    {list &&
-                      list.map((role) => (
+                    {/* {list &&
+                      list?.map((role) => (
                         <Option key={role.id} value={role.id}>
                           {role.name}
                         </Option>
-                      ))}
+                      ))} */}
                   </Select>
                  
                 </Form.Item>
@@ -426,7 +426,7 @@ const AddUser = () => {
                     placeholder='Please select'
                   >
                     {shift &&
-                      shift.map((shift) => (
+                      shift?.map((shift) => (
                         <Option key={shift.id} value={shift.id}>
                           {shift.name}
                         </Option>
@@ -459,7 +459,7 @@ const AddUser = () => {
                     placeholder='Please select Designation'
                   >
                     {designation &&
-                      designation.map((designation) => (
+                      designation?.map((designation) => (
                         <Option key={designation.id} value={designation.id}>
                           {designation.name}
                         </Option>
@@ -544,7 +544,7 @@ const AddUser = () => {
             <Form.List name='educations'>
               {(fields, { add, remove }) => (
                 <>
-                  {fields.map(({ key, name, ...restField }) => (
+                  {fields?.map(({ key, name, ...restField }) => (
                     <EmployeeEducationForm
                       key={key}
                       name={name}

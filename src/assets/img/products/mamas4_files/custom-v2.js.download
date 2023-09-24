@@ -1,0 +1,7 @@
+$(document).ready(function(){
+  $(document).on('keypress','#nt_search_canvas .search_header__input',function(){ 
+      var search_val = $(this).val();
+      console.log(search_val);
+  });
+  
+});

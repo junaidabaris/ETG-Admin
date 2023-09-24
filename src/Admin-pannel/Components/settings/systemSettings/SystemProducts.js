@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useGetSettingProductsQuery, useUpdateSettingProductsMutation } from '../../all-products/allproductsApi/allProductsApi';
 import { ToastContainer, toast } from 'react-toastify';
+import { token } from '../../../common/TokenArea';
 
 function SystemProducts() {
 
@@ -8,8 +9,7 @@ function SystemProducts() {
         ProductTax: null, Racks: null, ProductVariants: null, Displaywarehouseproducts: '', image_width: '', image_height: '', thumbnail_width: '', thumbnail_height: '', Watermark: null, remove_expired: '', BarcodeRenderer: '', Updatecostwithpurchase: null, todays_deal: null, featured: null, trending: null, flash_deal: null
     });
 
-    const { data: SettingProductsData } = useGetSettingProductsQuery();
-    console.log('SettingProductsData----', SettingProductsData)
+    const { data: SettingProductsData } = useGetSettingProductsQuery(token);
 
     useEffect(() => {
         const clon = { ...SettingProductsData }

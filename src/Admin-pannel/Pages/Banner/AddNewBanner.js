@@ -2,7 +2,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-
+import { useGetLanguagesQuery } from "../../Components/all-products/allproductsApi/allProductsApi";
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import MultilangBanner from "./MultilangBanner";
 function AddNewBanner() {
 
     const [inputval, setInputval] = useState({
@@ -14,13 +20,31 @@ function AddNewBanner() {
     });
     const [file, setFile] = useState()
 
-    const onChangeHandler = (e) => {
-        const inpName = e.target.name;
-        const inpval = e.target.value;
-        const clonedObj = { ...inputval };
-        clonedObj[inpName] = inpval;
-        setInputval(clonedObj)
-    };
+    const onChangeHandler = (e, id, bul) => {
+        if (bul) {
+            const maped = val.map((item) => {
+                if (item.language_id == id) {
+                    const obj = { ...item, image: e.target.files[0] }
+                    return obj
+                } else {
+                    return item
+                }
+            })
+            setVal(maped);
+        } else {
+            const maped = val.map((item) => {
+                if (item.language_id == id) {
+                    const obj = { ...item, [e.target.name]: e.target.value }
+                    return obj
+                } else {
+                    return item
+                }
+            })
+            setVal(maped);
+        }
+
+
+    }
     const token = window.localStorage.getItem('token')
     const imgHandle = (e) => {
         setFile(e.target.files[0])
@@ -32,49 +56,7 @@ function AddNewBanner() {
     const [isSusses, setIssusses] = useState(false)
 
 
-    const addGeneralSettingData = async (e) => {
-        setLoader(true)
-        e.preventDefault();
-        const clonedObj = { ...inputval, image: file };
-        const formData = new FormData();
 
-        formData.append('SliderTopHeading', clonedObj.SliderTopHeading);
-        formData.append('bottomText', clonedObj.bottomText);
-        formData.append('url', clonedObj.url);
-        formData.append('image', clonedObj.image);
-
-        if (params.id) {
-            try {
-                const res = await axios.put(` https://onlineparttimejobs.in/api/banner/update/${params.id}`, formData, {
-                    headers: {
-                        "Content-type": "application/json; charset=UTF-8",
-                        Authorization: `Bearer ${token}`,
-                    },
-                })
-                setLoader(false)
-                setIssusses(true)
-            } catch (error) {
-                setLoader(false)
-                setError(true)
-            }
-        } else {
-            try {
-                const res = await axios.post(`https://onlineparttimejobs.in/api/banner/admin`, formData, {
-                    headers: {
-                        "Content-type": "application/json; charset=UTF-8",
-                        Authorization: `Bearer ${token}`,
-                    },
-                })
-                setLoader(false)
-                setIssusses(true)
-            } catch (error) {
-                setLoader(false)
-                setError(true)
-            }
-            document.getElementById("create-course-form").reset();
-        }
-
-    };
 
     const params = useParams()
 
@@ -133,70 +115,102 @@ function AddNewBanner() {
             toastErrorMessage()
         };
     }, [errorFile])
+    const [value, setValue] = useState(0);
 
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
 
+    const { data, refetch } = useGetLanguagesQuery(token);
+    const [val, setVal] = useState(data)
+    useEffect(() => {
+        if (data) {
+            const maped = data.map((item) => {
+                return {
+                    SliderTopHeading: '',
+                    bottomText: '',
+                    url: '',
+                    image: '',
+                    language_id: item._id,
+                    lable: item.name
+                }
+            })
+            setVal(maped)
+        }
+    }, [data])
+
+    const addNewAttributeData = async (e) => {
+        e.preventDefault();
+        const images = new FormData();
+        const clone = [...val]
+        setLoader(true)
+        for (let i = 0; i < clone.length; i++) {
+            let element = clone[i];
+            if (element?.image) {
+                images.append('image', element?.image);
+                const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+                images.delete('image');
+                const obj = { ...element, image: { public_id: res2.data.public_id, url: res2.data.url } }
+                clone.splice(i, 1, obj)
+            }
+        }
+        if (params.id) {
+            try {
+                const res = await axios.put(` https://onlineparttimejobs.in/api/banner/update/${params.id}`, { list: clone }, {
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8",
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                setLoader(false)
+                setIssusses(true)
+            } catch (error) {
+                setLoader(false)
+                setError(true)
+            }
+        } else {
+            try {
+                const res = await axios.post(`https://onlineparttimejobs.in/api/banner/add`,  { list: clone }, {
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8",
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                setLoader(false)
+                setIssusses(true)
+            } catch (error) {
+                setLoader(false)
+                setError(true)
+            }
+            document.getElementById("create-course-form").reset();
+        }
+
+    };
     return <div className="aiz-main-content">
         <div className="px-15px px-lg-25px">
             <div className="row">
                 <div className="col-lg-8 mx-auto">
-                    <div className="card">
-                        <div className="card-header">
-                            {params.id ? <h1 className="mb-0 h6">Edit Banner</h1> : <h1 className="mb-0 h6">Add New Banner</h1>}
-                        </div>
-                        <div className="card-body">
+                    <Box sx={{ width: '100%', typography: 'body1' }}>
+                        <TabContext value={value}>
+                            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                                <TabList onChange={handleChange} aria-label="lab API tabs example">
+                                    {data && data.map((item, i) => {
+                                        return <Tab label={item?.name} value={i} />
+                                    })}
 
-                            <form className="form-horizontal" id='create-course-form' onSubmit={addGeneralSettingData}>
-                                <input type="hidden" name="_token" defaultValue="MfWj9eEof7fNq0mKB42pyG49sPDPkHAVyVSS7UBT" />
-
-
-                                <div className="form-group row">
-                                    <label className="col-sm-3 col-from-label">Choose Slider Image :</label>
-                                    <div className="col-sm-9">
-                                        <div className="input-group">
-                                            <div className="input-group-prepend">
-                                                <div className="input-group-text bg-soft-secondary">Browse</div>
-                                            </div>
-                                            <div className="form-control file-amount">
-                                                <input type="file" name="image" className="selected-files" onChange={imgHandle} />
-                                            </div>
-                                        </div>
-                                        <div className="file-preview box sm" />
+                                </TabList>
+                            </Box>
+                            {val && val.map((item, i) => {
+                                return <TabPanel value={i}>
+                                    <div className="card">
+                                        <MultilangBanner params={params} setValue={setValue} data={val} item={item} i={i} addNewAttributeData={addNewAttributeData} onChangeHandler={onChangeHandler} imgHandle={imgHandle} />
                                     </div>
-                                </div>
 
+                                </TabPanel>
+                            })}
 
-
-
-                                <div className="form-group row">
-                                    <label className="col-sm-3 col-from-label">URL</label>
-                                    <div className="col-sm-9">
-                                        <input type="text" name="url" value={inputval.url} className="form-control" fdprocessedid="ihieoq" onChange={onChangeHandler} />
-                                    </div>
-                                </div>
-                                <div className="form-group row">
-                                    <label className="col-sm-3 col-from-label">Slider Top Heading :</label>
-                                    <div className="col-sm-9">
-                                        <input type="text" name="SliderTopHeading" value={inputval.SliderTopHeading} className="form-control" fdprocessedid="ihieoq" onChange={onChangeHandler} />
-                                    </div>
-                                </div>
-
-
-                                <div className="form-group row">
-                                    <label className="col-sm-3 col-from-label">Button Text :</label>
-                                    <div className="col-sm-9">
-                                        <input type="text" name="bottomText" value={inputval.bottomText} className="form-control" fdprocessedid="ihieoq" onChange={onChangeHandler} />
-                                    </div>
-                                </div>
-
-
-
-                                <div className="text-right">
-                                    <button type="submit" className="btn btn-primary" fdprocessedid="a528s9">{params.id ? 'Update Banner' : 'Add Banner'}</button>
-                                </div>
-
-                            </form>
-                        </div>
-                    </div>
+                        </TabContext>
+                    </Box>
                 </div>
             </div>
         </div>

@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from 'react-toastify';
-import { useAddNewAttributeMutation } from "../all-products/allproductsApi/allProductsApi";
+import { useAddNewAttributeMutation, useGetLanguagesQuery } from "../all-products/allproductsApi/allProductsApi";
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import FormsMultiLanguage from "./FormsMultiLanguage";
 
 function AddNewAttributesAdmin() {
 
@@ -8,21 +14,9 @@ function AddNewAttributesAdmin() {
         name: '',
     });
 
-    const onChangeHandler = (e) => {
-        const inpName = e.target.name;
-        const inpval = e.target.value;
-        const clonedObj = { ...inputval };
-        clonedObj[inpName] = inpval;
-        setInputval(clonedObj)
-    };
-
     const [addNewAttribute, response] = useAddNewAttributeMutation();
     const token = window.localStorage.getItem('token')
-    const addNewAttributeData = (e) => {
-        e.preventDefault();
-        addNewAttribute({ data: inputval, token: token })
-        document.getElementById("create-course-form").reset();
-    };
+
 
     const toastSuccessMessage = () => {
         toast.success("Attribute added Successfully", {
@@ -39,30 +33,78 @@ function AddNewAttributesAdmin() {
         }
 
     }, [response])
+    const [value, setValue] = useState(0);
 
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
+    const { data, refetch } = useGetLanguagesQuery(token);
+    const [val, setVal] = useState(data)
+    useEffect(() => {
+        if (data) {
+            const maped = data.map((item) => {
+                return { name: "", language_id: item._id, approve: false, lable: item.name }
+            })
+            setVal(maped)
+        }
+    }, [data])
+    const onChangeHandler = (e, id, bul) => {
+
+        if (e.target.name == 'approve') {
+            const maped = val.map((item) => {
+                if (item.language_id == id) {
+                    const obj = { ...item, [e.target.name]: !bul }
+                    return obj
+                } else {
+                    return item
+                }
+            })
+            setVal(maped);
+        } else {
+            const maped = val.map((item) => {
+                if (item.language_id == id) {
+                    const obj = { ...item, [e.target.name]: e.target.value }
+                    return obj
+                } else {
+                    return item
+                }
+            })
+            setVal(maped);
+        }
+
+    }
+
+    const addNewAttributeData = (e) => {
+        e.preventDefault();
+        addNewAttribute({ data: { list: val }, token: token })
+
+    };
     return (
         <>
             <div className="col-md-5">
-                <div className="card">
-                    <div className="card-header">
-                        <h5 className="mb-0 h6">Add New Attribute</h5>
-                    </div>
-                    <div className="card-body">
-                        <form id="create-course-form" onSubmit={addNewAttributeData}>
-                            <input type="hidden" name="_token" defaultValue="6klBhNOhEcSYzHAP1WU8ctR90lIocmkKBETVGkNx" />
 
-                            <div className="form-group mb-3">
-                                <label htmlFor="name">Name</label>
-                                <input type="text" placeholder="Name" id="name" name="name" className="form-control" required fdprocessedid="8s3s9v" onChange={onChangeHandler} />
-                            </div>
+                <Box sx={{ width: '100%', typography: 'body1' }}>
+                    <TabContext value={value}>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                            <TabList onChange={handleChange} aria-label="lab API tabs example">
+                                {data && data.map((item, i) => {
+                                    return <Tab label={item?.name} value={i} />
+                                })}
 
-                            <div className="form-group mb-3 text-right">
-                                <button type="submit" className="btn btn-primary" fdprocessedid="uzw7ye">Save</button>
-                            </div>
+                            </TabList>
+                        </Box>
+                        {val && val.map((item, i) => {
+                            return <TabPanel value={i}>
+                                <div className="card">
+                                    <FormsMultiLanguage setValue={setValue} data={val} item={item} i={i} addNewAttributeData={addNewAttributeData} onChangeHandler={onChangeHandler} />
+                                </div>
 
-                        </form>
-                    </div>
-                </div>
+                            </TabPanel>
+                        })}
+
+                    </TabContext>
+                </Box>
                 <ToastContainer />
             </div>
         </>

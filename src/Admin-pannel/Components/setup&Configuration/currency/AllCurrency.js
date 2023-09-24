@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { useDeleteCurrencyMutation, useGetCurrencyQuery } from "../../all-products/allproductsApi/allProductsApi";
+import { token } from "../../../common/TokenArea";
 
 function AllCurrency() {
     const [show, setShow] = useState(false);
@@ -9,16 +10,14 @@ function AllCurrency() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const { isLoading, data } = useGetCurrencyQuery();
-    console.log(data);
+    const { isLoading, data ,refetch } = useGetCurrencyQuery(token);
 
     const [deleteCurr, respo] = useDeleteCurrencyMutation();
 
     const deleteCurrencyData = (id) => {
-        deleteCurr(id)
+        deleteCurr({ id, token })
+        refetch()
     }
-    console.log(respo)
-
     if (respo.isSuccess === true) {
         alert('Currency successfully deleted')
     }

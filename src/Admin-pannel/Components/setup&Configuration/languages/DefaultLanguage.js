@@ -1,9 +1,10 @@
+import { token } from "../../../common/TokenArea";
 import { useGetLanguagesQuery } from "../../all-products/allproductsApi/allProductsApi";
 
 function DefaultLanguage() {
 
 
-    const { data, res } = useGetLanguagesQuery();
+    const { data, res } = useGetLanguagesQuery(token);
     console.log(data);
 
 

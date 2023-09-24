@@ -24,7 +24,7 @@ function DashboardRightSectionAdmin({ setshow }) {
     return (
         <>
             <div className="aiz-main-wrapper">
-                <AsideAdmin />
+                <AsideAdmin isActive={isActive} />
                 <div className="aiz-content-wrapper aiz-main-wrapper-2">
                     <TopNavSeller showSidebar={showSidebar} />
                     <Outlet></Outlet>

@@ -5,7 +5,7 @@ import './AsideAdmin.css';
 import { AiOutlineBarChart } from "react-icons/ai";
 
 function AsideAdmin() {
-  const [Sales, setSales] = useState(false)
+  const [Sales2, setSales2] = useState(false)
   const [state, setState] = useState(false)
   const [agreement, setAgreement] = useState(false)
   const [billingBook, setBillingBook] = useState(false);
@@ -13,6 +13,7 @@ function AsideAdmin() {
   const [wholeSale, setWholsale] = useState(false)
   const [rentVtech, setrentVtech] = useState(false)
   // const [sales, setSales] = useState(false)
+  const [website2, setWebsite2] = useState(false)
   const [refunds, setRefunds] = useState(false)
   const [customers, setCustomers] = useState(false)
   const [sellers, setSellers] = useState(false)
@@ -78,8 +79,19 @@ function AsideAdmin() {
   const [manufacturing, setManufacturing] = useState(false)
   const [salesgstreport, setSalesgstreport] = useState(false)
   const [myToDo, setMyToDo] = useState(false)
-
-
+  const [hrRecords, setHrRecord] = useState(false)
+  const [training, setTraining] = useState(false);
+  const [timeslote, settimeslote] = useState(false);
+  const [Sales, setSales] = useState(false)
+  const [leads, setLeads] = useState(false)
+  const [finanace, setFinanace] = useState(false)
+  const [logistic, setLogistic] = useState(false)
+  const [projectDash, setProjectDash] = useState(false);
+  const [dashbord, setDashbord] = useState(false);
+  const [crm, setCrm] = useState(false);
+  const [saless, setSaless] = useState(false);
+  const [finince, setFinance] = useState(false);
+  const idShow = window.localStorage.getItem('adminId')
   if (isDelevery === 'true') {
     return <div className="aiz-sidebar left c-scrollbar c-scrollbar-2" style={{ backgroundColor: "#e1e1db" }}>
       <div className="aiz-side-nav-logo-wrap">
@@ -373,22 +385,24 @@ function AsideAdmin() {
 
 
 
+                  {idShow == '642177b99fd9c29aab59d245' && <>
+                    <li className="aiz-side-nav-item">
+                      <Link className="aiz-side-nav-link " to="add-company">
+                        <span className="aiz-side-nav-text list-voucher">
+                          Add Company
+                        </span>
+                      </Link>
+                    </li>
+                    <li className="aiz-side-nav-item">
+                      <Link className="aiz-side-nav-link " to="list-company">
+                        <span className="aiz-side-nav-text list-voucher">
+                          List Company
+                        </span>
+                      </Link>
+                    </li>
+                  </>}
 
 
-                  <li className="aiz-side-nav-item">
-                    <Link className="aiz-side-nav-link " to="add-company">
-                      <span className="aiz-side-nav-text list-voucher">
-                        Add Company
-                      </span>
-                    </Link>
-                  </li>
-                  <li className="aiz-side-nav-item">
-                    <Link className="aiz-side-nav-link " to="list-company">
-                      <span className="aiz-side-nav-text list-voucher">
-                        List Company
-                      </span>
-                    </Link>
-                  </li>
                   <li className="aiz-side-nav-item">
                     <Link className="aiz-side-nav-link " to="coast-centre-create">
                       <span className="aiz-side-nav-text">Create Cost Centre</span>
@@ -666,11 +680,230 @@ function AsideAdmin() {
             </ul>
 
             <ul className="aiz-side-nav-list metismenu" id="main-menu" data-toggle="aiz-side-menu">
-              <li className="aiz-side-nav-item mm-active">
-                <Link to="" className="aiz-side-nav-link active">
-                  <i className="las la-home aiz-side-nav-icon" />
-                  <span className="aiz-side-nav-text">Dashboard</span>
+
+              <li className="aiz-side-nav-item" >
+                <Link to="#" className="aiz-side-nav-link" onClick={() => { setDashbord(!dashbord) }}>
+                  <i className="las la-shopping-cart aiz-side-nav-icon" />
+                  <span className="aiz-side-nav-text">Dashboard's</span>
+                  <span className="aiz-side-nav-arrow" />
                 </Link>
+
+                {/*Submenu*/}
+                <ul className={`aiz-side-nav-list level-2 mm-collapse ${dashbord ? "mm-show" : "extra"}`} id="product">
+                  <li className="aiz-side-nav-item">
+                    <Link to="" className="aiz-side-nav-link ">
+                      <span className="labour-charge-type">Main Dashboard</span>
+                    </Link>
+                  </li>
+
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="new-dashboard">
+                      <i className="las la-user-tie aiz-side-nav-icon" />
+                      <span className="aiz-side-nav-text">New Dashborad</span>
+                      <span className="aiz-side-nav-arrow" />
+
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link to="#" className="aiz-side-nav-link" onClick={() => { setCrm(!crm) }}>
+                      <span className="aiz-side-nav-text">CRM</span>
+                      <span className="aiz-side-nav-arrow" />
+                    </Link>
+                    <ul style={{ marginLeft: "15px" }} className={`aiz-side-nav-list level-2 mm-collapse ${crm ? "mm-show" : "extra"}`} id="product">
+                      <li className="aiz-side-nav-item">
+                        <Link to="dashboard-crm" className="aiz-side-nav-link ">
+                          <span className="labour-charge-type">crm</span>
+                        </Link>
+                      </li>
+                      <li className="aiz-side-nav-item">
+                        <Link className="aiz-side-nav-link" to="pipeline">
+                          <span className="aiz-side-nav-text"> Pipeline</span>
+                        </Link>
+                      </li>
+                      <li className="aiz-side-nav-item">
+                        <Link className="aiz-side-nav-link" to="leads">
+                          <span className="aiz-side-nav-text">Leads</span>
+
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+
+
+                  <li className="aiz-side-nav-item">
+                    <Link to="#" className="aiz-side-nav-link" onClick={() => { setSaless(!saless) }}>
+                      <span className="aiz-side-nav-text">Sales</span>
+                      <span className="aiz-side-nav-arrow" />
+                    </Link>
+                    <ul style={{ marginLeft: "15px" }} className={`aiz-side-nav-list level-2 mm-collapse ${saless ? "mm-show" : "extra"}`} id="product">
+                      <li className="aiz-side-nav-item">
+                        <Link className="aiz-side-nav-link" to="sales">
+                          <span className="aiz-side-nav-text"> Sales</span>
+                        </Link>
+                      </li>
+                      <li className="aiz-side-nav-item">
+                        <Link className="aiz-side-nav-link" to="product">
+                          <span className="aiz-side-nav-text"> Product</span>
+                        </Link>
+                      </li>
+                      <li className="aiz-side-nav-item">
+                        <Link className="aiz-side-nav-link" to="point-of-sale">
+                          <span className="aiz-side-nav-text"> Point Of Sale</span>
+                        </Link>
+                      </li>
+                      <li className="aiz-side-nav-item">
+                        <Link className="aiz-side-nav-link" to="rental">
+                          <span className="aiz-side-nav-text"> Rental</span>
+                        </Link>
+                      </li>
+                      <li className="aiz-side-nav-item">
+                        <Link className="aiz-side-nav-link" to="subscrip">
+                          <span className="aiz-side-nav-text"> Subscriptons</span>
+                        </Link>
+                      </li>
+                      <li className="aiz-side-nav-item">
+                        <Link className="aiz-side-nav-link" to="salesperson">
+                          <span className="aiz-side-nav-text"> Sales Person</span>
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+
+
+
+                  <li className="aiz-side-nav-item">
+                    <Link to="#" className="aiz-side-nav-link" onClick={() => { setFinance(!finince) }}>
+                      <span className="aiz-side-nav-text">FINANCE</span>
+                      <span className="aiz-side-nav-arrow" />
+                    </Link>
+                    <ul style={{ marginLeft: "15px" }} className={`aiz-side-nav-list level-2 mm-collapse ${finince ? "mm-show" : "extra"}`} id="product">
+                      <li className="aiz-side-nav-item">
+                        <Link className="aiz-side-nav-link" to="accounting">
+                          <span className="aiz-side-nav-text">Accounting</span>
+                        </Link>
+                      </li>
+                      <li className="aiz-side-nav-item">
+                        <Link className="aiz-side-nav-link" to="invoicing">
+                          <span className="aiz-side-nav-text">Invoicing</span>
+                        </Link>
+                      </li>
+                      <li className="aiz-side-nav-item">
+                        <Link className="aiz-side-nav-link" to="benchmark">
+                          <span className="aiz-side-nav-text">Benchmark</span>
+                        </Link>
+                      </li>
+                      <li className="aiz-side-nav-item">
+                        <Link className="aiz-side-nav-link" to="expenses">
+                          <span className="aiz-side-nav-text">Expenses</span>
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to='#' onClick={() => { setLogistic(!logistic) }}>
+
+                      <span className="aiz-side-nav-text">Logistics</span>
+                      <span className="aiz-side-nav-arrow" />
+                    </Link>
+                    <ul style={{ marginLeft: "15px" }} className={`aiz-side-nav-list level-2 mm-collapse ${logistic ? "mm-show" : "extra"}`}>
+                      <li className="aiz-side-nav-item">
+                        <Link className="aiz-side-nav-link" to="purchase ">
+                          <span className="aiz-side-nav-text">Purchase</span>
+                        </Link>
+                      </li>
+                      <li className="aiz-side-nav-item">
+                        <Link className="aiz-side-nav-link" to="venders ">
+                          <span className="aiz-side-nav-text">Vendors</span>
+                        </Link>
+                      </li>
+                      <li className="aiz-side-nav-item">
+                        <Link className="aiz-side-nav-link" to="inventory ">
+                          <span className="aiz-side-nav-text">Inventory On Hand</span>
+                        </Link>
+                      </li>
+                      <li className="aiz-side-nav-item">
+                        <Link className="aiz-side-nav-link" to="inventory-flow ">
+                          <span className="aiz-side-nav-text">Inventory Flow</span>
+                        </Link>
+                      </li>
+                      <li className="aiz-side-nav-item">
+                        <Link
+                          className="aiz-side-nav-link "
+                          to="event-marketing"
+                        >
+                          <span className="aiz-side-nav-text">Event (Marketing)</span>
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to='#' onClick={() => { setWebsite2(!website2) }}>
+                      <span className="aiz-side-nav-text">Website</span>
+                      <span className="aiz-side-nav-arrow" />
+                    </Link>
+                    <ul style={{ marginLeft: "15px" }} className={`aiz-side-nav-list level-2 mm-collapse ${website2 ? "mm-show" : "extra"}`}>
+                      <li className="aiz-side-nav-item">
+                        <Link className="aiz-side-nav-link" to="ecommerse ">
+                          <span className="aiz-side-nav-text">eCommerse</span>
+                        </Link>
+                      </li>
+
+                    </ul>
+                  </li>
+
+
+
+                  <li className="aiz-side-nav-item">
+                    <Link to="assets-dashboard" className="aiz-side-nav-link ">
+                      <span className="labour-charge-type">Assets</span>
+                    </Link>
+                  </li>
+                  {/* <li className="aiz-side-nav-item">
+                    <Link to="dashboard-crm" className="aiz-side-nav-link">
+                      <span className="aiz-side-nav-text">Crm</span>
+                    </Link>
+                  </li> */}
+                  <li className="aiz-side-nav-item">
+                    <Link to="employees-complaints-dashboard" className="aiz-side-nav-link ">
+                      <span className="labour-charge-type">Employee's Complaints </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link
+                      className="aiz-side-nav-link "
+                      to="task-project-dash"
+                    >
+                      <span className="aiz-side-nav-text">Task</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link
+                      className="aiz-side-nav-link "
+                      to="time-sheets"
+                    >
+                      <span className="aiz-side-nav-text">TimeSheets</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link
+                      className="aiz-side-nav-link "
+                      to="help-desk"
+                    >
+                      <span className="aiz-side-nav-text">Help Desk</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link
+                      className="aiz-side-nav-link "
+                      to="hr-resources"
+                    >
+                      <span className="aiz-side-nav-text">Employee (Human Resources)</span>
+                    </Link>
+                  </li>
+
+                </ul>
               </li>
 
               {/* <li className="aiz-side-nav-item" id="dropdownList">
@@ -778,6 +1011,11 @@ function AsideAdmin() {
                     <li className="aiz-side-nav-item">
                       <Link to="bulk_import_inventory" className="aiz-side-nav-link">
                         <span className="aiz-side-nav-text">Bulk Import Inventory</span>
+                      </Link>
+                    </li>
+                    <li className="aiz-side-nav-item">
+                      <Link to="unit" className="aiz-side-nav-link ">
+                        <span className="aiz-side-nav-text">Unit</span>
                       </Link>
                     </li>
                     <li className="aiz-side-nav-item">
@@ -948,6 +1186,7 @@ function AsideAdmin() {
                   <span className="aiz-side-nav-text">Tracking Order</span>
                 </Link>
               </li>
+
 
 
 
@@ -1794,8 +2033,8 @@ function AsideAdmin() {
                 </ul>
               </li>
               {/* Setup & Configurations */}
-              <li className="aiz-side-nav-item" onClick={() => setSetupConfiguration(!setupConfiguration)}>
-                <Link to="#" className="aiz-side-nav-link">
+              <li className="aiz-side-nav-item" >
+                <Link to="#" className="aiz-side-nav-link" onClick={() => setSetupConfiguration(!setupConfiguration)}>
                   <i className="las la-dharmachakra aiz-side-nav-icon" />
                   <span className="aiz-side-nav-text">Setup &amp; Configurations</span>
                   <span className="aiz-side-nav-arrow" />
@@ -1816,6 +2055,11 @@ function AsideAdmin() {
                   <li className="aiz-side-nav-item">
                     <Link to="languages" className="aiz-side-nav-link ">
                       <span className="aiz-side-nav-text">Languages</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link to="country" className="aiz-side-nav-link">
+                      <span className="aiz-side-nav-text">Country</span>
                     </Link>
                   </li>
                   <li className="aiz-side-nav-item">
@@ -2331,18 +2575,18 @@ function AsideAdmin() {
               <li className="aiz-side-nav-item" >
                 <Link to="#" className="aiz-side-nav-link" onClick={() => { setQuotation(!quotation) }} >
                   <i className="las la-user-tie aiz-side-nav-icon" />
-                  <span className="aiz-side-nav-text">Vtech Quotation</span>
+                  <span className="aiz-side-nav-text">Serial wise Quotation</span>
                   <span className="aiz-side-nav-arrow" />
                 </Link>
                 <ul className={`aiz-side-nav-list level-2 mm-collapse ${quotation ? "mm-show" : "extra"}`}>
                   <li className="aiz-side-nav-item">
                     <Link to="list-vtech-quotation" className="aiz-side-nav-link ">
-                      <span className="aiz-side-nav-text">List Vtech Quotation</span>
+                      <span className="aiz-side-nav-text">List Serial wise Quotation</span>
                     </Link>
                   </li>
                   <li className="aiz-side-nav-item">
                     <Link to="add-vtech-quotation" className="aiz-side-nav-link ">
-                      <span className="aiz-side-nav-text">Add Vtech Quotation</span>
+                      <span className="aiz-side-nav-text">Add Serial wise Quotation</span>
                     </Link>
                   </li>
                 </ul>
@@ -2350,18 +2594,18 @@ function AsideAdmin() {
               <li className="aiz-side-nav-item" >
                 <Link to="#" className="aiz-side-nav-link" onClick={() => { setvpurchase(!vpurchase) }} >
                   <i className="las la-user-tie aiz-side-nav-icon" />
-                  <span className="aiz-side-nav-text">Vtech Purchase</span>
+                  <span className="aiz-side-nav-text">Serial wise Purchase</span>
                   <span className="aiz-side-nav-arrow" />
                 </Link>
                 <ul className={`aiz-side-nav-list level-2 mm-collapse ${vpurchase ? "mm-show" : "extra"}`}>
                   <li className="aiz-side-nav-item">
-                    <Link to="#" className="aiz-side-nav-link ">
-                      <span className="aiz-side-nav-text">List Vtech Purchase</span>
+                    <Link to="list-v-tech-purchase" className="aiz-side-nav-link ">
+                      <span className="aiz-side-nav-text">List Serial wise Purchase</span>
                     </Link>
                   </li>
                   <li className="aiz-side-nav-item">
                     <Link to="add-v-tech-purchase" className="aiz-side-nav-link ">
-                      <span className="aiz-side-nav-text">Add Vtech Purchase</span>
+                      <span className="aiz-side-nav-text">Add Serial wise Purchase</span>
                     </Link>
                   </li>
                 </ul>
@@ -2369,18 +2613,18 @@ function AsideAdmin() {
               <li className="aiz-side-nav-item" >
                 <Link to="#" className="aiz-side-nav-link" onClick={() => { setvstock(!vstock) }} >
                   <i className="las la-user-tie aiz-side-nav-icon" />
-                  <span className="aiz-side-nav-text">V-tech Transfer stock</span>
+                  <span className="aiz-side-nav-text">Serial wise Transfer stock</span>
                   <span className="aiz-side-nav-arrow" />
                 </Link>
                 <ul className={`aiz-side-nav-list level-2 mm-collapse ${vstock ? "mm-show" : "extra"}`}>
                   <li className="aiz-side-nav-item">
                     <Link to="list-v-tech-Transfer-stock" className="aiz-side-nav-link ">
-                      <span className="aiz-side-nav-text">List Vtech Transfer stock</span>
+                      <span className="aiz-side-nav-text">List Serial wise Transfer stock</span>
                     </Link>
                   </li>
                   <li className="aiz-side-nav-item">
                     <Link to="add-v-tech-Transfer-stock" className="aiz-side-nav-link ">
-                      <span className="aiz-side-nav-text">Add Vtech Transfer stock</span>
+                      <span className="aiz-side-nav-text">Add Serial wise Transfer stock</span>
                     </Link>
                   </li>
                 </ul>
@@ -2449,13 +2693,18 @@ function AsideAdmin() {
                 </Link>
               </li>
 
+
+
+
+
+
               <li className="aiz-side-nav-item">
-                <Link className="aiz-side-nav-link" to="#" onClick={() => { setSales(!Sales) }}>
+                <Link className="aiz-side-nav-link" to="#" onClick={() => { setSales2(!Sales2) }}>
                   <i className="las la-user-tie aiz-side-nav-icon" />
                   <span className="aiz-side-nav-text">Sales</span>
                   <span className="aiz-side-nav-arrow" />
                 </Link>
-                <ul className={`aiz-side-nav-list level-2 mm-collapse ${Sales ? "mm-show" : "extra"}`}>
+                <ul className={`aiz-side-nav-list level-2 mm-collapse ${Sales2 ? "mm-show" : "extra"}`}>
                   <li className="aiz-side-nav-item">
                     <Link className="aiz-side-nav-link " to="proposal-sales">
                       <span className="aiz-side-nav-text">Proposal</span>
@@ -2714,6 +2963,17 @@ function AsideAdmin() {
                     }`}
                 >
                   <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="serial-code-tracking">
+                      <span className="aiz-side-nav-text">Serial Code tracking</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="serial-wise-stock-report">
+                      <span className="aiz-side-nav-text">Serial  wise stock report</span>
+                    </Link>
+                  </li>
+
+                  <li className="aiz-side-nav-item">
                     <Link className="aiz-side-nav-link" to="sales-gst-report">
                       <span className="aiz-side-nav-text">Sales GST Report </span>
                     </Link>
@@ -2798,8 +3058,85 @@ function AsideAdmin() {
                     >
                       <span className="aiz-side-nav-text">Bills of Materials</span>
                     </Link>
-                  </li></ul>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="routings">
+                      <span className="aiz-side-nav-text">
+                        Routings
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link
+                      className="aiz-side-nav-link "
+                      to="work-center"
+                    >
+                      <span className="aiz-side-nav-text">
+                        Work Center
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link
+                      className="aiz-side-nav-link "
+                      to="manufacturing-order"
+                    >
+                      <span className="aiz-side-nav-text">
+                        Manufacturing Order
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="work-order">
+                      <span className="aiz-side-nav-text"> Work Order</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="settingmanufacture">
+                      <span className="aiz-side-nav-text"> Setting</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="purchase-report">
+                      <span className="aiz-side-nav-text"> Purchase Report </span>
+                    </Link>
+                  </li>
+                </ul>
               </li>
+
+              <li className="aiz-side-nav-item">
+                <Link className="aiz-side-nav-link" to='' onClick={() => { setHrRecord(!hrRecords) }}>
+
+                  <i className="las la-user-tie aiz-side-nav-icon" />
+                  <span className="aiz-side-nav-text">HR RECORDS</span>
+                  <span className="aiz-side-nav-arrow" />
+                </Link>
+                <ul className={`aiz-side-nav-list level-2 mm-collapse ${hrRecords ? "mm-show" : "extra"}`}>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="job-descriptions">
+                      <span className="aiz-side-nav-text"> Job Descriptions</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="org-chart">
+                      <span className="aiz-side-nav-text"> Org Chart</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="onboarding">
+                      <span className="aiz-side-nav-text"> Onboarding</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="hr-records">
+                      <span className="aiz-side-nav-text">Hr Records</span>
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+
+
+
 
               <li className="aiz-side-nav-item">
                 <Link
@@ -3033,21 +3370,23 @@ function AsideAdmin() {
 
 
 
-                  <li className="aiz-side-nav-item">
-                    <Link className="aiz-side-nav-link " to="add-company">
-                      <span className="aiz-side-nav-text list-voucher">
-                        Add Company
-                      </span>
-                    </Link>
-                  </li>
-                  <li className="aiz-side-nav-item">
-                    <Link className="aiz-side-nav-link " to="list-company">
-                      <span className="aiz-side-nav-text list-voucher">
-                        List Company
-                      </span>
-                    </Link>
-                  </li>
 
+                  {idShow == '642177b99fd9c29aab59d245' && <>
+                    <li className="aiz-side-nav-item">
+                      <Link className="aiz-side-nav-link " to="add-company">
+                        <span className="aiz-side-nav-text list-voucher">
+                          Add Company
+                        </span>
+                      </Link>
+                    </li>
+                    <li className="aiz-side-nav-item">
+                      <Link className="aiz-side-nav-link " to="list-company">
+                        <span className="aiz-side-nav-text list-voucher">
+                          List Company
+                        </span>
+                      </Link>
+                    </li>
+                  </>}
                   <li className="aiz-side-nav-item">
                     <Link className="aiz-side-nav-link " to="coast-centre-create">
                       <span className="aiz-side-nav-text">Create Cost Centre</span>
@@ -3111,6 +3450,261 @@ function AsideAdmin() {
                   </li>
                 </ul>
               </li>
+
+              <li className="aiz-side-nav-item">
+                <Link
+                  className="aiz-side-nav-link"
+                  to="#"
+                  onClick={() => {
+                    settimeslote(!timeslote);
+                  }}
+                >
+
+                  <i className="las la-user-tie aiz-side-nav-icon" />
+                  <span className="aiz-side-nav-text">Time Slot</span>
+                  <span className="aiz-side-nav-arrow" />
+                </Link>
+                <ul
+                  className={`aiz-side-nav-list level-2 mm-collapse ${timeslote ? "mm-show" : "extra"
+                    }`}
+                >
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="time-slote">
+                      <span className="aiz-side-nav-text">Time Slote</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="time-group">
+                      <span className="aiz-side-nav-text">Time Group</span>
+                    </Link>
+                  </li>
+
+                </ul>
+              </li>
+
+              <li className="aiz-side-nav-item">
+                <Link
+                  className="aiz-side-nav-link"
+                  to="#"
+                  onClick={() => {
+                    setTraining(!training);
+                  }}
+                >
+
+                  <i className="las la-user-tie aiz-side-nav-icon" />
+                  <span className="aiz-side-nav-text">HR Records</span>
+                  <span className="aiz-side-nav-arrow" />
+                </Link>
+                <ul
+                  className={`aiz-side-nav-list level-2 mm-collapse ${training ? "mm-show" : "extra"
+                    }`}
+                >
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="training">
+                      <span className="aiz-side-nav-text">Training</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="contract">
+                      <span className="aiz-side-nav-text">Contracts</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="dependant">
+                      <span className="aiz-side-nav-text">Dependant</span>
+                    </Link>
+                  </li>
+
+                </ul>
+              </li>
+
+
+
+
+
+
+
+              <li className="aiz-side-nav-item">
+                <Link className="aiz-side-nav-link" to='' onClick={() => { setSales(!Sales) }}>
+                  <i className="las la-user-tie aiz-side-nav-icon" />
+                  <span className="aiz-side-nav-text">Sales</span>
+                  <span className="aiz-side-nav-arrow" />
+
+                </Link>
+                <ul className={`aiz-side-nav-list level-2 mm-collapse ${Sales ? "mm-show" : "extra"}`}>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="sales">
+                      <span className="aiz-side-nav-text"> Sales</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="product">
+                      <span className="aiz-side-nav-text"> Product</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="point-of-sale">
+                      <span className="aiz-side-nav-text"> Point Of Sale</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="rental">
+                      <span className="aiz-side-nav-text"> Rental</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="subscrip">
+                      <span className="aiz-side-nav-text"> Subscriptons</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="salesperson">
+                      <span className="aiz-side-nav-text"> Sales Person</span>
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+              <li className="aiz-side-nav-item">
+                <Link className="aiz-side-nav-link" to='' onClick={() => { setLeads(!leads) }}>
+
+                  <i className="las la-user-tie aiz-side-nav-icon" />
+                  <span className="aiz-side-nav-text">CRM</span>
+                  <span className="aiz-side-nav-arrow" />
+                </Link>
+                <ul className={`aiz-side-nav-list level-2 mm-collapse ${leads ? "mm-show" : "extra"}`}>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="lead-crm">
+                      <span className="aiz-side-nav-text"> Leads</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="pipeline">
+                      <span className="aiz-side-nav-text"> Pipeline</span>
+                    </Link>
+                  </li>
+
+                </ul>
+              </li>
+              <li className="aiz-side-nav-item">
+                <Link className="aiz-side-nav-link" to='' onClick={() => { setFinanace(!finanace) }}>
+
+
+                  <i className="las la-user-tie aiz-side-nav-icon" />
+                  <span className="aiz-side-nav-text">FINANCE</span>
+                  <span className="aiz-side-nav-arrow" />
+                </Link>
+                <ul className={`aiz-side-nav-list level-2 mm-collapse ${finanace ? "mm-show" : "extra"}`}>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="accounting">
+                      <span className="aiz-side-nav-text">Accounting</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="invoicing">
+                      <span className="aiz-side-nav-text">Invoicing</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="benchmark">
+                      <span className="aiz-side-nav-text">Benchmark</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="expenses">
+                      <span className="aiz-side-nav-text">Expenses</span>
+                    </Link>
+                  </li>
+
+
+                </ul>
+              </li>
+              <li className="aiz-side-nav-item">
+                <Link className="aiz-side-nav-link" to='' onClick={() => { setLogistic(!logistic) }}>
+
+                  <i className="las la-user-tie aiz-side-nav-icon" />
+                  <span className="aiz-side-nav-text">Logistics</span>
+                  <span className="aiz-side-nav-arrow" />
+                </Link>
+                <ul className={`aiz-side-nav-list level-2 mm-collapse ${logistic ? "mm-show" : "extra"}`}>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="purchase ">
+                      <span className="aiz-side-nav-text">Purchase</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="venders ">
+                      <span className="aiz-side-nav-text">Vendors</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="inventory ">
+                      <span className="aiz-side-nav-text">Inventory On Hand</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="inventory-flow ">
+                      <span className="aiz-side-nav-text">Inventory Flow</span>
+                    </Link>
+                  </li>
+
+                </ul>
+              </li>
+
+
+
+
+              <li className="aiz-side-nav-item">
+                <Link
+                  className="aiz-side-nav-link"
+                  to="#"
+                  onClick={() => {
+                    setProjectDash(!projectDash);
+                  }}
+                >
+                  <i className="las la-user-tie aiz-side-nav-icon" />
+                  <span className="aiz-side-nav-text">Project Dashboard</span>
+                  <span className="aiz-side-nav-arrow" />
+                </Link>
+                <ul
+                  className={`aiz-side-nav-list level-2 mm-collapse ${projectDash ? "mm-show" : "extra"
+                    }`}
+                >
+                  <li className="aiz-side-nav-item">
+                    <Link
+                      className="aiz-side-nav-link "
+                      to="task-project-dash"
+                    >
+                      <span className="aiz-side-nav-text">Task</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="report-exl">
+                      <span className="aiz-side-nav-text">
+                        Report Exl
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="report-exl2s">
+                      <span className="aiz-side-nav-text">
+                        Report Exl2
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="fareenas">
+                      <span className="aiz-side-nav-text">
+                        Fareenas
+                      </span>
+                    </Link>
+                  </li>
+
+                </ul>
+              </li>
+
+
+
+
 
               <li className="aiz-side-nav-item">
                 <Link to="#" className="aiz-side-nav-link" onClick={() => { setReportMaster(!reportMaster) }}>

@@ -242,7 +242,7 @@ function AllProducts() {
                             <Link to="#" className="btn btn-soft-success btn-icon btn-circle btn-sm" title="View">
                               <i className="las la-eye" />
                             </Link>
-                            <Link to={`edit/${item._id}`} className="btn btn-soft-primary btn-icon btn-circle btn-sm" title="Edit">
+                            <Link to={`edit/${item.uid}`} className="btn btn-soft-primary btn-icon btn-circle btn-sm" title="Edit">
                               <i className="las la-edit" />
                             </Link>
                             {/* <a className="btn btn-soft-warning btn-icon btn-circle btn-sm" href="https://mmslfashions.in/admin/products/duplicate/73?type=All" title="Duplicate">

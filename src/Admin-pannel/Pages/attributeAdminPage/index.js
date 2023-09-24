@@ -12,9 +12,12 @@ function AttributeAdminPage() {
                         </div>
                     </div>
                     <div className="row">
-                        <AttributesAdmin />
                         <AddNewAttributesAdmin />
                     </div>
+                    <div className="row">
+                        <AttributesAdmin />
+                    </div>
+                   
                 </div>
                 <div className="bg-white text-center py-3 px-15px px-lg-25px mt-auto">
                     {/*p class="mb-0">&copy;  v6.3.3</p*/}

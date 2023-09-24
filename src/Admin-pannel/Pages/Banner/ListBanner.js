@@ -3,13 +3,20 @@ import { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { AiOutlineSearch } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { token } from "../../common/TokenArea";
 
 function ListBanner() {
     const [data, setData] = useState(null)
     const [error, seterror] = useState(null)
     const getData = async () => {
         try {
-            const res = await axios.get(`https://onlineparttimejobs.in/api/banner`)
+            const res = await axios.get(`https://onlineparttimejobs.in/api/banner/admin`, {
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                    Authorization: `Bearer ${token}`,
+                },
+
+            })
             setData(res.data)
         } catch (error) {
             seterror('Server Error')
@@ -23,7 +30,12 @@ function ListBanner() {
     const changeStatus = async (item) => {
         const obj = { approval: !item.approval }
         try {
-            const res = await axios.put(`https://onlineparttimejobs.in/api/banner/updateStatus/${item._id}`, obj)
+            const res = await axios.put(`https://onlineparttimejobs.in/api/banner/updateStatus/${item._id}`, obj, {
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                    Authorization: `Bearer ${token}`,
+                },
+            })
             setTimeout(() => {
                 getData()
             }, 1000);
@@ -35,7 +47,12 @@ function ListBanner() {
 
     const deleteBrandData = async (id) => {
         try {
-            const res = await axios.delete(`https://onlineparttimejobs.in/api/banner/${id}`)
+            const res = await axios.delete(`https://onlineparttimejobs.in/api/banner/${id}`,{
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                    Authorization: `Bearer ${token}`,
+                },
+            })
             getData()
             alert('Banner Delete Successfully')
         } catch (error) {

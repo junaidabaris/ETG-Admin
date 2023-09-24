@@ -22,6 +22,8 @@ import Educations from './Educations';
 import BillingAddress from '../../../Pages/billingAdd/BillingAddress';
 import PhysicalElegibility from './PhysicalElegibility';
 import OtherDetail from './OtherDetail';
+import ShiipingAd from './ShiipingAd';
+import { token } from '../../../common/TokenArea';
 function NewCustomers() {
 
     const [value, setValue] = React.useState('1');
@@ -66,9 +68,9 @@ function NewCustomers() {
 
     const { data: customerRoleData } = useGetCustomerRoleQuery()
 
-    const { data: language } = useGetLanguagesQuery()
+    const { data: language } = useGetLanguagesQuery(token)
 
-    const { data: currency, isSuccess } = useGetCurrencyQuery()
+    const { data: currency, isSuccess } = useGetCurrencyQuery(token)
     const [options1, setOption1] = useState()
     useEffect(() => {
         if (currency) {
@@ -81,7 +83,7 @@ function NewCustomers() {
 
 
 
-    const { data } = useGetCustomerByIdQuery(params.id);
+    const { data } = useGetCustomerByIdQuery({id:params.id , token:token});
     const [editCustomer, response] = useEditCustomerMutation();
 
 
@@ -101,8 +103,7 @@ function NewCustomers() {
     };
     const submitEditCustomerData = (e) => {
         e.preventDefault();
-        console.log(inputval);
-        // editCustomer({ id: params.id, data: inputval })
+        editCustomer({ id: params.id, data: inputval,token:token })
         // document.getElementById("create-course-form").reset();
     };
 
@@ -136,7 +137,8 @@ function NewCustomers() {
                                         <TabList onChange={handleChange} aria-label="lab API tabs example">
                                             <Tab label="Customer Details" value="1" />
                                             <Tab label="Basic Details " value="2" />
-                                            {/* <Tab label='Billing & Shipping' value='11' /> */}
+                                            <Tab label='Billing' value='11' />
+                                            <Tab label='Shipping' value='14' />
                                             <Tab label='Extra Carriculam' value='6' />
                                             <Tab label='Physical Elligibility' value='7' />
                                             <Tab label="Education  " value="4" />
@@ -201,6 +203,9 @@ function NewCustomers() {
                                     <TabPanel value="11">
                                         <AddressSec />
                                         {/* <BillingAddress/> */}
+                                    </TabPanel>
+                                    <TabPanel value="14">
+                                        <ShiipingAd />
                                     </TabPanel>
 
                                     <TabPanel value="2">

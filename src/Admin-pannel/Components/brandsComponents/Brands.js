@@ -32,7 +32,7 @@ function Brands() {
     const [deleteBrand, response] = useDeleteBrandMutation();
 
     function deleteBrandData(id) {
-        deleteBrand(id)
+        deleteBrand({ id: id, token: token })
     }
 
     useEffect(() => {
@@ -75,7 +75,7 @@ function Brands() {
 
     return (
         <>
-            <div className=" col-lg-7 ">
+            <div className=" col-lg-10 ">
                 <div className="card">
                     <div className="card-header row gutters-5">
                         <div className="col text-center text-md-left">
@@ -125,7 +125,7 @@ function Brands() {
                                             </td>
 
                                             <td className="text-right footable-last-visible" style={{ display: 'table-cell' }}>
-                                                <Link to={`edit/${item._id}`} className="btn btn-soft-primary btn-icon btn-circle btn-sm" title="Edit">
+                                                <Link to={`edit/${item.uid}`} className="btn btn-soft-primary btn-icon btn-circle btn-sm" title="Edit">
                                                     <i className="las la-edit" />
                                                 </Link>
                                                 <button type="button" onClick={() => { deleteBrandData(item._id) }} className="btn btn-soft-danger btn-icon btn-circle btn-sm">

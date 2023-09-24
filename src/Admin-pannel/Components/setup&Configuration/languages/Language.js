@@ -1,14 +1,16 @@
 import { Link } from "react-router-dom";
 import { useDeleteLanguageMutation, useGetLanguagesQuery } from "../../all-products/allproductsApi/allProductsApi";
+import { token } from "../../../common/TokenArea";
 
 function Language() {
 
-    const { data } = useGetLanguagesQuery();
+    const { data ,refetch } = useGetLanguagesQuery(token);
 
     const [deleteLang, response] = useDeleteLanguageMutation();
 
     const deleteLanguageData = (id) => {
-        deleteLang(id)
+        deleteLang({id,token})
+        refetch()
     };
 
     if (response.isSuccess === true) {

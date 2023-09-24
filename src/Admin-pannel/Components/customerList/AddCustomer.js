@@ -36,19 +36,17 @@ function AddCustomer() {
         setInputVal(clonedObj)
     };
 
-
+    const token = window.localStorage.getItem('adminToken')
     const { data } = useGetRolesQuery(params.id);
 
 
     const { data: customerRoleData } = useGetCustomerRoleQuery()
 
-    const { data: language } = useGetLanguagesQuery()
+    const { data: language } = useGetLanguagesQuery(token)
 
-    const { data: currency } = useGetCurrencyQuery()
+    const { data: currency } = useGetCurrencyQuery(token)
 
     const { data: timeformat } = useGetTimeFormatQuery()
-    console.log('timeformat', timeformat);
-
 
     const [addCustomerD, response] = useAddDCustomerMutation();
 
@@ -56,7 +54,7 @@ function AddCustomer() {
     const submitStaffData = (e) => {
         e.preventDefault();
         const clone = { ...inputVal }
-        addCustomerD(clone)
+        addCustomerD({data:clone ,token:token})
         document.getElementById("create-course-form").reset();
     };
 
@@ -84,7 +82,7 @@ function AddCustomer() {
             toastErrorMessage()
         };
     }, [response]);
-    const token = window.localStorage.getItem('adminToken')
+   
     const [unders, setUneders] = useState(null)
     const getAllData = async () => {
         const res1 = await axios.get(`https://onlineparttimejobs.in/api/accountGroup`, {

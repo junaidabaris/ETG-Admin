@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useGetSettingSalesDataQuery, useGetSettingSiteConfigurationQuery, useUpdateSettingSalesMutation } from '../../all-products/allproductsApi/allProductsApi';
 import { ToastContainer, toast } from 'react-toastify';
+import { token } from '../../../common/TokenArea';
 
 function SystemSalesConfiguration() {
 
@@ -8,8 +9,7 @@ function SystemSalesConfiguration() {
         OverSelling: null, ReferenceFormat: '', DefaultCurrency: '', ProductLevelDiscount: null, ProductSerial: null, InvoiceView: '', ksaQrcode: null, CartItemAddition: '', ProductsCountfixbarcode: '', AutoDetectBarcode: null, OrderTax: '', referenceNo: ''
     });
 
-    const { data: SalesData } = useGetSettingSalesDataQuery();
-    console.log('SalesData----', SalesData)
+    const { data: SalesData } = useGetSettingSalesDataQuery(token);
 
     useEffect(() => {
         const clon = { ...SalesData }
@@ -54,7 +54,6 @@ function SystemSalesConfiguration() {
 
     useEffect(() => {
         if (response.isError === true) {
-            console.log('responseisErrorSaless---------------', response.error.data.message)
             toastErrorMessage(response.error.data.message)
         };
     }, [response]);

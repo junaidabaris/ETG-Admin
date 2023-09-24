@@ -4,11 +4,12 @@ import Form from 'react-bootstrap/Form';
 import { useParams } from 'react-router';
 import { useAddSellerListMutation, useEditSellerListMutation, useGetSellerDetailQuery } from '../../Components/all-products/allproductsApi/allProductsApi';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
 
 function SellerAddEditForm() {
     const params = useParams()
     const [validated, setValidated] = useState(false);
-    const [sendDataItem] = useAddSellerListMutation()
+    const [sendDataItem, { isSuccess: adsus, isError: adder }] = useAddSellerListMutation()
     const { data, isSuccess } = useGetSellerDetailQuery(params.id)
     const [status, setSatatus] = useState({ verification_status: false, cash_on_delivery_status: false, bank_payment_status: false })
 
@@ -42,12 +43,40 @@ function SellerAddEditForm() {
         amount_type: "Debit",
         AccLedgerGroupId: "",
         OpeningBalance: "",
-        asonDate : "",
+        asonDate: "",
         bank_payment_status: false
     }
     )
 
-    const [update, { isSuccess: upSuss }] = useEditSellerListMutation()
+    const [update, { isSuccess: upSuss, isError: uperr }] = useEditSellerListMutation()
+    const toastSuccessMessage = (str) => {
+        toast.success(`Seller ${str} Successfully`, {
+            position: "top-center"
+        })
+    };
+    
+    const toastErrorMessage = (str) => {
+        toast.error(`Seller ${str}  added`, {
+            position: "top-center"
+        })
+    };
+    
+
+    useEffect(() => {
+        if (adsus) {
+            toastSuccessMessage('added')
+        }
+        if (adder) {
+            toastErrorMessage('added')
+        }
+        if (upSuss) {
+            toastSuccessMessage('update')
+        }
+        if (uperr) {
+            toastErrorMessage('update')
+        }
+
+    }, [adsus, adder,upSuss, uperr])
 
     const token = window.localStorage.getItem('adminToken')
     const [unders, setUneders] = useState(null)
@@ -60,14 +89,6 @@ function SellerAddEditForm() {
         })
         setUneders(res1.data)
     }
-
-    useEffect(() => {
-        if (upSuss) {
-            alert('Update Seller')
-        }
-        getAllData()
-    }, [upSuss])
-
     const onChangeHandle = (e) => {
         const clone = { ...state }
         clone[e.target.name] = e.target.value
@@ -97,11 +118,11 @@ function SellerAddEditForm() {
         }
 
         setValidated(true);
-        const mergData = { ...state, ...status }
+        const mergData = { ...state, ...status, location: { long: state.long, lat: state.lat } }
         if (params.id) {
-            update({ data: mergData, id: params.id, location: { long: state.long, lat: state.lat } })
+            update({ data: mergData, id: params.id,token: token })
         } else {
-            sendDataItem(mergData, { location: { long: state.long, lat: state.lat } });
+            sendDataItem({ data: mergData, token: token });
         }
     }
 
@@ -143,6 +164,7 @@ function SellerAddEditForm() {
 
 
     return <div className='container'>
+        <ToastContainer />
         {params.id ? <h2>Update Seller</h2> : <h2>Add Seller</h2>}
         <Form noValidate validated={validated} onSubmit={sendData}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -236,11 +258,11 @@ function SellerAddEditForm() {
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Amount Type</Form.Label>
-                <Form.Select  style={{ width: "50%" }} aria-label="Default select example"  name="amount_type" onChange={onChangeHandle}>
+                <Form.Select style={{ width: "50%" }} aria-label="Default select example" name="amount_type" onChange={onChangeHandle}>
                     <option selected value='Debit'>Debit</option>
                     <option value='Credit'>Credit</option>
                 </Form.Select>
-              
+
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Opening Balance</Form.Label>

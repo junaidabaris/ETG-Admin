@@ -10,7 +10,7 @@ function ListinSide({ data,getDatas }) {
     }
     return (
         <>
-            <div className=" col-lg-7 ">
+            <div className=" col-lg-10 ">
                 <div className="card">
                     <div className="card-header row gutters-5">
                         <div className="col text-center text-md-left">
@@ -43,7 +43,7 @@ function ListinSide({ data,getDatas }) {
                                             })}
                                         </td>
                                         <td className="text-right footable-last-visible" style={{ display: 'table-cell' }}>
-                                            <Link to={`edit/${item._id}`} className="btn btn-soft-primary btn-icon btn-circle btn-sm">
+                                            <Link to={`#`} className="btn btn-soft-primary btn-icon btn-circle btn-sm">
                                                 <i className="las la-edit" />
                                             </Link>
                                             <button type="button" onClick={()=>DeleteData(item._id)} className="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete">

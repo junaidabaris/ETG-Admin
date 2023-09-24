@@ -3,11 +3,16 @@ import axios from 'axios';
 import Multiselect from 'multiselect-react-dropdown';
 import { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
-
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import { useGetLanguagesQuery } from '../../Components/all-products/allproductsApi/allProductsApi';
+import MutiformLang from './MutiformLang';
 function AddProductAttributes({ getDatas }) {
     const [finalCatD, setFinalCatD] = useState();
     const [categ, setCateg] = useState([]);
-
     const [state, setState] = useState({
         name: ""
     })
@@ -18,20 +23,17 @@ function AddProductAttributes({ getDatas }) {
         setState(clone)
     }
 
-    const getData = async () => {
-        const res = await axios.get(`https://onlineparttimejobs.in/api/attributes`)
-        setCateg(res.data)
-    }
+    const token = window.localStorage.getItem('token')
+
     const toastSuccessMessage = () => {
         toast.success("Attribute Set  added Successfully", {
             position: "top-center"
         })
     };
-    const token = window.localStorage.getItem('token')
     const sendData = async () => {
         const obj = { name: state.name, values: finalCatD }
         try {
-            const res = await axios.post(`https://onlineparttimejobs.in/api/attributeSetMaster/add_attributeSetMasters`, obj,{
+            const res = await axios.post(`https://onlineparttimejobs.in/api/attributeSetMaster/add_attributeSetMasters`, obj, {
                 headers: {
                     "Content-type": "application/json; charset=UTF-8",
                     Authorization: `Bearer ${token}`,
@@ -39,7 +41,7 @@ function AddProductAttributes({ getDatas }) {
             })
             toastSuccessMessage()
             setState({ name: '' })
-            
+
             getDatas()
         } catch (error) {
             alert('!Error Attribute Set not added')
@@ -48,55 +50,83 @@ function AddProductAttributes({ getDatas }) {
     }
 
 
+    const { data, refetch } = useGetLanguagesQuery(token);
+
     useEffect(() => {
-        getData()
-    }, [])
+        if (data) {
+            const maped = data.map((item) => {
+                return { name: "", language_id: item._id, values: [], lable: item.name }
+            })
+            setVal(maped)
+        }
+    }, [data])
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+    const [value, setValue] = useState(0);
+    const [val, setVal] = useState(data)
+    const onChangeHandler = (e, id, bul) => {
+        const maped = val.map((item) => {
+            if (item.language_id == id) {
+                const obj = { ...item, [e.target.name]: e.target.value }
+                return obj
+            } else {
+                return item
+            }
+        })
+        setVal(maped)
+    }
+    const addNewAttributeData = async (e) => {
+        e.preventDefault();
+        const images = new FormData();
+        const clone = [...val]
+
+        const url = 'https://onlineparttimejobs.in/api/attributeSetMaster/add_attributeSetMasters'
+        try {
+            const res = await axios.post(url, { list: clone }, {
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            toastSuccessMessage()
+        } catch (error) {
+            alert('Error Attribute Set not added !')
+        }
+
+    };
+
+    const changeData = (cbv) => {
+        setVal(cbv);
+    }
 
 
     return (
         <>
-            <div className="col-md-5">
-                <div className="card" style={{ height: "600px" }}>
-                    <div className="card-header">
-                        <h5 className="mb-0 h6">Add New Product Attribute</h5>
-                    </div>
-                    <div className="card-body">
-                        <form id="create-course-form" >
-                            <div className="form-group mb-3">
-                                <label htmlFor="name">Attribute Name</label>
-                                <input type="text" placeholder="Name" id="name" value={state.name} onChange={changeHandle} name="name" className="form-control" required fdprocessedid="8s3s9v" />
-                            </div>
+            <div className="col-md-7">
 
-                            <div className="form-group mb-3">
-                                <label htmlFor="name">Attribute Child Name</label>
-                                <Multiselect
-                                    isObject={true}
-                                    displayValue="name"
-                                    options={categ}
-                                    showCheckbox
-                                    selectedValues={[]}
-                                    onRemove={(selectedCat) => {
-                                        const selectedIds = selectedCat.map((cat) => {
-                                            return cat._id
-                                        })
-                                        setFinalCatD(selectedIds)
-                                    }}
-                                    onSelect={(selectedCat) => {
-                                        const selectedIds = selectedCat.map((cat) => {
-                                            return cat._id
-                                        })
-                                        setFinalCatD(selectedIds)
-                                    }}
-                                />
-                            </div>
+                <Box sx={{ width: '100%', typography: 'body1' }}>
+                    <TabContext value={value}>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                            <TabList onChange={handleChange} aria-label="lab API tabs example">
+                                {data && data.map((item, i) => {
+                                    return <Tab label={item?.name} value={i} />
+                                })}
 
-                            <div className="form-group mb-3 text-right">
-                                <button type="button" onClick={sendData} className="btn btn-primary" fdprocessedid="uzw7ye">Submit</button>
-                            </div>
+                            </TabList>
+                        </Box>
+                        {val && val.map((item, i) => {
+                            return <TabPanel value={i}>
+                                <div className="card">
+                                    <MutiformLang setValue={setValue} data={val} changeData={changeData} item={item} i={i} addNewAttributeData={addNewAttributeData} onChangeHandler={onChangeHandler} />
+                                </div>
 
-                        </form>
-                    </div>
-                </div>
+                            </TabPanel>
+                        })}
+
+                    </TabContext>
+                </Box>
                 <ToastContainer />
             </div>
         </>

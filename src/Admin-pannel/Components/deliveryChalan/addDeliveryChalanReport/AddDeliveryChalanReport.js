@@ -1,15 +1,15 @@
 
-import ModalCombo from "../../../Pages/addComboProduct/ModalCombo"
 import { useEffect, useState } from "react";
-import { useAddDeleveryChallanMutation, useAddQuatationVMutation, useAddpurchaseVcartMutation, useGetCustomersQuery, useGetPickupPointQuery, useGetProductSearchQuery } from "../../all-products/allproductsApi/allProductsApi";
+import { useAddDeleveryChallanMutation, useAddQuatationVMutation, useAddchallanVcartMutation, useAddpurchaseVcartMutation, useGetCustomersQuery, useGetPickupPointQuery, useGetProductSearchQuery } from "../../all-products/allproductsApi/allProductsApi";
 import axios from "axios";
 import { RxCross1 } from "react-icons/rx";
 import { AiFillDelete } from "react-icons/ai";
 import { Spinner } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
+import ModalDeleviry from "./ModalDeleviry";
 
 function AddDeliveryChalanReport() {
-
+    const token = window.localStorage.getItem('token')
     const [show, setShow] = useState(true)
     const [modalShow, setModalShow] = useState(false);
     const [billingAddress, setBillingAddress] = useState();
@@ -30,16 +30,17 @@ function AddDeliveryChalanReport() {
             billingAddress: '',
         }
     )
-
+    const [idpick, setItPick] = useState()
     const { data: pickupPoints } = useGetPickupPointQuery();
-    const { data: customers } = useGetCustomersQuery();
+    const { data: customers } = useGetCustomersQuery(token);
     const { data: searchPro } = useGetProductSearchQuery(searchs)
     const [showCombo, setShowCombo] = useState([])
 
     const [addDeleveryChallan, { isError, isSuccess, isLoading: addCOmbLoad }] = useAddDeleveryChallanMutation()
 
-    const setTableItem = (item) => {
-        setcartData(item);
+    const setTableItem = async (item) => {
+        const sendInpData = await axios.get(`https://onlineparttimejobs.in/api/serviceProductStock/${item._id + '&' + idpick}`)
+        setcartData(sendInpData?.data);
         setModalShow(true)
         setShow(false)
     }
@@ -64,15 +65,17 @@ function AddDeliveryChalanReport() {
         const clone2 = { ...clonnn, index: e.target.id }
         setInputVal(clone2)
         const abc = showCombo.map((item, i) => {
+            console.log(item);
             if (i == e.target.id) {
-                return { ...item, productId: item.productId, serial: clone2.serial, variant: item.variant, unitPrice: clone2.unitPrice, tax: clone2.tax, tax_type: clone2.tax_type, qty: clone2.qty }
+                return { ...item, stockId: e.target.value }
             } else {
                 return item
             }
         })
+        // console.log(abc);
+        // // setShowCombo(abc)
+        // const sendInpData = await axios.post('https://onlineparttimejobs.in/api/serviceProductStock/addToCart', { products: abc })
         setShowCombo(abc)
-        // const sendInpData = await axios.post('https://onlineparttimejobs.in/api/serviceQuotation/cart', { products: abc })
-        // setShowCombo(sendInpData.data.products)
     }
 
     const changeHandelAddress = async (e) => {
@@ -82,16 +85,19 @@ function AddDeliveryChalanReport() {
         const billingRes = await axios.get(`https://onlineparttimejobs.in/api/user/billAddress/${e.target.value}`);
         setBillingAddress(billingRes.data);
         setCustomerId(e.target.value)
+        const clone = {...values}
+        clone.shippingAddress = shippingRes[0]._id
+        clone.billingAddress = billingRes[0]._id
+        setValues(clone)
     }
-    const [cartPurchase, { data, isSuccess: cartSussuss }] = useAddpurchaseVcartMutation()
-    const SaveData = (val) => {
+    const [cartChalan, { data, isSuccess: cartSussuss }] = useAddchallanVcartMutation()
+    const SaveData = async (val) => {
         setModalShow(false)
         const arr = [...showCombo, ...val]
-        const sendArr = arr.map((item) => {
-            console.log(item);
-            return { productId: item.productId, variantId: item.variant, sku: item.sku, qty: item.qty }
+        const clone = arr.map((item) => {
+            return item.data
         })
-        cartPurchase({ products: sendArr });
+        cartChalan({ products: clone });
 
     };
     useEffect(() => {
@@ -100,23 +106,21 @@ function AddDeliveryChalanReport() {
         }
     }, [cartSussuss])
 
+        
 
-    const token = window.localStorage.getItem('token')
+  
     const sendComboData = () => {
-        const getData = showCombo.map((item) => {
-            console.log(item);
-            return { productId: item.productId._id, variantId: item.variantId._id, sku: item.sku, unitPrice: item.variantId.unitPrice,  discount: item.variantId.discount, tax: item.variantId.tax, subtotal: item.variantId.subTotal, serial: item.serial, total: item.variantId.total }
-        })
+        // const getData = showCombo.map((item) => {
+        //     return { productId: item.productId._id, variantId: item.variantId._id, sku: item.sku, unitPrice: item.variantId.unitPrice, discount: item.variantId.discount, tax: item.variantId.tax, subtotal: item.variantId.subTotal, serial: item.serial, total: item.variantId.total }
+        // })
         const obj = {
             ...values,
-            products: getData,
-            userid: customerId,
+            products: showCombo,
+            customer_id: customerId,
             isActive: true,
-            // shippingAddress: shippingAddress?.address[0]?._id,
-            // billingAddress: billingAddress?.address[0]?._id
         }
 
-        addDeleveryChallan({data:obj , tokenn:token})
+        addDeleveryChallan({ data: obj, tokenn: token })
     }
 
     const toastSuccessMessage = () => {
@@ -175,7 +179,7 @@ function AddDeliveryChalanReport() {
 
     return <div>
 
-        {modalShow && <ModalCombo
+        {modalShow && <ModalDeleviry
             show={modalShow}
             onHide={() => setModalShow(false)}
             cartData={cartData}
@@ -230,6 +234,7 @@ function AddDeliveryChalanReport() {
                                     <div>
                                         <label>PickupPint</label>
                                         <select name="pickupPoint" className="form-select" aria-label="Default select example" onChange={changeHandelVal} >
+                                            <option selected>Open this select menu</option>
                                             {pickupPoints && pickupPoints.map((item, i) => {
                                                 return <option value={item._id} key={i}>{item?.pickupPoint_name}</option>
                                             })}
@@ -241,6 +246,7 @@ function AddDeliveryChalanReport() {
                                     <div>
                                         <label>Customer</label>
                                         <select name="customer" className="form-select" aria-label="Default select example" onChange={changeHandelAddress} >
+                                            <option selected>Open this select menu</option>
                                             {customers && customers.map((item, i) => {
                                                 return <option value={item._id} key={i}>{item?.firstname + " " + item?.lastname}</option>
                                             })}
@@ -252,6 +258,7 @@ function AddDeliveryChalanReport() {
                                     <div>
                                         <label>Billing Adress</label>
                                         <select name="billingAddress" className="form-select" aria-label="Default select example" onChange={changeHandelVal} >
+                                            <option selected>Open this select menu</option>
                                             {billingAddress && billingAddress.address?.map((item, i) => {
                                                 return <option selected value={item._id} key={i}>{item?.addressLine1 + ',' + item?.addressLine2 + ' ,' + item?.landmark + ' ,' + item?.zip + ', ' + item?.city + ' ,' + item?.state + ' ,' + item?.country}</option>
                                             })}
@@ -263,6 +270,7 @@ function AddDeliveryChalanReport() {
                                     <div>
                                         <label>Shipping Adress</label>
                                         <select name="shippingAddress" className="form-select" aria-label="Default select example" onChange={changeHandelVal} >
+                                            <option selected>Open this select menu</option>
                                             {shippingAddress && shippingAddress.address?.map((item, i) => {
                                                 return <option selected value={item._id} key={i}>{item?.addressLine1 + ', ' + item?.addressLine2 + ' ,' + item?.landmark + ',' + item?.zip + ',' + item?.city + ',' + item?.state + ',' + item?.country}</option>
                                             })}
@@ -276,7 +284,19 @@ function AddDeliveryChalanReport() {
 
                         <div className="container">
                             <div className="row">
-                                <div className="col">
+                                <div className="col-4">
+                                    <div>
+                                        <label>Pickup Point *</label>
+                                        <select name="pickupPoint" className="form-select" aria-label="Default select example" value={idpick} onChange={(e) => { setItPick(e.target.value) }} >
+                                            <option selected>Open this select menu</option>
+                                            {pickupPoints && pickupPoints.map((item, i) => {
+                                                return <option value={item._id} key={i}>{item?.pickupPoint_name}</option>
+                                            })}
+                                        </select>
+
+                                    </div>
+                                </div>
+                                <div className="col-6">
                                     <div>
                                         <label>Products *</label>
                                         <input className="form-control" onKeyDown={handelChange} placeholder="Please add products to order list" />
@@ -338,7 +358,13 @@ function AddDeliveryChalanReport() {
                                                                 <input type="text" disabled value={item?.variantId?.weight} name="rate" className="form-control" />
                                                             </td>
                                                             <td>
-                                                                <input type="text" value={item?.serial} id={i} name="serial" onChange={handleInputItem} className="form-control" />
+                                                                {/* <input type="text" value={item?.serial} id={i} name="serial" onChange={handleInputItem} className="form-control" /> */}
+                                                                <select className="form-select" aria-label="Default select example" id={i} name="stockId" value={item?.stockId} onChange={handleInputItem}>
+                                                                    <option selected>Open this select menu</option>
+                                                                    {item?.serialNo?.map((val) => {
+                                                                        return <option value={val._id} id={i}>{val.serialNo}</option>
+                                                                    })}
+                                                                </select>
                                                             </td>
 
                                                             {/* <td>

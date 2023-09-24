@@ -1,8 +1,9 @@
+import { token } from "../../../common/TokenArea";
 import { useGetCurrencyQuery } from "../../all-products/allproductsApi/allProductsApi";
 
 function SystemDefaultCurrency() {
 
-    const { data } = useGetCurrencyQuery();
+    const { data } = useGetCurrencyQuery(token);
     console.log(data);
 
     return (

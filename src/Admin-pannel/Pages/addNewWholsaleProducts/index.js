@@ -25,11 +25,12 @@ function AddNewWholesaleProductsPage() {
     const dataSetNext = (value) => {
         setData(value)
     }
+    const token = window.localStorage.getItem('token')
     const [sendDatas, { isLoading, isError, isSuccess }] = useAddWholeSaleMutation()
 
     const sendData = () => {
         const val = { seller_id: sellid, productId: data[0]?.productId, products: main.products }
-        sendDatas(val)
+        sendDatas({data:val,token:token})
 
     }
 

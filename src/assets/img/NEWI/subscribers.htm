@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <title>Odoo</title>
+        <link type="image/x-icon" rel="shortcut icon" href="/web/static/img/favicon.ico"/>
+        <script id="web.layout.odooscript" type="text/javascript">
+            var odoo = {
+                csrf_token: "e442889cebd6e6ceda087b057d77e5bc098b4bfdo1726308089",
+                debug: "",
+            };
+        </script>
+        
+                <link rel="manifest" href="/web/manifest.webmanifest" crossorigin="use-credentials"/>
+            
+                <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+                <meta name="theme-color" content="#714B67"/>
+        <script type="text/javascript">
+                    odoo.__session_info__ = {"uid": 2, "is_system": true, "is_admin": true, "user_context": {"lang": "en_US", "tz": "Europe/Brussels", "uid": 2}, "db": "demo_saas-163_d526183c2d00_1694768562", "server_version": "saas~16.3+e", "server_version_info": ["saas~16", 3, 0, "final", 0, "e"], "support_url": "https://www.odoo.com/help", "name": "Mitchell Admin", "username": "admin", "partner_display_name": "YourCompany, Mitchell Admin", "company_id": 1, "partner_id": 3, "web.base.url": "https://demo8.odoo.com", "active_ids_limit": 20000, "profile_session": null, "profile_collectors": null, "profile_params": null, "max_file_upload_size": 134217728, "home_action_id": false, "cache_hashes": {"translations": "1b6cf8240a08e631c89ad3de0eb2e011de453ef0", "load_menus": "d0ddd892fdf0a7bf012b6093b3dfb5e8ee1e2bcc43c39e5fd1139817e3c696a3"}, "currencies": {"1": {"symbol": "$", "position": "before", "digits": [69, 2]}}, "bundle_params": {"lang": "en_US"}, "user_companies": {"current_company": 1, "allowed_companies": {"2": {"id": 2, "name": "My Company (Chicago)", "sequence": 10, "timesheet_uom_id": 4, "timesheet_uom_factor": 1.0}, "1": {"id": 1, "name": "Demo Company", "sequence": 0, "timesheet_uom_id": 4, "timesheet_uom_factor": 1.0}}}, "show_effect": true, "display_switch_company_menu": true, "user_id": [2], "max_time_between_keys_in_ms": 100, "web_tours": [], "tour_disable": true, "notification_type": "email", "warning": "admin", "expiration_date": false, "expiration_reason": false, "map_box_token": false, "odoobot_initialized": true, "iap_company_enrich": false, "ocn_token_key": false, "fcm_project_id": false, "inbox_action": 125, "dbuuid": "d7e32482-5830-46db-8c0e-486d63c3e49a", "multi_lang": false, "is_quick_edit_mode_enabled": false, "uom_ids": {"4": {"id": 4, "name": "Hours", "rounding": 0.01, "timesheet_widget": "float_time"}}, "demo_restart_url": "//demo.odoo.com/", "subscribe_url": "https://www.odoo.com/start"};
+                    odoo.reloadMenus = () => fetch(`/web/webclient/load_menus/${odoo.__session_info__.cache_hashes.load_menus}`).then(res => res.json());
+                    odoo.loadMenusPromise = odoo.reloadMenus();
+                    // Block to avoid leaking variables in the script scope
+                    {
+                        const { user_context,  cache_hashes } = odoo.__session_info__;
+                        // Prefetch translations to speedup webclient. This is done in JS because link rel="prefetch"
+                        // is not yet supported on safari.
+                        fetch(`/web/webclient/translations/${cache_hashes.translations}?lang=${user_context.lang}`);
+                    }
+                </script>
+                    <link type="text/css" rel="stylesheet" href="/web/assets/1410-e0d2f37/web.assets_common.min.css" data-asset-bundle="web.assets_common" data-asset-version="e0d2f37"/>
+                    <link type="text/css" rel="stylesheet" href="/web/assets/1409-14708de/web.assets_backend.min.css" data-asset-bundle="web.assets_backend" data-asset-version="14708de"/>
+                <script type="text/javascript" src="/web/assets/1381-273631f/web.assets_common.min.js" data-asset-bundle="web.assets_common" data-asset-version="273631f" onerror="__odooAssetError=1"></script>
+                <script type="text/javascript" src="/web/assets/1379-a9fbf7e/web.assets_backend.min.js" data-asset-bundle="web.assets_backend" data-asset-version="a9fbf7e" onerror="__odooAssetError=1"></script>
+                <script type="text/javascript" src="/web/assets/1380-ceeeb28/web.assets_backend_prod_only.min.js" data-asset-bundle="web.assets_backend_prod_only" data-asset-version="ceeeb28" onerror="__odooAssetError=1"></script>
+            
+    </head>
+    <body class="o_web_client">
+        
+        
+    </body>
+</html>

@@ -62,7 +62,7 @@ function PurchaseVtechModal(props) {
                         <td><label className="control-label">Product Name</label></td>
                         <td><label className="control-label">SKU</label></td>
                         <td><label className="control-label">Variant</label></td>
-                        <td><label className="control-label">Actual Rate</label></td>
+                        {/* <td><label className="control-label">Actual Rate</label></td> */}
                         <td><label className="control-label">Quantity</label></td>
                     </tr>
 
@@ -92,9 +92,9 @@ function PurchaseVtechModal(props) {
                             <td>
                                 <input type="text" disabled value={item?.weight} name="rate" className="form-control" />
                             </td>
-                            <td>
+                            {/* <td>
                                 <input type="text" disabled value={item?.actual_rate} name="actual_rate" className="form-control" />
-                            </td>
+                            </td> */}
                             <td>
                                 <input type="text" value={item?.qty} name="qty" id={item?._id} onChange={setQty} className="form-control" />
                             </td>

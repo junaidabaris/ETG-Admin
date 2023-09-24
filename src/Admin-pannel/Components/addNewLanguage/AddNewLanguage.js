@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { toast, ToastContainer } from 'react-toastify';
 import { useAddNewLanguageMutation, useGetLanguagesQuery } from "../all-products/allproductsApi/allProductsApi";
+import { token } from "../../common/TokenArea";
+import { useEffect } from "react";
 
 function AddNewLanguage() {
-    const [inputval, setInputVal] = useState({ code: '', app_lang_code: '' });
+    const [inputval, setInputVal] = useState({name:"", code: '', app_lang_code: '' });
 
-    const { data } = useGetLanguagesQuery();
+    const { data } = useGetLanguagesQuery(token);
+
     const [addNewLanguage, response] = useAddNewLanguageMutation();
 
     const onChangeHandler = (e) => {
@@ -18,7 +21,7 @@ function AddNewLanguage() {
 
     const addNewLanguageData = (e) => {
         e.preventDefault();
-        addNewLanguage(inputval)
+        addNewLanguage({ data: inputval, token: token })
         console.log(inputval)
         document.getElementById("create-course-form").reset();
     };
@@ -29,15 +32,15 @@ function AddNewLanguage() {
         })
     };
 
-    if (response.isSuccess === true) {
-        toastSuccessMessage()
-    };
-    if (response.isError === true) {
-        alert('!Language not added')
-    }
+    useEffect(() => {
+        if (response.isSuccess === true) {
+            toastSuccessMessage()
+        };
+        if (response.isError === true) {
+            alert('!Language not added')
+        }
 
-
-    console.log(response)
+    },[response])
 
     return (
         <>
@@ -66,11 +69,13 @@ function AddNewLanguage() {
                                             </div>
                                             <div className="col-lg-9">
                                                 <div >
-                                                    <select className="form-select" aria-label="Default select example" name="code" onChange={onChangeHandler}>
+                                                    {/* <select className="form-select" aria-label="Default select example" name="code" onChange={onChangeHandler}>
+                                                        <option>Select Option</option>
                                                         {data && data.map((item, i) => {
                                                             return <option value={item._id} key={item._id}>{item.code}</option>
                                                         })}
-                                                    </select>
+                                                    </select> */}
+                                                    <input type="text" className="form-control" name="code" placeholder="Code" required fdprocessedid="ev1co6" onChange={onChangeHandler} />
                                                 </div>
                                             </div>
                                         </div>

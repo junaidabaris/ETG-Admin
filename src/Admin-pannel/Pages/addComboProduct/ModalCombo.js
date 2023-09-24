@@ -5,7 +5,8 @@ import { useState } from 'react';
 
 function ModalCombo(props) {
     let selectedVariants = []
-    const [values, setValues] = useState(props?.cartData?.variations)
+    const [values, setValues] = useState(props?.cartData)
+    console.log(props?.cartData);
     const sendData = (data, i) => {
         let flag = false
         let index;

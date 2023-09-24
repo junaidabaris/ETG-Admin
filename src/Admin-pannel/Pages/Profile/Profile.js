@@ -2,26 +2,27 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useGetCurrencyQuery, useGetLanguagesQuery, useGetSellerDetailQuery, useUpdateSellerMutation } from "../../Components/all-products/allproductsApi/allProductsApi";
+import { token } from "../../common/TokenArea";
 
 
 function Profile() {
-    const isSellerId = window.localStorage.getItem('isSellerId')
+    const isSellerId = window.localStorage.getItem('adminId')
     const adminId = window.localStorage.getItem('adminId')
 
-    const { data: detailSeller } = useGetSellerDetailQuery(isSellerId)
+    const { data: detailSeller } = useGetSellerDetailQuery(token)
     const [update, { isLoading }] = useUpdateSellerMutation()
 
     const [show, setShow] = useState(false)
-    const { data: language } = useGetLanguagesQuery()
-    const { data: currency } = useGetCurrencyQuery()
+    const { data: language } = useGetLanguagesQuery(token)
+    const { data: currency } = useGetCurrencyQuery(token)
 
     const [state, setState] = useState({
-        firstName: "",
-        lastName: "",
+        firstname: "",
+        lastname: "",
         email: "",
         mobile: "",
-        currency: "",
-        language: "",
+        currency_id: "",
+        language_id: "",
         addressLine1: "",
         addressLine2: "",
         landmark: "",
@@ -35,7 +36,7 @@ function Profile() {
     const onchengeHandle = (e) => {
         const clone = { ...state }
         clone[e.target.name] = e.target.value
-        if (e.target.name === 'language' || e.target.name === 'currency') {
+        if (e.target.name === 'language_id' || e.target.name === 'currency_id') {
             clone[e.target.id] = e.target.value
         }
         setState(clone)
@@ -44,12 +45,12 @@ function Profile() {
     useEffect(() => {
         if (detailSeller) {
             const obj = {
-                firstName: detailSeller?.firstname,
-                lastName: detailSeller?.lastname,
+                firstname: detailSeller?.firstname,
+                lastname: detailSeller?.lastname,
                 email: detailSeller?.email,
                 mobile: detailSeller?.mobile,
-                currency: "",
-                language: "",
+                currency_id: "",
+                language_id: "",
                 addressLine1: detailSeller?.addressLine1,
                 addressLine2: detailSeller?.addressLine2,
                 landmark: detailSeller?.landmark,
@@ -65,7 +66,8 @@ function Profile() {
     }, [detailSeller])
 
     const sendData = () => {
-        update(state)
+        update({ data: state, token: token })
+        console.log(state);
         setShow(true)
         setTimeout(() => {
             setShow(false)
@@ -103,9 +105,9 @@ function Profile() {
                                                 <input
                                                     type="text"
                                                     className="form-control"
-                                                    name="firstName"
+                                                    name="firstname"
                                                     autoComplete="off"
-                                                    value={state.firstName}
+                                                    value={state.firstname}
                                                     onChange={onchengeHandle}
                                                 />
                                             </div>
@@ -118,9 +120,9 @@ function Profile() {
                                                 <input
                                                     type="text"
                                                     className="form-control"
-                                                    name="lastName"
+                                                    name="lastname"
                                                     autoComplete="off"
-                                                    value={state.lastName}
+                                                    value={state.lastname}
                                                     onChange={onchengeHandle}
                                                 />
                                             </div>
@@ -288,7 +290,7 @@ function Profile() {
                                                 Your Language
                                             </label>
                                             <div className="col-md-10">
-                                                <select className="form-select" name="language" id="languId" onChange={onchengeHandle} aria-label="Default select example">
+                                                <select className="form-select" name="language_id" id="languId" onChange={onchengeHandle} aria-label="Default select example">
                                                     <option selected>{state?.language ? state.language : 'Select Language'}</option>
                                                     {language && language.map((item) => {
                                                         return <option key={item._id} value={item._id}>{item.name}</option>
@@ -303,7 +305,7 @@ function Profile() {
                                                 Your Currency
                                             </label>
                                             <div className="col-md-10">
-                                                <select className="form-select" name="currency" id="currId" onChange={onchengeHandle} aria-label="Default select example">
+                                                <select className="form-select" name="currency_id" id="currId" onChange={onchengeHandle} aria-label="Default select example">
                                                     <option selected>{state?.currency ? state.currency : 'Select Currency'}</option>
                                                     {currency && currency.map((item) => {
                                                         return <option key={item._id} value={item._id}>{item.name}</option>

@@ -1,98 +1,110 @@
 import { useEffect, useState } from "react";
 import 'react-toastify/dist/ReactToastify.css';
+// import "./AddNewProduct.css";
 import ShippingConfigurationAdmin from "../../Components/addNewProductsComponents/ShippingConfigurationAdmin";
-import { useEditProductMutation, useForm_variatioMutation, useGetAttributesQuery, useGetBrandsQuery, useGetCategoriesQuery, useGetPickupPointQuery, useGetProductByIdQuery, useGetSellersQuery, useGetUnitMasterQuery } from "../../Components/all-products/allproductsApi/allProductsApi";
+import { useAddNewProductMutation, useEditProductMutation, useGetBrandsQuery, useGetCategoriesQuery, useGetCurrencyQuery, useGetLanguagesQuery, useGetPickupPointQuery, useGetProductByIdQuery, useGetSellersQuery, useGetUnitMasterQuery } from "../../Components/all-products/allproductsApi/allProductsApi";
 import { ToastContainer, toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import Multiselect from "multiselect-react-dropdown";
-import ToggleStatus from "../toggleStatus/ToggleStatus";
-import ProductDescriptionWrapper from "../productDescriptionWrapper/productDescriptionWrapper";
-import ProductsVariation from "../addNewProductsComponents/ProductsVariation";
-import { MultiselectOption } from "../../common/MultiSelectOption";
-import { AttributeItem } from "../addNewProductsComponents/AttributeItem";
-import { AiFillDelete } from "react-icons/ai";
+import ToggleStatus from "../../Components/toggleStatus/ToggleStatus";
+import ProductsVariation from "../../Components/addNewProductsComponents/ProductsVariation";
+import ProductDescriptionWrapper from "../../Components/productDescriptionWrapper/productDescriptionWrapper";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { RxCross1 } from "react-icons/rx";
-let sendPayload = [];
-function EditProducts() {
+
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import { token } from "../../common/TokenArea";
+
+const toastSuccessMessage = () => {
+    toast.success("Product added Successfully", {
+        position: "top-center"
+    })
+};
+
+const toastErrorMessage = () => {
+    toast.error("Product not added", {
+        position: "top-center"
+    })
+};
 
 
-    const [featuredval, setFeaturedval] = useState(false)
+const addFile = async (clonedObj, setspcOr) => {
+    // setspcOr(true)
+
+
+    const url = 'https://onlineparttimejobs.in/api/product/add_product'
+    const images = new FormData();
+    let cloned = [...clonedObj]
+    let varclone = []
+
+    for (let ind = 0; ind < cloned?.length; ind++) {
+        let element = cloned[ind].variations;
+        for (let k = 0; k < element.length; k++) {
+            let varImgs = []
+            let element2 = element[k];
+            for (let indi = 0; indi < element2.images?.length; indi++) {
+                images.delete('image');
+                const element3 = element2?.images[indi];
+                images.append('image', element3);
+                const res = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+                const obj = { public_id: res.data.public_id, url: res.data.url }
+                varImgs.push(obj)
+            }
+
+            images.delete('image');
+            images.append('image', element2.mainImage_url);
+            const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+            varclone.push({ ...element2, images: varImgs, mainImage_url: { public_id: res2.data.public_id, url: res2.data.url } })
+            varImgs = []
+        }
+
+
+        cloned[ind].variations = varclone
+        varclone = []
+    }
+
+    try {
+        const res = await axios.post(url, { list: cloned }, {
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        toastSuccessMessage()
+        // setspcOr(false)
+    } catch (error) {
+        toastErrorMessage()
+        // setspcOr(false)
+    }
+}
+
+function AddNewProductsPage() {
+    // setspcOr(false)
     const [tags, setTags] = useState([]);
-    const [sizeTags, setSizeTags] = useState([]);
-    const [variationArr, setVariationArr] = useState([]);
-    // const [categ, setCateg] = useState([]);
+    const [categ, setCateg] = useState([]);
     const [finalCatD, setFinalCatD] = useState();
-    const { data: categ } = useGetCategoriesQuery();
-    const { data: sellerD } = useGetSellersQuery()
-    const { data: unitMast } = useGetUnitMasterQuery()
 
-    const params = useParams();
-    const { data: productData, isSuccess, isLoading } = useGetProductByIdQuery(params.id);
-
-    const [idsAtt, setIdsAtt] = useState()
+    const [flashDeal, setFlashdeal] = useState({
+        start_Date: '',
+        end_Date: '',
+        discount_type: '',
+        discount: '',
+    })
+    const token = window.localStorage.getItem('token')
 
     const [proAtt, setProAtt] = useState()
-    const { data: attributesData } = useGetAttributesQuery()
-
-    const [form_variatio, { data: variationsData, isLoading: isVariantLoading, isError: formvariantError, isSuccess: sussVari }] = useForm_variatioMutation();
-
-    useEffect(() => {
-        if (isVariantLoading) {
-            setVariationArr(variationsData)
-        }
-    }, [isVariantLoading])
-
-    const [allAttributes, setAllAttributes] = useState(null);
-    const getAttributes = (attributes) => {
-        setAllAttributes([...attributes])
-    }
-
-    const [sendbox, setSendox] = useState()
-
-    const getChoiceValues = (choiceValues, currentAttr) => {
-
-
-        let flag = true;
-        if (sendPayload.length) {
-            sendPayload.map((item, i) => {
-                if (item.id === currentAttr.id) {
-                    sendPayload.splice(i, 1, currentAttr)
-                    flag = false;
-                }
-            })
-            if (flag) {
-                sendPayload.push(currentAttr)
-            }
-        } else {
-            sendPayload.push(currentAttr)
-        }
-        const filteredData = sendPayload?.filter(item => item.data.length)
-        if (filteredData.length) {
-            form_variatio({ attributes: filteredData, variations: variationArr })
-        }
-        setSendox(filteredData)
-        if (!filteredData?.length) {
-            // setVariationArr([])  
-        }
-
-    }
-
-    useEffect(() => {
-        if (sussVari) {
-            setVariationArr(variationsData)
-            return
-        }
-        setVariationArr(variationsData)
-    }, [sussVari])
-
-
-
+    const params = useParams();
+    const { data: unitMast } = useGetUnitMasterQuery(token)
 
     const [inputval, setInputVal] = useState({
         todays_deal: false,
-        featured: false,
         quotation: false,
+        featured: false,
         cash_on_delivery: false,
         show_stock_quantity: false,
         show_stock_with_text_only: false,
@@ -103,25 +115,25 @@ function EditProducts() {
         name: '',
         user_id: '63e6579c455104434981d8da',
         // category_id: '',
-        // category_id: [],
-        brand_id: '642d51f2a94153a958c06be4',
+        category_id: [],
+        brand_id: '642d520da94153a958c06be6',
         unit_price: '',
+        hsn_code: '',
+        sale_rp: '',
+        share_rp: '',
         weights: "",
         minimum_purchase_qty: '',
         tags: [],
         barcode: '',
-        hsn_code: '',
-        sale_rp: '',
-        share_rp: '',
         refundable: false,
         // products images
-        gallery_image: '',
-        thumbnail_image: '',
+        gallery_image: null,
+        thumbnail_image: null,
         // product vedios
         video_provider: '',
         video_link: '',
         variations: [],
-        attributes: '',
+        attributes: [],
         size: '',
         current_stock: '',
         minimum_order_qty: '',
@@ -134,173 +146,92 @@ function EditProducts() {
         quantity: '',
         total_quantity: '',
         minimum_order_quantity: '',
-        shipping_cost: '',
+        shipping_coast: '',
         Shipping_cost_multiply_with_quantity: '',
         slug: '',
         mrp: '',
-        purchase_rate: '',
-        sale_rate: '',
-        tax: '',
-        tax_type: '',
-        discount: '',
-        discount_type: '',
-        sku: '',
-        pickup_points: '',
-        current_qty: '',
-        // seo meta tags
         meta_title: '',
         meta_description: '',
         meta_img: '',
         // low stock quantity
         Quantity: '',
-        flash_discount: '',
-        unit: ""
+        seller_id: '',
+        unit: "",
+        company_id: ""
     });
 
-    const brandData = useGetBrandsQuery();
+    const changeStatus = (isStatus, key) => {
+        const clonedInputVal = { ...inputval }
+        clonedInputVal[key] = isStatus;
+        setInputVal(clonedInputVal)
+    }
+    const brandData = useGetBrandsQuery(token);
+    const { data: sellerD } = useGetSellersQuery(token)
+    // const [addProduct, response] = useAddNewProductMutation();
+    const [varianstData, setVariantsData] = useState()
+    const { productDescription } = useSelector((state) => {
+        return state.textEditorData
+    })
 
-
-    const onChangeHandler = (e) => {
-        let slug = e.target.value + new Date().getUTCMilliseconds();
-        const inpName = e.target.name;
-        const inpVal = e.target.value;
-        let tempPickList = JSON.parse(JSON.stringify(variationArr));
-
-        // if (inpName === 'discount') {
-        //     tempPickList.map((item, i) => {
-        //         if (item._id == e.target.getAttribute('data_id'))
-        //             return item[inpName] = inpVal
-        //     })
-        //     tempPickList.map((item, i) => {
-        //         if (item._id == e.target.getAttribute('data_id'))
-        //             return item.sale_rate = item.mrp - e.target.value
-        //     })
-
-        //     const newVariationArr = [...tempPickList]
-        //     setVariationArr(newVariationArr);
-        //     const clonedObj = { ...inputval, slug };
-        //     clonedObj[inpName] = inpVal;
-        //     setInputVal(clonedObj);
-        // } else {
-
-
-        //     tempPickList.map((item, i) => {
-        //         if (item._id == e.target.getAttribute('data_id'))
-        //             return item[inpName] = inpVal
-        //     })
-
-        //     const newVariationArr = [...tempPickList]
-        //     setVariationArr(newVariationArr);
-        //     const clonedObj = { ...inputval, slug };
-        //     clonedObj[inpName] = inpVal;
-        //     setInputVal(clonedObj);
-        // };
-
-        if (inpVal === 'Percent') {
-            tempPickList.map((item, i) => {
-                if (item._id == e.target.getAttribute('data_id'))
-                    return item[inpName] = inpVal
+    useEffect(() => {
+        const getCatData = async () => {
+            const getCategoryName = []
+            const resData = await axios.get(`https://onlineparttimejobs.in/api/category/admin`, {
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                    Authorization: `Bearer ${token}`,
+                },
             })
-            tempPickList.map((item, i) => {
-                const calculatedSalePercent = item.mrp * item.discount / 100
-                const calculatedSalerate = item.mrp - calculatedSalePercent
-                if (item._id == e.target.getAttribute('data_id'))
-                    return item.sale_rate = calculatedSalerate
-            })
+            // const resData = await reqData.json();
+            // 
+            for (let i = 0; i < resData.data.length; i++) {
+                getCategoryName.push({ name: resData.data[i].name, _id: resData.data[i]._id })
 
-            const newVariationArr = [...tempPickList]
-            setVariationArr(newVariationArr);
-            const clonedObj = { ...inputval, slug };
-            clonedObj[inpName] = inpVal;
-            setInputVal(clonedObj);
-        } else if (inpVal === 'Amount') {
-            tempPickList.map((item, i) => {
-                if (item._id == e.target.getAttribute('data_id'))
-                    return item[inpName] = inpVal
-            })
-            tempPickList.map((item, i) => {
-                // const calculatedSalePercent = item.mrp * item.discount / 100
-                // const calculatedSalerate = item.mrp - calculatedSalePercent
-                if (item._id == e.target.getAttribute('data_id'))
-                    return item.sale_rate = item.mrp - item.discount
-            })
-            const newVariationArr = [...tempPickList]
-            setVariationArr(newVariationArr);
-            const clonedObj = { ...inputval, slug };
-            clonedObj[inpName] = inpVal;
-            setInputVal(clonedObj);
+            };
+            if (getCategoryName.length) {
+                setCateg(getCategoryName);
+            }
         }
-        else {
-            tempPickList.map((item, i) => {
-                if (item._id == e.target.getAttribute('data_id'))
-                    return item[inpName] = inpVal
-            })
-            const newVariationArr = [...tempPickList]
-            setVariationArr(newVariationArr);
-            const clonedObj = { ...inputval, slug };
-            clonedObj[inpName] = inpVal;
-            setInputVal(clonedObj);
-        };
+        getCatData();
+    }, [])
+    // const onChangeHandler = (e) => {
+    //     let slug = e.target.value + new Date().getUTCMilliseconds();
+    //     const inpName = e.target.name;
+    //     const inpVal = e.target.value;
+    //     const clonedObj = { ...inputval, slug };
+    //     clonedObj[inpName] = inpVal;
+    //     setInputVal(clonedObj)
+    // };
+    const [attributesVal, setattributesVals] = useState()
+
+    const setattributesVal = (val) => {
+        setattributesVals(val)
+    }
+
+
+    const [spinn, setspinn] = useState(false)
+    const [spcOr, setspcOr] = useState(false)
+
+
+    const submitAddProductData = async () => {
+        setspinn(true)
+        const seller_id = sellerD && sellerD[0]._id;
+        const brand_id = brandData.data && brandData.data[0]._id;
+        const slug = 'youtube' + new Date().getUTCMilliseconds();
+        const clonedObj = { ...inputval, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, seller_id, slug, productDescription: productDescription };
+
+        const clone = { attributes: [proAtt?._id], attributeSet: proAtt?.values }
+        addFile(clonedObj, clonedObj.gallery_image, clone, setspcOr, token)
+
+        setspinn(false)
+
     };
 
 
-    const onchengePhotoHandel = (e) => {
-        const clonedObj = { ...inputval };
-        const inpName = e.target.name;
-        const inpVal = e.target.files[0];
-        clonedObj[inpName] = inpVal;
-        setInputVal(clonedObj)
-    };
+    const handleVariantData = (data) => {
+        setVariantsData(data)
+    }
 
-    // const [editProductD, response] = useEditProductMutation(params.id);
-
-    const submitEditProductData = async () => {
-        const clonedObj = { ...inputval, variations: variationArr, tags: tags, category_id: finalCatD, variation_Form: sendbox };
-        setInputVal(clonedObj);
-
-        const url = `https://onlineparttimejobs.in/api/product/${params.id}`
-        const formData = new FormData();
-
-        formData.append('name', clonedObj.name);
-        // formData.append('gallery_image', clonedObj.gallery_image);
-        // formData.append('thumbnail_image', clonedObj.thumbnail_image);
-        formData.append('brand_id', inputval.brand_id);
-        formData.append('seller_id', clonedObj.seller_id);
-        formData.append('shipping_cost', clonedObj.shipping_cost);
-        formData.append('tags', clonedObj.tags);
-        formData.append('slug', clonedObj.slug);
-        formData.append('video_link', clonedObj.video_link);
-        formData.append('video_provider', clonedObj.video_provider);
-        formData.append('quotation', clonedObj.quotation);
-        formData.append('refundable', clonedObj.refundable);
-        // formData.append('share_rp', clonedObj.share_rp);
-
-        formData.append('category_id', JSON.stringify(clonedObj.category_id));
-        formData.append('attributes', JSON.stringify(proAtt));
-        if (idsAtt?.length > 0) {
-            formData.append('attributeSet', JSON.stringify([idsAtt[0]]));
-        }
-        formData.append('variations', JSON.stringify(variationArr));
-        console.log('variationArr------------', variationArr)
-        formData.append('images', JSON.stringify(clonedObj.images));
-        formData.append('variation_Form', JSON.stringify(clonedObj.variation_Form));
-        formData.append('productDescription', JSON.stringify(clonedObj.productDescription))
-        formData.append('weights', clonedObj.weights)
-        formData.append('unit', clonedObj.unit)
-        formData.append('barcode', clonedObj.barcode)
-        formData.append('minimum_purchase_qty', clonedObj.minimum_purchase_qty)
-        formData.append('minimum_order_qty', clonedObj.minimum_order_qty)
-
-        try {
-            const res = await axios.put(url, formData);
-            toastSuccessMessage()
-        } catch (error) {
-            alert('!Error Product not Edited')
-        }
-
-        // editProductD(formData)
-
-    };
 
     function handleTagKeyDown(e) {
         if (e.key !== 'Enter') return
@@ -314,740 +245,589 @@ function EditProducts() {
     ];
 
 
-    const toastSuccessMessage = () => {
-        toast.success("Product Edited Successfully", {
-            position: "top-center"
-        })
-    };
-
-    const { data: pickUp } = useGetPickupPointQuery();
-
-
-    useEffect(() => {
-        if (params.id && productData) {
-            sendPayload = []
-            const obj = { ...productData }
-            setInputVal({ ...obj, brand_id: obj?.brand_id?._id })
-            setFinalCatD([obj?.category_id[0]?._id])
-            setTags(obj.tags)
-            const weights = obj.variations.map((variation) => variation.weight)
-            setSizeTags(weights);
-            setVariationArr(obj.variations);
-            setProAtt(obj.attributes);
-            setIdsAtt(obj.attributeSet[0]);
-            setAllAttributes(obj.variation_Form)
-        }
-    }, [isSuccess, productData])
-
-    const changeStatus = (isStatus, key) => {
-        const clonedInputVal = { ...inputval }
-        clonedInputVal[key] = isStatus;
-        setInputVal(clonedInputVal)
-    }
-
-    useEffect(() => {
-        if (formvariantError) {
-            alert('Attributes not Valid')
-        }
-    }, [formvariantError])
-
-
-
-
-
-
     const [data1, setData1] = useState()
+    const [data2, setData2] = useState()
     const getDatas = async () => {
         const res = await axios.get('https://onlineparttimejobs.in/api/attributeSetMaster')
         setData1(res.data)
     }
 
+    // const token = window.localStorage.getItem('adminToken')
+    const getDatas1 = async () => {
+        const res = await axios.get(`https://onlineparttimejobs.in/api/accountCompany`, {
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        setData2(res.data)
+    }
+
     useEffect(() => {
-        getDatas()
+        // getDatas()
+        // getDatas1()
     }, [])
 
 
-    const changettriPro = (e) => {
-        const maped = data1.find((item) => {
-            return item._id === e.target.value
-        })
-        setProAtt(maped);
-    }
 
-    const changeValues = (e) => {
-        const clone = [...proAtt]
-        const filterd = clone.map((item) => {
-            if (item._id === e.target.name) {
-                return { ...item, value: e.target.value }
+
+
+    const { data, refetch } = useGetLanguagesQuery(token);
+    const { data: currdata } = useGetCurrencyQuery(token);
+
+
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+        const maped = val.map((item, id) => {
+            if (newValue == id) {
+                const obj = { ...item, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription }
+                return obj
             } else {
                 return item
             }
         })
-        setProAtt(filterd)
-    }
-    const removeRowAt = (id) => {
-        const clone = [...proAtt]
-        const filterd = clone.filter((item) => {
-            if (item._id === id) {
-                return
+        setVal(maped)
+    };
+    const [value, setValue] = useState(0);
+    const [val, setVal] = useState(data)
+    const onChangeHandler = (e, id, bul) => {
+        const maped = val.map((item) => {
+            if (item.language_id == id) {
+                // const obj = { ...item, [e.target.name]: e.target.value }
+                const obj = { ...item, [e.target.name]: e.target.value, }
+                return obj
             } else {
                 return item
             }
         })
-        setProAtt(filterd)
+        setVal(maped)
     }
 
-    console.log('inputValcheck----------', inputval)
+    const [disNextVal, setdisNextVal] = useState(true)
+    const freshDeals = (e) => {
+        const clone = { ...flashDeal }
+        clone[e.target.name] = e.target.value
+        setFlashdeal(clone)
+        if (clone.start_Date) {
+            setdisNextVal(false)
+        }
+    }
+    const addNewAttributeData = async (e, id) => {
+
+        e.preventDefault();
+        let clone2 = [...val]
+        setspinn(true)
+        const maped = clone2.map((item) => {
+            if (item.language_id == id) {
+                const obj = { ...item, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription }
+                return obj
+            } else {
+                return item
+            }
+        })
+        setVal(maped)
+        // addFile(maped, token)
+        console.log(maped);
+        setspinn(false)
+
+
+    };
+
+    const { data: productData, isSuccess, isLoading } = useGetProductByIdQuery({ id: params.id, token: token });
+    const changeDataForm = (index)=>{
+        setVal(productData?.product)
+        setFinalCatD(productData?.product[index].category_id)
+        setTags(productData?.product[index].tags)
+        setVariantsData(productData?.product[index].variations)
+    }
+
+
+    const setTabs = (i, str, id) => {
+        if (str == 'nex') {
+            setValue(i + 1)
+        } else {
+            setValue(i - 1)
+        }
+        const maped = val.map((item) => {
+            if (item.language_id == id) {
+                const obj = { ...item, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription }
+                return obj
+            } else {
+                return item
+            }
+        })
+        setVal(maped)
+        changeDataForm(i)
+    }
+
+    useEffect(() => {
+        if (productData) {
+            changeDataForm(0)
+        }
+    }, [productData])
 
     return (
         <>
             <div className="aiz-main-content">
-                <div className="px-15px px-lg-25px">
-                    <div className="aiz-titlebar text-left mt-2 mb-3">
-                        {params.id ? <h5 className="mb-0 h6">Edit Product</h5> : <h5 className="mb-0 h6">Add New Product</h5>}
+                {spcOr && <div className="preloaderCount">
+                    <div className="spinner-border" role="status">
+                        <span className="visually-hidden">ded</span>
                     </div>
-                    <div>
-                        <form className="form form-horizontal mar-top" id="choice_form">
-                            <div className="row gutters-5">
-                                <div className="col-lg-8">
+                    <h6>please wait your product in uploading</h6>
+                </div>}
 
-                                    <input type="hidden" name="_token" defaultValue="6klBhNOhEcSYzHAP1WU8ctR90lIocmkKBETVGkNx" />
-                                    <input type="hidden" name="added_by" defaultValue="admin" onChange={onChangeHandler} />
+                {spinn && <div className="preloaderCount">
+                    <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                </div>}
+                <Box sx={{ width: '100%', typography: 'body1' }}>
+                    <TabContext value={value}>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                            <TabList onChange={handleChange} aria-label="lab API tabs example">
+                                {data && data.map((item, i) => {
 
+                                    return <Tab label={item?.name} value={i} />
+                                })}
+                            </TabList>
+                        </Box>
+                        {val && val.map((item, i) => {
+                            // console.log(item);
+                            return <TabPanel value={i} key={i}>
+                                <div className="px-15px px-lg-25px">
+                                    <div className="aiz-titlebar text-left mt-2 mb-3">
+                                        {params.id ? <h5 className="mb-0 h6">Edit Product {item.lable}</h5> : <h5 className="mb-0 h6">Add New Product {item.lable}</h5>}
+                                    </div>
+                                    <div>
+                                        <form className="form form-horizontal mar-top" id="choice_form">
+                                            <div className="row gutters-5">
+                                                <div className="col-lg-8">
 
-                                    <div className="card">
-
-                                        <div className="card-header">
-                                            <h5 className="mb-0 h6">Product Information</h5>
-                                        </div>
-
-                                        <div className="card-body">
-
-                                            <div className="form-group row">
-                                                <label className="col-md-3 col-from-label">Product Name <span className="text-danger">*</span></label>
-                                                <div className="col-md-8">
-                                                    <input type="text" className="form-control" value={inputval?.name} name="name" placeholder="Product Name" required fdprocessedid="3bss68" onChange={onChangeHandler} />
-                                                </div>
-                                            </div>
-
-                                            <div className="form-group row" id="category">
-                                                <label className="col-md-3 col-from-label">Category <span className="text-danger">*</span></label>
-                                                <div className="col-md-8">
-
-                                                    <Multiselect
-                                                        displayValue="name"
-                                                        isObject={true}
-                                                        options={categ ? categ : []}
-                                                        showCheckbox
-                                                        selectedValues={productData && productData.category_id}
-                                                        onRemove={(selectedCat) => {
-                                                            const selectedIds = selectedCat.map((cat) => {
-                                                                return cat._id
-                                                            })
-                                                            setFinalCatD(selectedIds)
-                                                        }}
-                                                        onSelect={(selectedCat) => {
-                                                            // setFinalCatD(event)
-                                                            const selectedIds = selectedCat.map((cat) => {
-                                                                return cat._id
-                                                            })
-                                                            setFinalCatD(selectedIds)
-                                                        }}
-                                                    />
-
-                                                </div>
-                                            </div>
-
-
-                                            <div className="form-group row" id="brand">
-                                                <label className="col-md-3 col-from-label">Brand</label>
-                                                <div className="col-md-8">
-
-                                                    <select className="form-select" aria-label="Default select example" name="brand_id" onChange={onChangeHandler}>
-                                                        {brandData.data && brandData.data.map((item) => {
-                                                            return <option value={item._id} key={item._id} selected={item._id === productData?.brand_id?._id}>{item.name || item._id}</option>
-                                                        })}
-                                                    </select>
-
-                                                </div>
-                                            </div>
-
-                                            <div className="form-group row" id="seller">
-                                                <label className="col-md-3 col-from-label">Seller</label>
-                                                <div className="col-md-8">
-                                                    <select className="form-select" aria-label="Default select example" name="seller_id" onChange={onChangeHandler}>
-                                                        {/* {inputval?.brand_id && <option>{inputval?.brand_id?.name}</option>} */}
-                                                        {sellerD && sellerD.map((item) => {
-                                                            return <option value={item._id} key={item._id}>{item.firstname + " " + item.lastname}</option>
-                                                        })}
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div className="form-group row">
-                                                <label className="col-md-3 col-from-label">Unit</label>
-                                                <div className="col-md-8">
-                                                    <select className="form-select" value={inputval?.unit} aria-label="Default select example" name="unit" onChange={onChangeHandler}>
-                                                        {/* <option value={1}>{inputval.unit ? inputval.unit : 'Select Unit'}</option> */}
-                                                        {unitMast && unitMast.map((item) => {
-                                                            return <option value={item.name} key={item._id}>{item.name}</option>
-                                                        })}
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div className="form-group row">
-                                                <label className="col-md-3 col-from-label">Weight <small>(In Kg)</small></label>
-                                                <div className="col-md-8">
-                                                    <input type="text" value={inputval?.weights} className="form-control" name="weights" step="0.01" placeholder="weight" fdprocessedid="sq5qc3" onChange={onChangeHandler} />
-                                                </div>
-                                            </div>
-
-
-                                            <div className="form-group row">
-                                                <label className="col-md-3 col-from-label"> Product Attribute </label>
-
-                                                <div className="col-md-8">
-                                                    <select className="form-select" aria-label="Default select example" value={idsAtt} name="unit" onChange={changettriPro}>
-                                                        <option value={1}>Select Unit</option>
-                                                        {data1 && data1.map((item) => {
-                                                            return <option value={item._id} key={item._id} id={item._id}>{item.name}</option>
-                                                        })}
-                                                    </select>
-                                                </div>
-                                            </div>
-
-
-
-                                            {proAtt && <div className="form-group row">
-                                                <label className="col-md-3 col-from-label">Set Attribute Values</label>
-                                                <div className="col-md-8">
-                                                    {proAtt && proAtt?.map((item, i) => {
-                                                        return <div style={{ display: "flex", margin: "5px 0" }} key={i}>
-                                                            <label className="col-md-3 col-from-label">{item?.label?.name}</label>
-                                                            <input placeholder="Value" name={item?._id} value={item?.value} className="form-control" onChange={changeValues} />
-                                                            <div style={{ fontSize: "17px", margin: "0 5px" }}> <RxCross1 onClick={() => { removeRowAt(item?._id) }} /></div>
+                                                    <div className="card">
+                                                        <div className="card-header">
+                                                            <h5 className="mb-0 h6">Product Information</h5>
                                                         </div>
-                                                    })}
-                                                </div>
-                                            </div>}
+                                                        <div className="card-body">
 
-
-
-
-                                            <div className="form-group row">
-                                                <label className="col-md-3 col-from-label">Minimum Purchase Qty <span className="text-danger">*</span></label>
-                                                <div className="col-md-8">
-                                                    <input type="number" value={inputval?.minimum_purchase_qty} lang="en" className="form-control" name="minimum_purchase_qty" required fdprocessedid="d0gl3m" onChange={onChangeHandler} />
-                                                </div>
-                                            </div>
-
-                                            <div className="form-group row">
-                                                <label className="col-md-3 col-from-label">Tags <span className="text-danger">*</span>
-                                                </label>
-                                                <div className="col-md-8">
-                                                    <div className="tags_inp_wrapper">
-                                                        <div className='tags-input-container'>
-                                                            {tags.map((tag, index) => {
-                                                                return <div className='tag-item' key={index}>
-                                                                    <span className='text'>{tag}</span>
-                                                                    <span className='close' onClick={() => removetagTag(index)}>&times;</span>
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Product Name <span className="text-danger">*</span></label>
+                                                                <div className="col-md-8">
+                                                                    <input type="text" className="form-control" value={item?.name} name="name" placeholder="Product Name" required fdprocessedid="3bss68" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
                                                                 </div>
-                                                            })}
-                                                            <input type="text" onKeyDown={handleTagKeyDown} placeholder='type some text' className='tags-input' name="attributes" onChange={onChangeHandler} />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                            </div>
 
-                                            <div className="form-group row">
-                                                <label className="col-md-3 col-from-label">Barcode</label>
-                                                <div className="col-md-8">
-                                                    <input type="text" value={inputval?.barcode} className="form-control" name="barcode" placeholder="Barcode" fdprocessedid="ifjwoo" onChange={onChangeHandler} />
-                                                </div>
-                                            </div>
+                                                            <div className="form-group row" id="category">
+                                                                <label className="col-md-3 col-from-label">Category <span className="text-danger">*</span></label>
+                                                                <div className="col-md-8">
+                                                                    <Multiselect
+                                                                        isObject={true}
+                                                                        displayValue="name"
 
-                                            <div className="form-group row">
-                                                <label className="col-md-3 col-from-label">Refundable</label>
-                                                <div className="col-md-8">
-                                                    {/* <label className="aiz-switch aiz-switch-success mb-0">
-                                                        <input type="checkbox" name="refundable" value={featuredval} onChange={onChangeHandler} />
-                                                        <span />
-                                                    </label> */}
-                                                    <ToggleStatus name="refundable" isStatus={inputval?.refundable} changeStatus={changeStatus} />
-                                                </div>
-                                            </div>
-
-                                            <div className="form-group row">
-                                                <label className="col-md-3 col-from-label">Quotation</label>
-                                                <div className="col-md-8">
-                                                    <ToggleStatus name="quotation" isStatus={inputval?.quotation} changeStatus={changeStatus} />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    {/* <ProductsInformationAdmin /> */}
-
-                                    {/* <div className="card">
-                                        <div className="card-header">
-                                            <h5 className="mb-0 h6">Product Images</h5>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className="form-group row">
-                                                <label className="col-md-3 col-form-label" htmlFor="signinSrEmail">Gallery Images <small>(600x600)</small></label>
-                                                <div className="col-md-8">
-
-                                                    <div className="input-group" data-type="image" data-multiple="true">
-                                                        <div className="input-group-prepend">
-                                                            <div className="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
-                                                        </div>
-                                                        <div className="form-control file-amount">
-                                                            <input type="file" name="gallery_image" className="selected-files" onChange={onchengePhotoHandel} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="file-preview box sm">
-                                                    </div>
-                                                    <small className="text-muted">These images are visible in product details page gallery. Use 600x600 sizes images.</small>
-                                                </div>
-                                            </div>
-                                            <div className="form-group row">
-                                                <label className="col-md-3 col-form-label" htmlFor="signinSrEmail">Thumbnail Image <small>(300x300)</small></label>
-                                                <div className="col-md-8">
-                                                    <div className="input-group" data-toggle="aizuploader" data-type="image">
-                                                        <div className="input-group-prepend">
-                                                            <div className="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
-                                                        </div>
-                                                        <div className="form-control file-amount">
-                                                            <input type="file" name="thumbnail_image" className="selected-files" onChange={onchengePhotoHandel} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="file-preview box sm">
-                                                    </div>
-                                                    <small className="text-muted">This image is visible in all product box. Use 300x300 sizes image. Keep some blank space around main object of your image as we had to crop some edge in different devices to make it responsive.</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> */}
-
-                                    {/* <ProductsImages /> */}
-
-                                    <div className="card">
-                                        <div className="card-header">
-                                            <h5 className="mb-0 h6">Product Videos</h5>
-                                        </div>
-                                        <div className="card-body">
-
-                                            <div className="form-group row">
-                                                <label className="col-md-3 col-from-label">Video Provider</label>
-                                                <div className="col-md-8">
-                                                    <select className="form-select" value={inputval?.video_provider} aria-label="Default select example" name="video_provider" onChange={onChangeHandler}>
-                                                        <option value="youtube">Youtube</option>
-                                                        <option value="dailymotion">Dailymotion</option>
-                                                        <option value="vimeo">Vimeo</option>
-                                                    </select>
-
-                                                </div>
-                                            </div>
-
-                                            <div className="form-group row">
-                                                <label className="col-md-3 col-from-label">Video Link</label>
-                                                <div className="col-md-8">
-                                                    <input type="text" className="form-control" name="video_link" value={inputval?.video_link} placeholder="Video Link" fdprocessedid="2pggse" onChange={onChangeHandler} />
-                                                    <small className="text-muted">Use proper link without extra parameter. Don't use short share link/embeded iframe code.</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* <ProductsDescriptionAdmin /> */}
-
-                                    <div className="card">
-                                        <div className="card-header">
-                                            <h5 className="mb-0 h6">SEO Meta Tags</h5>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className="form-group row">
-                                                <label className="col-md-3 col-from-label">Meta Title</label>
-                                                <div className="col-md-8">
-                                                    <input type="text" value={inputval?.meta_title} className="form-control" name="meta_title" placeholder="Meta Title" fdprocessedid="1hz7zu" onChange={onChangeHandler} />
-                                                </div>
-                                            </div>
-
-                                            <div className="form-group row">
-                                                <label className="col-md-3 col-from-label"></label>
-                                                <div className="col-md-8">
-                                                    <button type="button" className="btn btn-primary">Fetch AI Content</button>
-                                                </div>
-                                            </div>
+                                                                        options={categ}
+                                                                        showCheckbox
+                                                                        selectedValues={item?.category_id}
+                                                                        onRemove={(selectedCat) => {
+                                                                            const selectedIds = selectedCat.map((cat) => {
+                                                                                return cat._id
+                                                                            })
+                                                                            setFinalCatD(selectedIds)
+                                                                        }}
+                                                                        onSelect={(selectedCat) => {
+                                                                            const selectedIds = selectedCat.map((cat) => {
+                                                                                return cat._id
+                                                                            })
+                                                                            setFinalCatD(selectedIds)
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                            </div>
 
 
-                                            <div className="form-group row">
-                                                <label className="col-md-3 col-from-label">Description</label>
-                                                <div className="col-md-8">
-                                                    <textarea name="meta_description" value={inputval?.meta_description} rows={8} className="form-control" onChange={onChangeHandler} />
-                                                </div>
-                                            </div>
-
-                                            <div className="form-group row">
-                                                <label className="col-md-3 col-from-label"></label>
-                                                <div className="col-md-8">
-                                                    <button type="button" className="btn btn-primary">Fetch AI Content</button>
-                                                </div>
-                                            </div>
-
-
-                                            <div className="form-group row">
-                                                <label className="col-md-3 col-form-label" htmlFor="signinSrEmail">Meta Image</label>
-                                                <div className="col-md-8">
-                                                    <div className="input-group" data-toggle="aizuploader" data-type="image">
-                                                        <div className="input-group-prepend">
-                                                            <div className="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
-                                                        </div>
-                                                        <div className="form-control file-amount">
-                                                            <input type="file" name="meta_image" className="selected-files" onChange={onChangeHandler} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="file-preview box sm">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* <SeoMetaTagsAdmin /> */}
-
-                                </div>
-                                <div className="col-lg-4">
-                                    <ShippingConfigurationAdmin />
-
-                                    <div className="card">
-
-                                        <div className="card-header">
-                                            <h5 className="mb-0 h6">Low Stock Quantity Warning</h5>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className="form-group mb-3">
-                                                <label htmlFor="name">
-                                                    Quantity
-                                                </label>
-                                                <input type="number" name="low_stock_quantity" value={inputval?.low_stock_quantity} className="form-control" fdprocessedid="dtmr1" onChange={onChangeHandler} />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="card">
-                                        <div className="card-header">
-                                            <h5 className="mb-0 h6">
-                                                Stock Visibility State
-                                            </h5>
-                                        </div>
-                                        <div className="card-body">
-
-                                            <div className="form-group row">
-                                                <label className="col-md-6 col-from-label">Show Stock Quantity</label>
-                                                <div className="col-md-6">
-                                                    {/* <label className="aiz-switch aiz-switch-success mb-0">
-                                                        <input type="radio" name="show_stock_quantity" value={featuredval} onChange={onChangeHandler} />
-                                                        <span />
-                                                    </label> */}
-                                                    <ToggleStatus name="show_stock_quantity" isStatus={inputval?.show_stock_quantity} changeStatus={changeStatus} />
-                                                </div>
-                                            </div>
-
-                                            <div className="form-group row">
-                                                <label className="col-md-6 col-from-label">Show Stock With Text Only</label>
-                                                <div className="col-md-6">
-                                                    {/* <label className="aiz-switch aiz-switch-success mb-0">
-                                                        <input type="checkbox" name="show_stock_with_text_only" value={featuredval} onChange={onChangeHandler} />
-                                                        <span />
-                                                    </label> */}
-                                                    <ToggleStatus name="show_stock_with_text_only" isStatus={inputval?.show_stock_with_text_only} changeStatus={changeStatus} />
-                                                </div>
-                                            </div>
-
-                                            <div className="form-group row">
-                                                <label className="col-md-6 col-from-label">Hide Stock</label>
-                                                <div className="col-md-6">
-                                                    {/* <label className="aiz-switch aiz-switch-success mb-0">
-                                                        <input type="checkbox" name="hide_stock" value={featuredval} onChange={onChangeHandler} />
-                                                        <span />
-                                                    </label> */}
-                                                    <ToggleStatus name="hide_stock" isStatus={inputval.hide_stock} changeStatus={changeStatus} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="card">
-                                        <div className="card-header">
-                                            <h5 className="mb-0 h6">Cash on Delivery</h5>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className="form-group row">
-                                                <label className="col-md-6 col-from-label">Status</label>
-                                                <div className="col-md-6">
-                                                    {/* <label className="aiz-switch aiz-switch-success mb-0">
-                                                        <input type="checkbox" name="cash_on_delivery" value={featuredval} onChange={onChangeHandler} />
-                                                        <span />
-                                                    </label> */}
-                                                    <ToggleStatus name="cash_on_delivery" isStatus={inputval.cash_on_delivery} changeStatus={changeStatus} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="card">
-                                        <div className="card-header">
-                                            <h5 className="mb-0 h6">Featured</h5>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className="form-group row">
-                                                <label className="col-md-6 col-from-label">Status</label>
-                                                <div className="col-md-6">
-                                                    {/* <label className="aiz-switch aiz-switch-success mb-0">
-                                                        <input type="checkbox" name="featured" value={featuredval} onChange={onChangeHandler} />
-                                                        <span />
-                                                    </label> */}
-                                                    <ToggleStatus name="featured" isStatus={inputval.featured} changeStatus={changeStatus} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="card">
-                                        <div className="card-header">
-                                            <h5 className="mb-0 h6">Todays Deal</h5>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className="form-group row">
-                                                <label className="col-md-6 col-from-label">Status</label>
-                                                <div className="col-md-6">
-                                                    {/* <label className="aiz-switch aiz-switch-success mb-0">
-                                                        <input type="checkbox" name="todays_deal" value={featuredval} onChange={onChangeHandler} />
-                                                        <span />
-                                                    </label> */}
-                                                    <ToggleStatus name="todays_deal" isStatus={inputval.todays_deal} changeStatus={changeStatus} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="card">
-                                        <div className="card-header">
-                                            <h5 className="mb-0 h6">Trending</h5>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className="form-group row">
-                                                <label className="col-md-6 col-from-label">Status</label>
-                                                <div className="col-md-6">
-                                                    {/* <label className="aiz-switch aiz-switch-success mb-0">
-                                                        <input type="checkbox" name="trending" value={featuredval} onChange={onChangeHandler} />
-                                                        <span />
-                                                    </label> */}
-                                                    <ToggleStatus name="trending" isStatus={inputval.trending} changeStatus={changeStatus} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-
-                            </div>
-
-                            <div className="row">
-                                <div className="card mt-2 rest-part physical_product_show" data-select2-id={176}>
-                                    <div className="card-header">
-                                        <h4 className="mb-0">Variation</h4>
-                                    </div>
-                                    <div className="col-lg-12" style={{ padding: '25px', margin: '5px' }}>
-                                        {/* <form> */}
-
-
-                                        <div className="row">
-                                            <div className="col-lg-6">
-                                                <MultiselectOption allAttributes={allAttributes} data={attributesData} showCheckbox={true} getSelectedOptions={getAttributes}>
-                                                    <label>Attributes:</label>
-                                                </MultiselectOption>
-                                            </div>
-
-                                            {isSuccess && <div className="col-lg-12 mt-3">
-                                                {allAttributes?.map((item) => {
-                                                    return <AttributeItem key={item._id} item={item} isSuccess={isSuccess} isLoading={isLoading} handleChoiceValues={getChoiceValues} />
-                                                })}
-                                            </div>}
-
-
-
-                                        </div>
-
-
-                                    </div>
-                                </div>
-
-
-
-
-                                <div className="card mt-2 rest-part col-lg-12">
-                                    <div className="card-header">
-                                        <h4 className="mb-0">Product price &amp; stock</h4>
-                                    </div>
-                                    <div className="card-body">
-                                        <div className="row align-items-end">
-                                            <div className="col-12 sku_combination table-responsive form-group" id="sku_combination">
-                                                <table className="table table-bordered physical_product_show">
-
-                                                    <thead>
-                                                        <tr>
-                                                            <td className="text-center">
-                                                                <label className="control-label">#</label>
-                                                            </td>
-                                                            <td className="text-center">
-                                                                <label className="control-label">Variant</label>
-                                                            </td>
-                                                            <td className="text-center">
-                                                                <label className="control-label">MRP</label>
-                                                            </td>
-                                                            <td className="text-center">
-                                                                <label className="control-label">Purchase Rate</label>
-                                                            </td>
-                                                            <td className="text-center">
-                                                                <label className="control-label">Tax %</label>
-                                                            </td>
-                                                            <td className="text-center">
-                                                                <label className="control-label">Tax Type</label>
-                                                            </td>
-                                                            <td className="text-center">
-                                                                <label className="control-label">Sale Rate</label>
-                                                            </td>
-                                                            <td className="text-center">
-                                                                <label className="control-label">Discount</label>
-                                                            </td>
-                                                            <td className="text-center">
-                                                                <label className="control-label">Discount Type</label>
-                                                            </td>
-                                                            <td className="text-center">
-                                                                <label className="control-label">SKU</label>
-                                                            </td>
-                                                            <td><label className="control-label">HSN Code</label></td>
-                                                            <td><label className="control-label">Sale Reward Point</label></td>
-                                                            <td><label className="control-label">Share Reward Point</label></td>
-                                                            <td><label className="control-label">Gallery Image</label></td>
-                                                            <td><label className="control-label">Thumbnail Image</label></td>
-                                                            {/* <td><label className="control-label">Add Images</label></td> */}
-                                                            {/* <td className="text-center">
-                                                                <label className="control-label">Pickup Point</label>
-                                                            </td> */}
-                                                            {/* <td className="text-center">
-                                                                <label className="control-label">Quantity</label>
-                                                            </td> */}
-                                                        </tr>
-                                                    </thead>
-
-                                                    <tbody>
-                                                        {variationArr?.map((item, index) => {
-                                                            return <tr className="sizzings" key={index}>
-                                                                <td>
-                                                                    <label data_id={item._id} name="weight" className="control-label"> <AiFillDelete /></label>
-                                                                </td>
-                                                                <td>
-                                                                    <label data_id={item._id} name="weight" className="control-label">{item.weight}</label>
-                                                                </td>
-                                                                <td>
-                                                                    <input data_id={item._id} type="number" name="mrp" className="form-control" required onChange={onChangeHandler} value={item.mrp} />
-                                                                </td>
-
-                                                                <td>
-                                                                    <input data_id={item._id} type="number" name="purchase_rate" className="form-control" required onChange={onChangeHandler} value={item.purchase_rate} />
-                                                                </td>
-                                                                <td>
-                                                                    <input data_id={item._id} type="string" name="tax" className="form-control" required onChange={onChangeHandler} value={item.tax} />
-                                                                </td>
-
-                                                                <td>
-                                                                    <select data_id={item._id} type="string" value={item.tax_type} name="tax_type" className="selectOptions" aria-label="Default select example" onChange={onChangeHandler}>
-                                                                        <option value={'Inclusive'}>Inclusive</option>
-                                                                        <option value={'Exclusive'}>Exclusive</option>
+                                                            <div className="form-group row" id="seller">
+                                                                <label className="col-md-3 col-from-label">Seller</label>
+                                                                <div className="col-md-8">
+                                                                    <select className="form-select" aria-label="Default select example" value={item?.seller_id?._id} name="seller_id" onChange={(e) => { onChangeHandler(e, item.language_id) }} >
+                                                                        <option>Select Seller</option>
+                                                                        {sellerD && sellerD.map((item) => {
+                                                                            return <option value={item._id} key={item._id}>{item.firstname + " " + item.lastname}</option>
+                                                                        })}
                                                                     </select>
-                                                                </td>
+                                                                </div>
+                                                            </div>
 
 
-                                                                <td>
-                                                                    <input data_id={item._id} type="number" name="sale_rate"  className="form-control" required onChange={onChangeHandler} value={item.sale_rate} />
-                                                                </td>
-                                                                <td>
-                                                                    <input data_id={item._id} type="text" name="discount" className="form-control" required onChange={onChangeHandler} value={item.discount} />
-                                                                </td>
-                                                                <td>
-                                                                    <select data_id={item._id} value={item.discount_type} name="discount_type" className="selectOptions" aria-label="Default select example" onChange={onChangeHandler}>
-                                                                        <option value={'Percent'}>Percent</option>
-                                                                        <option value={'Amount'}>Amount</option>
+                                                            <div className="form-group row" id="brand">
+                                                                <label className="col-md-3 col-from-label">Brand</label>
+                                                                <div className="col-md-8">
+                                                                    <select className="form-select" aria-label="Default select example" value={item?.brand_id?._id} name="brand_id" onChange={(e) => { onChangeHandler(e, item.language_id) }} >
+                                                                        <option>Select Brand</option>
+                                                                        {brandData.data && brandData.data.map((item) => {
+                                                                            return <option value={item._id} key={item._id}>{item.name || item._id}</option>
+                                                                        })}
                                                                     </select>
-                                                                </td>
-                                                                <td>
-                                                                    <input data_id={item._id} type="text" name="sku" className="form-control" required onChange={onChangeHandler} value={item.sku} />
-                                                                </td>
+                                                                </div>
+                                                            </div>
 
-                                                                <td>
-                                                                    <input data_id={item._id} type="text" name="hsn_code" value={item?.hsn_code} className="form-control" onChange={onChangeHandler} />
-                                                                </td>
-                                                                <td>
-                                                                    <input data_id={item._id} type="text" name="sale_rp" value={item?.sale_rp} className="form-control" onChange={onChangeHandler} />
-                                                                </td>
-                                                                <td>
-                                                                    <input data_id={item._id} type="text" name="share_rp" value={item?.share_rp} className="form-control" onChange={onChangeHandler} />
-                                                                </td>
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Unit</label>
+                                                                <div className="col-md-8">
+                                                                    <select className="form-select" value={item?.unit} aria-label="Default select example" name="unit" onChange={(e) => { onChangeHandler(e, item.language_id) }} >
+                                                                        <option value={1}>Select Unit</option>
+                                                                        {unitMast && unitMast.map((item) => {
+                                                                            return <option value={item.name} key={item._id}>{item.name}</option>
+                                                                        })}
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Weight <small>(In Kg)</small></label>
+                                                                <div className="col-md-8">
+                                                                    <input type="text" value={item?.weights} className="form-control" name="weights" step="0.01" placeholder="weight" fdprocessedid="sq5qc3" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
+                                                                </div>
+                                                            </div>
 
 
-                                                                <td>
-                                                                    {/* <input data_id={item._id} type="text" name="share_rp" value={item?.share_rp} className="form-control" onChange={onChangeHandler} /> */}sd
-                                                                </td>
-                                                                <td>
-                                                                   <img src={item?.mainImage_url?.url}/>
-                                                                </td>
-                                                            </tr>
-                                                        })}
-                                                    </tbody>
 
-                                                </table>
+
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Minimum Purchase Qty <span className="text-danger">*</span></label>
+                                                                <div className="col-md-8">
+                                                                    <input type="number" value={item?.minimum_purchase_qty} lang="en" className="form-control" name="minimum_purchase_qty" required fdprocessedid="d0gl3m" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Tags <span className="text-danger">*</span>
+                                                                </label>
+                                                                <div className="col-md-8">
+                                                                    <div className="tags_inp_wrapper">
+                                                                        <div className='tags-input-container'>
+                                                                            {tags.map((tag, index) => {
+                                                                                return <div className='tag-item' key={index}>
+                                                                                    <span className='text'>{tag}</span>
+                                                                                    <span className='close' onClick={() => removetagTag(index)}>&times;</span>
+                                                                                </div>
+                                                                            })}
+                                                                            <input type="text" onKeyDown={(e) => { handleTagKeyDown(e, item.language_id) }} placeholder='type some text' className='tags-input' name="attributes" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Barcode</label>
+                                                                <div className="col-md-8">
+                                                                    <input type="text" value={item?.barcode} className="form-control" name="barcode" placeholder="Barcode" fdprocessedid="ifjwoo" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Refundable</label>
+                                                                <div className="col-md-8">
+                                                                    <ToggleStatus name="refundable" isStatus={item.refundable} changeStatus={changeStatus} />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Quotation</label>
+                                                                <div className="col-md-8">
+                                                                    <ToggleStatus name="quotation" isStatus={item.quotation} changeStatus={changeStatus} />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {/* <ProductsInformationAdmin /> */}
+
+
+
+                                                    {/* <ProductsImages /> */}
+
+                                                    <div className="card">
+                                                        <div className="card-header">
+                                                            <h5 className="mb-0 h6">Product Videos</h5>
+                                                        </div>
+                                                        <div className="card-body">
+
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Video Provider</label>
+                                                                <div className="col-md-8">
+                                                                    <select className="form-select" value={item?.video_provider} aria-label="Default select example" name="video_provider" onChange={(e) => { onChangeHandler(e, item.language_id) }} >
+                                                                        <option value="youtube">Youtube</option>
+                                                                        <option value="dailymotion">Dailymotion</option>
+                                                                        <option value="vimeo">Vimeo</option>
+                                                                    </select>
+
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Video Link</label>
+                                                                <div className="col-md-8">
+                                                                    <input type="text" value={item?.video_link} className="form-control" name="video_link" placeholder="Video Link" fdprocessedid="2pggse" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
+                                                                    <small className="text-muted">Use proper link without extra parameter. Don't use short share link/embeded iframe code.</small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* <ProductsDescriptionAdmin /> */}
+
+                                                    <div className="card">
+                                                        <div className="card-header">
+                                                            <h5 className="mb-0 h6">SEO Meta Tags</h5>
+                                                        </div>
+                                                        <div className="card-body">
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Meta Title</label>
+                                                                <div className="col-md-8">
+                                                                    <input type="text" value={item?.meta_title} className="form-control" name="meta_title" placeholder="Meta Title" fdprocessedid="1hz7zu" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label"></label>
+                                                                <div className="col-md-8">
+                                                                    <button type="button" className="btn btn-primary">Fetch AI Content</button>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Description</label>
+                                                                <div className="col-md-8">
+                                                                    <textarea name="meta_description" value={item?.meta_description} rows={8} className="form-control" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label"></label>
+                                                                <div className="col-md-8">
+                                                                    <button type="button" className="btn btn-primary">Fetch AI Content</button>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-form-label" htmlFor="signinSrEmail">Meta Image</label>
+                                                                <div className="col-md-8">
+                                                                    <div className="input-group" data-toggle="aizuploader" data-type="image">
+                                                                        <div className="input-group-prepend">
+                                                                            <div className="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
+                                                                        </div>
+                                                                        <div className="form-control file-amount">
+                                                                            <input type="file" name="meta_image" className="selected-files" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="file-preview box sm">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {/* <SeoMetaTagsAdmin /> */}
+                                                </div>
+                                                <div className="col-lg-4">
+                                                    <ShippingConfigurationAdmin />
+
+                                                    <div className="card">
+                                                        <div className="card-header">
+                                                            <h5 className="mb-0 h6">Low Stock Quantity Warning</h5>
+                                                        </div>
+                                                        <div className="card-body">
+                                                            <div className="form-group mb-3">
+                                                                <label htmlFor="name">
+                                                                    Quantity
+                                                                </label>
+                                                                <input type="number" name="low_stock_quantity" value={item?.low_stock_quantity} className="form-control" fdprocessedid="dtmr1" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="card">
+                                                        <div className="card-header">
+                                                            <h5 className="mb-0 h6">
+                                                                Stock Visibility State
+                                                            </h5>
+                                                        </div>
+                                                        <div className="card-body">
+
+                                                            <div className="form-group row">
+                                                                <label className="col-md-6 col-from-label">Show Stock Quantity</label>
+                                                                <div className="col-md-6">
+                                                                    <ToggleStatus name="show_stock_quantity" isStatus={item.show_stock_quantity} changeStatus={changeStatus} />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="form-group row">
+                                                                <label className="col-md-6 col-from-label">Show Stock With Text Only</label>
+                                                                <div className="col-md-6">
+                                                                    <ToggleStatus name="show_stock_with_text_only" isStatus={item.show_stock_with_text_only} changeStatus={changeStatus} />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="form-group row">
+                                                                <label className="col-md-6 col-from-label">Hide Stock</label>
+                                                                <div className="col-md-6">
+                                                                    <ToggleStatus name="hide_stock" isStatus={item.hide_stock} changeStatus={changeStatus} />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="card">
+                                                        <div className="card-header">
+                                                            <h5 className="mb-0 h6">Cash on Delivery</h5>
+                                                        </div>
+                                                        <div className="card-body">
+                                                            <div className="form-group row">
+                                                                <label className="col-md-6 col-from-label">Status</label>
+                                                                <div className="col-md-6">
+                                                                    <ToggleStatus name="cash_on_delivery" isStatus={item.cash_on_delivery} changeStatus={changeStatus} />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="card">
+                                                        <div className="card-header">
+                                                            <h5 className="mb-0 h6">Featured</h5>
+                                                        </div>
+                                                        <div className="card-body">
+                                                            <div className="form-group row">
+                                                                <label className="col-md-6 col-from-label">Status</label>
+                                                                <div className="col-md-6">
+                                                                    <ToggleStatus name="featured" isStatus={item.featured} changeStatus={changeStatus} />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="card">
+                                                        <div className="card-header">
+                                                            <h5 className="mb-0 h6">Todays Deal</h5>
+                                                        </div>
+                                                        <div className="card-body">
+                                                            <div className="form-group row">
+                                                                <label className="col-md-6 col-from-label">Status</label>
+                                                                <div className="col-md-6">
+                                                                    <ToggleStatus name="todays_deal" isStatus={item.todays_deal} changeStatus={changeStatus} />
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="card">
+                                                        <div className="card-header">
+                                                            <h5 className="mb-0 h6">Trending</h5>
+                                                        </div>
+                                                        <div className="card-body">
+                                                            <div className="form-group row">
+                                                                <label className="col-md-6 col-from-label">Status</label>
+                                                                <div className="col-md-6">
+                                                                    <ToggleStatus name="trending" isStatus={item.trending} changeStatus={changeStatus} />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="card">
+
+
+
+                                                        <div className="card-header">
+                                                            <h5 className="mb-0 h6">**Flash Deal (This Field is mandatory)</h5>
+                                                        </div>
+                                                        <div className="card-body">
+                                                            <div className="form-group mb-3">
+                                                                <label htmlFor="name">
+                                                                    Start Date
+                                                                </label>
+                                                                <input type="date" name='start_Date' value={flashDeal.start_Date} onChange={freshDeals} className="form-control" />
+                                                            </div>
+                                                            <div className="form-group mb-3">
+                                                                <label htmlFor="name">
+                                                                    End Date
+                                                                </label>
+                                                                <input type="date" name="end_Date" value={flashDeal.end_Date} onChange={freshDeals} className="form-control" />
+                                                            </div>
+                                                            <div className="form-group mb-3">
+                                                                <label htmlFor="name">
+                                                                    Discount
+                                                                </label>
+                                                                <input type="number" onChange={freshDeals} value={flashDeal.discount} name="discount" defaultValue={0} min={0} step="0.01" className="form-control" fdprocessedid="hltlp8" />
+                                                            </div>
+                                                            <div className="form-group mb-3">
+                                                                <label htmlFor="name">
+                                                                    Discount Type
+                                                                </label>
+                                                                <select className="form-control aiz-selectpicker" onChange={freshDeals} name="discount_type" id="flash_discount_type" tabIndex={-98}>
+                                                                    <option value>Choose Discount Type</option>
+                                                                    <option value="Amount">Amount</option>
+                                                                    <option value="Percent">Percent</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                </div>
+
                                             </div>
-                                            <div className="col-md-3 form-group physical_product_show" id="quantity">
-                                                <label className="title-color">Total Quantity</label>
-                                                <input type="number" min={0} defaultValue={0} step={1} placeholder="Quantity" name="current_stock" className="form-control" required fdprocessedid="gny5jm" readOnly="readonly" onChange={onChangeHandler} />
-                                            </div>
-                                            <div className="col-md-3 form-group" id="minimum_order_qty">
-                                                <label className="title-color">Minimum order quantity</label>
-                                                <input type="number" value={inputval?.minimum_order_qty} placeholder="Minimum order quantity" name="minimum_order_qty" className="form-control" required fdprocessedid="wabmv" onChange={onChangeHandler} />
-                                            </div>
-                                            <div className="col-md-3 form-group physical_product_show" id="shipping_cost">
-                                                <label className="title-color">Shipping cost </label>
-                                                <input type="number" value={inputval?.shipping_cost} placeholder="Shipping cost" name="shipping_cost" className="form-control" required fdprocessedid="pvn15" onChange={onChangeHandler} />
+
+                                            <ProductDescriptionWrapper item={item}/>
+                                            <ProductsVariation item={item} handleVariantData={handleVariantData} setattributes={setattributesVal} setattributesVal={setattributesVal} setVariantsData={setVariantsData} />
+
+                                            <div className="row">
+                                                <div className="col-md-3 form-group physical_product_show" id="quantity">
+                                                    <label className="title-color">Total Quantity</label>
+                                                    <input type="number" placeholder="Quantity" name="current_stock" className="form-control" required fdprocessedid="gny5jm" readOnly="readonly" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
+                                                </div>
+                                                <div className="col-md-3 form-group" id="minimum_order_qty">
+                                                    <label className="title-color">Minimum order quantity</label>
+                                                    <input type="number" value={item?.minimum_order_qty} placeholder="Minimum order quantity" name="minimum_order_qty" className="form-control" required fdprocessedid="wabmv" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
+                                                </div>
+                                                <div className="col-md-3 form-group physical_product_show" id="shipping_cost">
+                                                    <label className="title-color">Shipping cost </label>
+                                                    <input type="number" placeholder="Shipping cost" name="shipping_cost" className="form-control" required fdprocessedid="pvn15" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
+                                                </div>
+                                                <div className="col-md-3 form-group physical_product_show" id="shipping_cost">
+                                                    <label className="title-color">Shipping cost multiply with quantity </label>
+                                                    <label className="switcher title-color">
+                                                        <input className="switcher_input" type="checkbox" name=" Shipping_cost_multiply_with_quantity" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
+                                                        <span className="switcher_control" />
+                                                    </label>
+                                                </div>
                                             </div>
 
-                                            <div className="col-md-3 form-group physical_product_show" id="shipping_cost">
-                                                <label className="title-color">Shipping cost multiply with quantity </label>
-                                                <label className="switcher title-color">
-                                                    <input className="switcher_input" type="checkbox" name="multiplyQTY" />
-                                                    <span className="switcher_control" />
-                                                </label>
-                                            </div>
-
-                                        </div>
+                                        </form>
 
                                     </div>
+                                    {val.length == i + 1 ? <div className="form-group mb-3 text-right">
+                                        <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setTabs(i, 'pre', item.language_id) }}>Prev</button>
+                                        <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={(e) => { addNewAttributeData(e, item.language_id) }}>Save</button>
+                                    </div>
+                                        :
+                                        <div className="form-group mb-3 text-right">
+                                            {i !== 0 && <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setTabs(i, 'pre', item.language_id) }}>Prev</button>}
+                                            <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setTabs(i, 'nex', item.language_id) }}>Next</button>
+                                        </div>
+
+                                    }
+                                    <ToastContainer />
                                 </div>
 
-                                {/* <ProductDescriptionWrapper />
-                                <ProductsVariation handleVariantData={handleVariantData} /> */}
+                            </TabPanel>
+                        })}
 
-                            </div>
-                        </form>
-                    </div>
-                    <button type="button" onClick={submitEditProductData} className="btn btn-primary m-3">Update Products</button>
-                    <ToastContainer />
-                </div>
+                    </TabContext>
+                </Box>
+
+
+
+
             </div>
         </>
     )
 }
-export default EditProducts;
+export default AddNewProductsPage;

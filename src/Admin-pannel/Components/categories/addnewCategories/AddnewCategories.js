@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { toast, ToastContainer } from 'react-toastify';
-import { useAddNewCategoryMutation, useGetCategoriesQuery } from '../../all-products/allproductsApi/allProductsApi';
+import { useAddNewCategoryMutation, useGetCategoriesQuery, useGetLanguagesQuery } from '../../all-products/allproductsApi/allProductsApi';
 import axios from 'axios';
-
-// import Button from 'react-bootstrap/Button';
-// import Col from 'react-bootstrap/Col';
-// import Form from 'react-bootstrap/Form';
-// import InputGroup from 'react-bootstrap/InputGroup';
-// import Row from 'react-bootstrap/Row';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import MultilangForm from './MultilangForm';
+import { useParams } from 'react-router-dom';
 
 
 function AddnewCategories() {
@@ -16,7 +17,7 @@ function AddnewCategories() {
 
   const [inputval, setInputVal] = useState({ name: '', parent_id: null, order_level: '', type: '1', banner: '', image: '', meta_title: '', meta_description: '', commision_rate: '', filtering_attributes: '', level: '', top: '', featured: '' });
   const token = window.localStorage.getItem('token')
-  const { data } = useGetCategoriesQuery(token);
+
   const [addCategory, response] = useAddNewCategoryMutation();
 
 
@@ -27,13 +28,13 @@ function AddnewCategories() {
     setFile(event.target.files[0])
   }
 
-  const onChangeHandler = (e) => {
-    const inpName = e.target.name;
-    const inpVal = e.target.value;
-    const clonedObj = { ...inputval };
-    clonedObj[inpName] = inpVal;
-    setInputVal(clonedObj)
-  };
+  // const onChangeHandler = (e) => {
+  //   const inpName = e.target.name;
+  //   const inpVal = e.target.value;
+  //   const clonedObj = { ...inputval };
+  //   clonedObj[inpName] = inpVal;
+  //   setInputVal(clonedObj)
+  // };
 
   const addNewCategory = async (event) => {
     event.preventDefault();
@@ -80,170 +81,159 @@ function AddnewCategories() {
     })
   };
 
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const { data: langData, refetch } = useGetLanguagesQuery(token);
+  const [val, setVal] = useState(langData)
+  const params = useParams()
   useEffect(() => {
-    if (response.isSuccess === true) {
-      toastSuccessMessage()
-    };
-    if (response.isError === true) {
-      alert('!Category not added')
-    };
-  }, [response])
+    if (langData) {
+      if (!params) {
+        const maped = langData.map((item) => {
+          return { name: "", language_id: item._id, parent_id: '', lable: item.name, order_level: "", type: "", image: "", meta_title: "", meta_description: '', commision_rate: "", level: "", top: "", featured: '' }
+        })
+        setVal(maped)
+      }else{
+        const maped = langData.map((item) => {
+          return { name: "", language_id: item._id, parent_id: '', lable: item.name, order_level: "", type: "", image: "", meta_title: "", meta_description: '', commision_rate: "", level: "", top: "", featured: '' }
+        })
+        setVal(maped)
+      }
+    }
+  }, [langData])
+  const onChangeHandler = (e, id, bul) => {
+
+    if (bul) {
+      const maped = val.map((item) => {
+        if (item.language_id == id) {
+          const obj = { ...item, image: e.target.files[0] }
+          return obj
+        } else {
+          return item
+        }
+      })
+      setVal(maped)
+    } else {
+      const maped = val.map((item) => {
+        if (item.language_id == id) {
+          const obj = { ...item, [e.target.name]: e.target.value }
+          return obj
+        } else {
+          return item
+        }
+      })
+      setVal(maped);
+    }
+
+  }
+
+  const submitEditCategoryData = async (data) => {
+
+    const url = `https://onlineparttimejobs.in/api/category/${params.id}`
+    try {
+      const res = await axios.put(url, { list: data }, {
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ' + token
+        }
+      });
+      alert('Edit Catagary Successfully')
+    } catch (error) {
+      alert('Catagary not Edit')
+    }
+  }
+
+  const addNewAttributeData = async (e) => {
+    e.preventDefault();
+    const images = new FormData();
+    const clone = [...val]
+    if (params?.id) {
+      submitEditCategoryData(clone)
+    } else {
+      for (let i = 0; i < clone.length; i++) {
+        let element = clone[i];
+        if (element?.image) {
+          images.append('image', element?.image);
+          const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+          images.delete('image');
+          const obj = { ...element, image: { public_id: res2.data.public_id, url: res2.data.url } }
+          clone.splice(i, 1, obj)
+        }
+      }
+      const url = 'https://onlineparttimejobs.in/api/category/add_category'
+      try {
+        const res = await axios.post(url, { list: clone }, {
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        toastSuccessMessage()
+      } catch (error) {
+        alert('Category Send Fail !')
+      }
+
+    }
 
 
+
+  };
+
+
+
+
+  const getDetailCat = async () => {
+    try {
+      const res = await axios.get(`https://onlineparttimejobs.in/api/category/${params.id}`, {
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      setVal(res.data);
+    } catch (error) {
+      alert('Server Error !')
+    }
+  }
+
+
+  useEffect(() => {
+    if (params.id) {
+      getDetailCat()
+    }
+  }, [params.id])
   return (
     <>
       <div className="aiz-main-content">
         <div className="px-15px px-lg-25px">
           <div className="row">
             <div className="col-lg-8 mx-auto">
-              <div className="card">
-                <div className="card-header">
-                  <h5 className="mb-0 h6">Category Information</h5>
-                </div>
-                <div className="card-body">
 
-                  <form className="form-horizontal" id="create-course-form" onSubmit={addNewCategory}>
-                    <input type="hidden" name="_token" defaultValue="JX7Efxc0fWnjgSTDtnGEP5Yd23Vk7icCfLqqxizf" />
+              <Box sx={{ width: '100%', typography: 'body1' }}>
+                <TabContext value={value}>
+                  <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <TabList onChange={handleChange} aria-label="lab API tabs example">
+                      {langData && langData.map((item, i) => {
+                        return <Tab label={item?.name} value={i} />
+                      })}
 
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label">Name</label>
-                      <div className="col-md-9">
-                        <input type="text" placeholder="Name" name="name" className="form-control" onChange={onChangeHandler} required />
+                    </TabList>
+                  </Box>
+                  {val && val.map((item, i) => {
+                    return <TabPanel value={i}>
+                      <div className="card">
+                        <MultilangForm setValue={setValue} data={val} item={item} i={i} addNewAttributeData={addNewAttributeData} onChangeHandler={onChangeHandler} />
                       </div>
-                    </div>
 
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label">Parent Category</label>
+                    </TabPanel>
+                  })}
 
-                      <div className="col-md-9">
-                        <select className="form-select" name='parent_id' onChange={onChangeHandler} required>
-                          <option>Select Parent Catagary</option>
-                          <option value='null'>Null</option>
-                          {data && data.map((item, i) => {
-                            return <option key={item._id} value={item._id}>{item.name}</option>
-                          })}
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label">
-                        Ordering Number
-                      </label>
-                      <div className="col-md-9">
-                        <input type="number" name="order_level" className="form-control" placeholder="Order Level" onChange={onChangeHandler} required />
-                        <small>Higher number has high priority</small>
-                      </div>
-                    </div>
-
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label">Type</label>
-                      <div className="col-md-9">
-                        <div>
-                          <select className="form-select form-control aiz-selectpicker mb-2 mb-md-0" aria-label="Default select example" name='type' onChange={onChangeHandler} required>
-                            <option value={0}>Physical</option>
-                            <option value={1}>Digital</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* <div className="form-group row">
-                      <label className="col-md-3 col-form-label" htmlFor="signinSrEmail">Banner <small>(200x200)</small></label>
-                      <div className="col-md-9">
-                        <div className="input-group" data-type="image">
-                          <div className="input-group-prepend">
-                            <div className="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
-                          </div>
-                          <div className="form-control file-amount">
-                            <input type="file" name="banner" className="selected-files" onChange={onChangeHandler} required />
-                          </div>
-                        </div>
-                        <div className="file-preview box sm">
-                        </div>
-                      </div>
-                    </div> */}
-
-
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label">Icon <small>(32x32)</small></label>
-                      <div className="col-md-9">
-                        <div className="input-group" data-type="image">
-                          <div className="input-group-prepend">
-                            <div className="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
-                          </div>
-                          <div className="form-control file-amount">
-                            <input type="file" name="image" className="selected-files" onChange={handleFile} />
-                          </div>
-                        </div>
-                        <div className="file-preview box sm">
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label">Meta Title</label>
-                      <div className="col-md-9">
-                        <input type="text" className="form-control" name="meta_title" placeholder="Meta Title" onChange={onChangeHandler} required />
-                      </div>
-                    </div>
-
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label">Meta description</label>
-                      <div className="col-md-9">
-                        <textarea name="meta_description" rows={5} className="form-control" onChange={onChangeHandler} required />
-                      </div>
-                    </div>
-
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label">Commission Rate</label>
-                      <div className="col-md-9 input-group">
-                        <input type="number" lang="en" min={0} step="0.01" placeholder="Commission Rate" id="commision_rate" name="commision_rate" className="form-control" onChange={onChangeHandler} required />
-                        <div className="input-group-append">
-                          <span className="input-group-text">%</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label">Filtering Attributes</label>
-                      <div className="col-md-9">
-                        <Form.Select aria-label="Default select example" name='filtering_attributes' className='form-control' onChange={onChangeHandler} required>
-                          <option>Open this select menu</option>
-                          <option value="1">One</option>
-                          <option value="2">Two</option>
-                          <option value="3">Three</option>
-                        </Form.Select>
-                      </div>
-                    </div>
-
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label">Level</label>
-                      <div className="col-md-9">
-                        <input type="number" className="form-control" name="level" placeholder="level" onChange={onChangeHandler} required />
-                      </div>
-                    </div>
-
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label">Top</label>
-                      <div className="col-md-9">
-                        <input type="text" className="form-control" name="top" placeholder="top" onChange={onChangeHandler} required />
-                      </div>
-                    </div>
-
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label">Featured</label>
-                      <div className="col-md-9">
-                        <input type="text" className="form-control" name="featured" placeholder="featured" onChange={onChangeHandler} required />
-                      </div>
-                    </div>
-
-                    <div className="form-group mb-0 text-right">
-                      <button type="submit" className="btn btn-primary">Save</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
+                </TabContext>
+              </Box>
             </div>
           </div>
         </div>

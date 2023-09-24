@@ -1,0 +1,13 @@
+.mainn{
+    padding: 10px;
+    background-color: white;
+    border: 0px solid black;
+  
+  }
+  .mainn > div{
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 6px;
+    margin: 10px 0;
+    /* color: #1a55b7; */
+  }

@@ -6,13 +6,19 @@ import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { RxCross1 } from 'react-icons/rx';
+import { token } from '../../common/TokenArea';
 
 function AttributeModal(props) {
     const [finalCatD, setFinalCatD] = useState();
 
     const [data1, setData1] = useState()
     const getDatas = async () => {
-        const res = await axios.get('https://onlineparttimejobs.in/api/attributeSetMaster')
+        const res = await axios.get('https://onlineparttimejobs.in/api/attributeSetMaster',{
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                'Authorization': 'Bearer ' + token
+            }
+        })
         setData1(res.data)
     }
 

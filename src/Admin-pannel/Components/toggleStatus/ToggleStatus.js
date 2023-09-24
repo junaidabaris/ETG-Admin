@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 
-function ToggleStatus({ isStatus, name, changeStatus }) {
+function ToggleStatus({ isStatus, name, onChangeHandler ,item }) {
     const [status, setStatus] = useState(isStatus);
-    const handleChange = () => {
+    const handleChange = (e) => {
         setStatus(!status);
-        changeStatus(!status, name);
+        onChangeHandler(e, item.language_id) 
+        // changeStatus(!status, name);
     }
     useEffect(()=> {
         if(isStatus) {
@@ -14,7 +15,7 @@ function ToggleStatus({ isStatus, name, changeStatus }) {
 
     return (
         <label className="aiz-switch aiz-switch-success mb-0">
-            <input type="checkbox" name={name} value={isStatus} onChange={handleChange} checked={isStatus} />
+            <input type="checkbox" name={name} value={isStatus} onChange={handleChange}  checked={isStatus} />
             <span />
         </label>
     )

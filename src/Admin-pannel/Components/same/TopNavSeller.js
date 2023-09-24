@@ -238,7 +238,7 @@ function TopNavSeller({ showSidebar }) {
                             </span>
                         </a>
                         <div className={`dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-md ${show && 'show'}`}>
-                            {isLoginPickup ? <Link to="profilePickup" className="dropdown-item" onClick={() => setShow(!show)}>
+                            {isLoginPickup ? <Link to="profile" className="dropdown-item" onClick={() => setShow(!show)}>
                                 <i className="las la-user-circle"></i>
                                 <span>Profile</span>
                             </Link> : <Link to="profile" className="dropdown-item">

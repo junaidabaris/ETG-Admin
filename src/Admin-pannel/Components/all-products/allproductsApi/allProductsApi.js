@@ -4,7 +4,7 @@ const seller_id = window.localStorage.getItem('isSellerId')
 export const productsApi = createApi({
     reducerPath: 'productsApi',
     baseQuery: fetchBaseQuery({ baseUrl: 'https://onlineparttimejobs.in/api/' }),
-    tagTypes: ['allOrders', 'sellers', 'sellerOwn', 'setList', 'purchaseList', 'reqList', 'allProducts', 'getBrand', 'customer', 'catagary', 'attribuits', 'getAffiliateWithdraw', 'getAffiliateLogs', 'getRefferalUsers', 'getaffiliateUsers', 'getaffiliateBasic', 'updateAffilliateUser', 'updateVerificationInfo', 'editAllPointsTable', 'getOTPConfiguration', 'updateOTPConfiguration', 'getOTPCredentialLists', 'updateOtpCredential', 'getPayFastCredentialLists', 'updatePayFastCredential', 'getFlutterCredential', 'updateFlutterCredential', 'getTingoCredential', 'updateTingoCredential', 'getFlutterActivation', 'updateFlutterActivation', 'getPayFastActivation', 'updatePayFastActivation', 'getTingoActivationF', 'updateTingoActivation', 'getRazorPayActivation', 'updateRazorPayActivation', 'getPayuMoneyActivation', 'updatePayumoneyActivation', 'getPayTmActivation', 'updatePayTmActivation', 'getRazorPayCredential', 'updateRazorPayCredential', 'getPayuMoneyCredential', 'updatePayuMoneyCredential', 'getPayTmCredential', 'updatePayTmCredential', 'getDeliveryBoyStatus', 'deliveryBoypaymentconfig', 'pickupLocationForDelivery', 'NotificationConfigurationForDelivery', 'SettingSiteConfiguration', 'MoneyAndNumberFormat', 'weighingScale', 'settingEmail', 'AwardPoint', 'SystemSettingPrefix', 'FacebookCredentail', 'TwitterCredentail', 'LinkedInCredentail', 'InstagramCredentail', 'GoogleCredentail', 'posCategory', 'posBrands'],
+    tagTypes: ['allOrders', 'sellers', 'sellerOwn', 'setList', 'purchaseList', 'reqList', 'allProducts', 'getBrand', 'customer', 'catagary', 'attribuits', 'getAffiliateWithdraw', 'getAffiliateLogs', 'getRefferalUsers', 'getaffiliateUsers', 'getaffiliateBasic', 'updateAffilliateUser', 'updateVerificationInfo', 'editAllPointsTable', 'getOTPConfiguration', 'updateOTPConfiguration', 'getOTPCredentialLists', 'updateOtpCredential', 'getPayFastCredentialLists', 'updatePayFastCredential', 'getFlutterCredential', 'updateFlutterCredential', 'getTingoCredential', 'updateTingoCredential', 'getFlutterActivation', 'updateFlutterActivation', 'getPayFastActivation', 'updatePayFastActivation', 'getTingoActivationF', 'updateTingoActivation', 'getRazorPayActivation', 'updateRazorPayActivation', 'getPayuMoneyActivation', 'updatePayumoneyActivation', 'getPayTmActivation', 'updatePayTmActivation', 'getRazorPayCredential', 'updateRazorPayCredential', 'getPayuMoneyCredential', 'updatePayuMoneyCredential', 'getPayTmCredential', 'updatePayTmCredential', 'getDeliveryBoyStatus', 'deliveryBoypaymentconfig', 'pickupLocationForDelivery', 'NotificationConfigurationForDelivery', 'SettingSiteConfiguration', 'MoneyAndNumberFormat', 'weighingScale', 'settingEmail', 'AwardPoint', 'SystemSettingPrefix', 'FacebookCredentail', 'TwitterCredentail', 'LinkedInCredentail', 'InstagramCredentail', 'GoogleCredentail', 'posCategory', 'posBrands', 'timeSlote'],
     endpoints: (builder) => ({
         getAllProducts: builder.query({
             query: (token) => ({
@@ -14,7 +14,7 @@ export const productsApi = createApi({
                     'Content-type': 'application/json; charset=UTF-8',
                     'Authorization': 'Bearer ' + token
                 }
-                
+
             }),
             providesTags: ['allProducts']
         }),
@@ -65,17 +65,25 @@ export const productsApi = createApi({
         }),
 
         getCustomers: builder.query({
-            query: () => ({
+            query: (token) => ({
                 url: 'customer',
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                }
             }),
             providesTags: ['customer']
         }),
 
         getSellers: builder.query({
-            query: () => ({
-                url: 'sellerList',
-                method: 'GET'
+            query: (token) => ({
+                url: 'sellerList/admin',
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                }
             }),
             providesTags: ['sellers']
         }),
@@ -87,9 +95,13 @@ export const productsApi = createApi({
         }),
 
         getLanguages: builder.query({
-            query: () => ({
-                url: 'language',
-                method: 'GET'
+            query: (token) => ({
+                url: 'language/admin',
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                }
             })
         }),
 
@@ -101,11 +113,17 @@ export const productsApi = createApi({
         }),
 
         getCurrency: builder.query({
-            query: () => ({
-                url: 'currency',
-                method: 'GET'
+            query: (token) => ({
+                url: 'currency/admin',
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                },
             })
         }),
+
+
 
         getOrders: builder.query({
             query: () => ({
@@ -149,9 +167,13 @@ export const productsApi = createApi({
         }),
 
         getColors: builder.query({
-            query: () => ({
+            query: (token) => ({
                 url: 'color',
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                }
             })
         }),
 
@@ -238,11 +260,12 @@ export const productsApi = createApi({
         }),
 
         getBrandById: builder.query({
-            query: (id) => ({
-                url: `brand/${id}`,
+            query: (val) => ({
+                url: `brand/admin/${val.id}`,
                 method: 'GET',
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + val.token
                 },
             }),
         }),
@@ -268,21 +291,23 @@ export const productsApi = createApi({
         }),
 
         getCustomerById: builder.query({
-            query: (id) => ({
-                url: `customer/${id}`,
+            query: (val) => ({
+                url: `customer/${val.id}`,
                 method: 'GET',
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + val.token
                 },
             }),
         }),
 
         getAttributeById: builder.query({
-            query: (id) => ({
-                url: `attributes/${id}`,
+            query: (val) => ({
+                url: `attributes/${val.id}`,
                 method: 'GET',
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + val.token
                 },
             }),
         }),
@@ -298,11 +323,12 @@ export const productsApi = createApi({
         }),
 
         getProductById: builder.query({
-            query: (id) => ({
-                url: `product/${id}`,
+            query: (val) => ({
+                url: `product/${val.id}`,
                 method: 'GET',
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + val.token
                 },
             }),
         }),
@@ -353,9 +379,10 @@ export const productsApi = createApi({
             query: (payload) => ({
                 url: 'currency/add_Currency',
                 method: 'POST',
-                body: payload,
+                body: payload.data,
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + payload.token
                 },
             }),
         }),
@@ -364,9 +391,10 @@ export const productsApi = createApi({
             query: (payload) => ({
                 url: 'language/add_Language',
                 method: 'POST',
-                body: payload,
+                body: payload.data,
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + payload.token
                 },
             }),
         }),
@@ -489,8 +517,8 @@ export const productsApi = createApi({
                     'Authorization': 'Bearer ' + val.token
                 },
             }),
-            invalidatesTags:['allProducts']
-          
+            invalidatesTags: ['allProducts']
+
         }),
 
         deleteSize: builder.mutation({
@@ -501,37 +529,58 @@ export const productsApi = createApi({
         }),
 
         deleteBrand: builder.mutation({
-            query: (id) => ({
-                url: `brand/${id}`,
+            query: (val) => ({
+                url: `brand/${val.id}`,
                 method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + val.token
+                },
             }),
         }),
 
         deleteCategory: builder.mutation({
-            query: (id) => ({
-                url: `category/${id}`,
+            query: (val) => ({
+                url: `category/${val.id}`,
                 method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + val.token
+                },
             }),
+
         }),
 
         deleteCustomer: builder.mutation({
-            query: (id) => ({
-                url: `customer/delete_Customer/${id}`,
+            query: (val) => ({
+                url: `customer/delete_Customer/${val.id}`,
                 method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + val.token
+                },
             }),
         }),
 
         deleteCurrency: builder.mutation({
-            query: (id) => ({
-                url: `currency/delete_Currency/${id}`,
+            query: (val) => ({
+                url: `currency/delete_Currency/${val.id}`,
                 method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + val.token
+                },
             }),
         }),
 
         deleteLanguage: builder.mutation({
-            query: (id) => ({
-                url: `language/delete_Language/${id}`,
+            query: (val) => ({
+                url: `language/delete_Language/${val.id}`,
                 method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + val.token
+                },
             }),
         }),
 
@@ -678,6 +727,7 @@ export const productsApi = createApi({
                 body: payload.data,
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + payload.token
                 },
             }),
         }),
@@ -710,7 +760,9 @@ export const productsApi = createApi({
                 method: 'PUT',
                 body: payload.data,
                 headers: {
+                    
                     'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + payload.token
                 },
             }),
         }),
@@ -755,6 +807,7 @@ export const productsApi = createApi({
                 body: payload.data,
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + payload.token
                 },
             }),
         }),
@@ -766,6 +819,7 @@ export const productsApi = createApi({
                 body: payload.data,
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + payload.token
                 },
             }),
         }),
@@ -838,11 +892,12 @@ export const productsApi = createApi({
 
         addSellerList: builder.mutation({
             query: (payload) => ({
-                url: 'sellerList/add_sellers',
+                url: 'sellerList/add_seller',
                 method: 'POST',
-                body: payload,
+                body: payload.data,
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + payload.token
                 },
             }),
         }),
@@ -851,16 +906,24 @@ export const productsApi = createApi({
             query: (data) => ({
                 url: `sellerList/update_sellers/${data.id}`,
                 method: 'PUT',
-                body: data.data
+                body: data.data,
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + data.token
+                },
             })
         }),
 
         getSellerDetail: builder.query({
-            query: (id) => ({
-                url: `sellerList/${id}`,
+            query: (token) => ({
+                url: `staff/profile`,
                 method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                },
             }),
-            providesTags: ['sellers']
+            // providesTags: ['sellers']
         }),
         getSmsTemplate: builder.query({
             query: (id) => ({
@@ -1237,7 +1300,11 @@ export const productsApi = createApi({
             query: (payload) => ({
                 url: `product/form_variation`,
                 method: 'POST',
-                body: payload,
+                body: payload.data,
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + payload.token
+                },
             }),
         }),
 
@@ -1321,9 +1388,13 @@ export const productsApi = createApi({
 
         // get unitMasterList
         getUnitMaster: builder.query({
-            query: (id) => ({
-                url: `unitMaster`,
+            query: (token) => ({
+                url: `unitMaster/admin`,
                 method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                },
             })
         }),
 
@@ -1355,12 +1426,14 @@ export const productsApi = createApi({
 
         // sellerDetail update  
         updateSeller: builder.mutation({
-            query: (data) => ({
-                url: `sellerList/update_profile_seller`,
+            query: (val) => ({
+                url: `staff/profile`,
                 method: 'PUT',
-                body: {
-                    data
-                }
+                body: val.data,
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + val.token
+                },
             }),
         }),
 
@@ -1753,7 +1826,11 @@ export const productsApi = createApi({
             query: (data) => ({
                 url: `wholesale/add_wholesales`,
                 method: 'POST',
-                body: data
+                body: data.data,
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + data.token
+                }
             }),
         }),
 
@@ -2063,9 +2140,14 @@ export const productsApi = createApi({
         }),
 
         getSettingSiteConfiguration: builder.query({
-            query: () => ({
+            query: (token) => ({
                 url: 'generalSetting/siteConfig',
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                },
+
             }),
             providesTags: ['SettingSiteConfiguration']
         }),
@@ -2074,15 +2156,23 @@ export const productsApi = createApi({
             query: (payload) => ({
                 url: 'generalSetting/siteConfig',
                 method: 'PUT',
-                body: payload,
+                body: payload.data,
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + payload.token
+                },
             }),
             invalidatesTags: ['SettingSiteConfiguration']
         }),
 
         getSettingSalesData: builder.query({
-            query: () => ({
+            query: (token) => ({
                 url: 'generalSetting/sales',
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                },
             }),
             providesTags: ['SettingSalesData']
         }),
@@ -2097,9 +2187,13 @@ export const productsApi = createApi({
         }),
 
         getSettingProducts: builder.query({
-            query: () => ({
+            query: (token) => ({
                 url: 'generalSetting/product',
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                },
             }),
             providesTags: ['SettingProducts']
         }),
@@ -2360,10 +2454,14 @@ export const productsApi = createApi({
         }),
 
         addDCustomer: builder.mutation({
-            query: (data) => ({
+            query: (pay) => ({
                 url: `customer/add_Customer`,
                 method: 'POST',
-                body: data
+                body: pay.data,
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + pay.token
+                },
             }),
             invalidatesTags: ['customer']
         }),
@@ -2572,7 +2670,7 @@ export const productsApi = createApi({
                 body: data
             }),
         }),
-        
+
         addDeleveryChallan: builder.mutation({
             query: (val) => ({
                 url: `serviceDeliveryChalan/addDeliveryChallan`,
@@ -2584,10 +2682,17 @@ export const productsApi = createApi({
                 body: val.data
             }),
         }),
-        
+
         addpurchaseVcart: builder.mutation({
             query: (data) => ({
                 url: `servicePurchaseProduct/addCart`,
+                method: 'POST',
+                body: data
+            }),
+        }),
+        addchallanVcart: builder.mutation({
+            query: (data) => ({
+                url: `serviceProductStock/addToCart`,
                 method: 'POST',
                 body: data
             }),
@@ -2599,9 +2704,149 @@ export const productsApi = createApi({
                 body: data
             }),
         }),
-        
+        getCounter: builder.query({
+            query: (token) => ({
+                url: 'country/admin',
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                },
+            })
+        }),
+        getCountry: builder.query({
+            query: (token) => ({
+                url: 'country/admin',
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+        }),
+        postCountry: builder.mutation({
+            query: (val) => ({
+                url: `country/add_Country`,
+                method: 'POST',
+                body: val.data,
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + val.token
+                },
+            }),
+        }),
+        deleteCountry: builder.mutation({
+            query: (val) => ({
+                url: `country/delete_country/${val.id}`,
+                method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + val.token
+                },
+            }),
+        }),
+        editCountry: builder.mutation({
+            query: (val) => ({
+                url: `country/update_country/${val.id}`,
+                method: 'PUT',
+                body: val.data,
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + val.token
+                },
+            }),
+        }),
+
+        getUnit: builder.query({
+            query: (token) => ({
+                url: 'unitMaster/admin',
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                },
+            })
+        }),
+        postUnit: builder.mutation({
+            query: (val) => ({
+                url: `unitMaster/add_unit`,
+                method: 'POST',
+                body: val.data,
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + val.token
+                },
+            }),
+        }),
+        deleteUnit: builder.mutation({
+            query: (val) => ({
+                url: `unitmaster/${val.id}`,
+                method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + val.token
+                },
+            }),
+        }),
+
+        postTimeSlote: builder.mutation({
+            query: (val) => ({
+                url: `timeslot/add_Timeslot`,
+                method: 'POST',
+                body: val.data,
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + val.token
+                },
+            }),
+            providesTags: ['timeSlote']
+        }),
+        getTimeSlote: builder.query({
+            query: (token) => ({
+                url: 'timeslot',
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                },
+            }),
+            providesTags: ['timeSlote']
+        }),
+        deletetimeSlote: builder.mutation({
+            query: (val) => ({
+                url: `timeslot/delete_timeslot/${val.id}`,
+                method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + val.token
+                },
+            }),
+            invalidatesTags: ['timeSlote']
+        }),
+
+        getArea: builder.query({
+            query: (token) => ({
+                url: 'area/public',
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                },
+            }),
+        }),
+        getChallanList: builder.query({
+            query: (token) => ({
+                url: 'serviceDeliveryChalan',
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                }
+            }),
+        }),
+
     })
-    
+
 })
 
-export const {usePostpurchaseVcartMutation,useAddpurchaseVcartMutation,useAddDeleveryChallanMutation,useAddQuatationVMutation, useDeleteRowPurchaseMutation, useDeleteCartRowMutation, useUpdatePopupsMutation, usePostPopupMutation, useCustomerActiveMutation, useBrandActiveMutation, useCatagaryActiveMutation, useProductActiveMutation, useSellerActiveMutation, useGetReqListQuery, useUpdateBrandReqMutation, useUpdateDeleveryMutation, useDeleteDeleveryMutation, useDeletePaymentMutation, useAddDeleveryMutation, useAddTransactionMutation, useAddComboProductsMutation, useUpdateListProductsMutation, useAddPurchaseListMutation, useGetPurchaseListsQuery, useAddPurchaseCartMutation, useGetProductSearchQuery, useAddSellerProductNewMutation, useUpdateSellerMutation, useDeleteSellerProductMutation, useOwnSellerProductQuery, useGetUnitMasterQuery, useSellerLoginMutation, useGetPickupOrderDataMutation, useGetstaffDetailQuery, useLoginStaffsMutation, useGetOrdersByPickupsQuery, useForm_variatioMutation, useGetOrderByStatusQuery, useGetAllStatusOrdersQuery, useGetAllProductsQuery, useGetCategoriesQuery, useGetBrandsQuery, useGetSizesQuery, useAddNewSizeMutation, useAddNewBrandMutation, useAddNewCategoryMutation, useAddNewProductMutation, useGetBannerQuery, useDeleteProductMutation, useDeleteSizeMutation, useDeleteBrandMutation, useDeleteCategoryMutation, useGetPlaceByIdQuery, useGetPickupPointQuery, useGetCustomersQuery, useGetSellersQuery, useGetTicketListsQuery, useGetLanguagesQuery, useAddPickUpPointMutation, useGetPagesQuery, useDeleteCustomerMutation, useGetCurrencyQuery, useGetOrdersQuery, useAddNewCurrencyMutation, useGetCouponsQuery, useDeleteCurrencyMutation, useDeleteLanguageMutation, useDeleteSupportTicketMutation, useDeleteCouponMutation, useAddNewLanguageMutation, useAddNewCouponMutation, useEditCurrencyMutation, useGetCurrencyByIdQuery, useGetCouponByIdQuery, useEditCouponMutation, useGetSellerProductQuery, useAddPaymentGetMutation, useGetOrderDetailQuery, useAddOrderConfigsMutation, useAddPagesMutation, useDeletePageListMutation, useEditPageListMutation, useGetLanguageByIdQuery, useEditLanguageMutation, useGetBrandByIdQuery, useEditBrandMutation, useGetBlogsQuery, useDeleteBlogsMutation, useDeleteAttributesMutation, useEditSupportTicketMutation, useGetSupportTicketByIdQuery, useGetAttributesQuery, useAddNewBlogsMutation, useGetBlogPostByIdQuery, useEditAllBlogsPostMutation, useGetCustomerByIdQuery, useEditCustomerMutation, useAddNewAttributeMutation, useGetAttributeByIdQuery, useEditAttributeMutation, useAddGeneralSettingMutation, useDeleteSellerBannerMutation, useGetBlogsCategoryQuery, useDeleteBlogCategoryMutation, useAddBlogCategoryMutation, useGetBlogCategoryByIdQuery, useEditBlogCategoryMutation, useDeleteOrderMutation, useGetSellerBannerByIdQuery, useEditSellerBannerMutation, useAddOrderConfigurationMutation, useGetCustomerShippingAdressByIdQuery, useGetColorsQuery, useDeleteColorMutation, useAddColorMutation, useGetColorByIdQuery, useEditColorMutation, useGetFlashDealsQuery, useDeleteFlashDealMutation, useAddFlasDealMutation, useGetFlashDealByIdQuery, useEditFlashDealMutation, useGetProductByIdQuery, useEditProductMutation, useDeleteSellerListMutation, useAddSellerListMutation, useEditSellerListMutation, useGetSellerDetailQuery, useGetSmsTemplateQuery, useAddSmsListMutation, useEditSmsListMutation, useSmsDeleteMutation, useDeletePickupPointMutation, useGetPickupPointByIdQuery, useEditPickupPointMutation, useAddStaffMutation, useGetAllStaffsQuery, useDeleteStaffMutation, useGetRolesQuery, useDeleteRoleMutation, useGetStaffByIdQuery, useEditStaffDataMutation, useAddRoleMutation, useGetRoleByIdQuery, useEditRoleDataMutation, useAddFileSystemMutation, useAddShareRewardMutation, useAddLikeRewardMutation, useAddBulkImportFileMutation, useGetOrderStartByIdQuery, useAddOrderStatusMutation, useGetClubPointUserPointQuery, useAddSetProductPointWithinRangeMutation, useAddPointForAllProductsMutation, useGetClubSetAllPointsTableDataQuery, useAddNewSellerPackageMutation, useGetPointToWalletDataQuery, useEditPointToWalletMutation, useEditAllPointsTableMutation, useGetSellerPackageQuery, useDeleteSellerPackageMutation, useGetSellerPackageByIdQuery, useEditSellerPackageMutation, useGetAllPointsTableByIdQuery, useDeleteSetAllPointsMutation, useDeleteUserPointsMutation, useGetUserPointsByIdQuery, useEditUserPointMutation, useGetListPurchaseQuery, useAddSellerProductMutation, useGetBasicAffiliateQuery, useUpdateLinkValidationTimeMutation, useUpdateAffiliateBasicMutation, useUpdateProductsSharingAffiliateMutation, useUpdateCategoryWiseAffilliateMutation, useGetAffiliateLogsQuery, useGetAffiliateWithdrawRequestQuery, useGetAffiliateUsersQuery, useUpdateAffilliateUserVerificationMutation, useGetAffilliateUserVerificationByIdQuery, useGetRefferalUsersQuery, usePostQuotationMutation, useGetOtpConfigurationListQuery, useUpdateOTPConfigurationMutation, useAddWholeSaleMutation, useGetOTPCredentialListsQuery, useUpdateOtpCredentialMutation, useGetPayFastCredentialQuery, useUpdatePayFastCredentialMutation, useGetFlutterCredentialQuery, useUpdateFlutterCredentialMutation, useGetTingoCredentialQuery, useUpdateTingoCredentialMutation, useGetFlutterActivationQuery, useUpdateFlutterActivationMutation, useGetPayFastActivationQuery, useUpdatePayFastActivationMutation, useGetTingoActivationQuery, useUpdateTingoActivationMutation, useGetRazorPayActivationQuery, useUpdateRazorPayActivationMutation, useGetPayuMoneyActivationQuery, useUpdatePayumoneyActivationMutation, useGetPayTmActivationQuery, useUpdatePayTmActivationMutation, useGetRazorPayCredentialQuery, useUpdateRazorPayCredentialMutation, useGetPayuMoneyCredentialQuery, useUpdatePayuMoneyCredentialMutation, useGetPayTmCredentialQuery, useUpdatePayTmCredentialMutation, useGetDeliveryBoyStatusQuery, useUpdateDeliveryBoyStatusMutation, useGetDeliveryboyPaymentConfigurationQuery, useUpdateDeliveryboyPaymentConfigurationMutation, useGetPickupLocationForDeliveryQuery, useGetNotificationConfigurationForDeliveryQuery, useUpdateNotificationConfigurationForDeliveryMutation, useGetSettingSiteConfigurationQuery, useUpdateSettingSiteConfigurationMutation, useGetSettingSalesDataQuery, useUpdateSettingSalesMutation, useGetSettingProductsQuery, useUpdateSettingProductsMutation, useGetSettingMoneyAndNumberFormatQuery, useUpdateMoneyFormatMutation, useGetSystemSettingPrefixQuery, useUpdateSystemSettingPrefixMutation, useGetSettingWeighingScaleQuery, useUpdateSettingWeighingScaleMutation, useGetSettingEmailQuery, useUpdateSettingEmailMutation, useGetSettingAwardPointQuery, useUpdateAwardPointMutation, useGetFacebookCredentailQuery, useUpdateFacebookCredentailMutation, useGetTwitterCredentailQuery, useUpdateTwitterCredentailMutation, useGetLinkedInCredentailQuery, useUpdateLinkedInCredentailMutation, useGetInstagramCredentailQuery, useUpdateInstagramCredentailMutation, useGetGoogleCredentailQuery, useUpdateGoogleCredentailMutation, useGetPOSCategoryQuery, useGetPOSBrandsQuery, useGetPOSCategoryByIdQuery, useGetPOSBrandByIdQuery, useGetPOSSubCategoryIdQuery, useAddPOSCustomerMutation, useGetPOSCustomerGroupQuery, useGetPOSUserDetailIdQuery, useGetWholsaleProductsByIdQuery, useGetCustomerRoleQuery, useGetTimeFormatQuery, useAddDCustomerMutation, useGetCustomerSelectedShippingAddressByIdQuery, useGetCustomerSelectedBillingAddressByIdQuery, useGetComboProductsByIdQuery, useAddPosPaymentMutation, useGetTicketBuildingDQuery, useGetTicketBlockDQuery, useGetTicketFloorDQuery, useGetTicketWardDQuery, useGetTicketOfficeRoomDQuery, useGetTicketareaDQuery, useAddSupportTicketDMutation, useGetTicketCompaintTypeDQuery, useGetTicketCompaintNatureDQuery, useGetTicketAssignToDQuery, useGetTicketListingDQuery, useGetTicketListingFilledDQuery, useGetTicketRoleDQuery, useGetModalAssignToDataQuery, useGetTicketMessageDataQuery, useGetTicketDataByIdQuery, useGetTicketStatusQuery, useUpdateTicketDaataMutation, useUpdateSupportTicketDetailMutation, useGetTComplaintTypeQuery, useDeleteComplaintTypeMutation, useAddComplaintTypeMutation, useGetTComplaintNatureQuery, useDeleteComplaintNatureMutation, useAddComplaintNatureMutation, useGetTComplaintTypeByIdQuery, useGetTComplaintNatureByIdQuery } = productsApi
+export const { useGetCounterQuery,useGetChallanListQuery,useGetCountryQuery, useGetAreaQuery, useDeletetimeSloteMutation, useGetTimeSloteQuery, usePostTimeSloteMutation, useDeleteUnitMutation, usePostUnitMutation, useGetUnitQuery, useEditCountryMutation, useDeleteCountryMutation, usePostCountryMutation, useAddchallanVcartMutation, usePostpurchaseVcartMutation, useAddpurchaseVcartMutation, useAddDeleveryChallanMutation, useAddQuatationVMutation, useDeleteRowPurchaseMutation, useDeleteCartRowMutation, useUpdatePopupsMutation, usePostPopupMutation, useCustomerActiveMutation, useBrandActiveMutation, useCatagaryActiveMutation, useProductActiveMutation, useSellerActiveMutation, useGetReqListQuery, useUpdateBrandReqMutation, useUpdateDeleveryMutation, useDeleteDeleveryMutation, useDeletePaymentMutation, useAddDeleveryMutation, useAddTransactionMutation, useAddComboProductsMutation, useUpdateListProductsMutation, useAddPurchaseListMutation, useGetPurchaseListsQuery, useAddPurchaseCartMutation, useGetProductSearchQuery, useAddSellerProductNewMutation, useUpdateSellerMutation, useDeleteSellerProductMutation, useOwnSellerProductQuery, useGetUnitMasterQuery, useSellerLoginMutation, useGetPickupOrderDataMutation, useGetstaffDetailQuery, useLoginStaffsMutation, useGetOrdersByPickupsQuery, useForm_variatioMutation, useGetOrderByStatusQuery, useGetAllStatusOrdersQuery, useGetAllProductsQuery, useGetCategoriesQuery, useGetBrandsQuery, useGetSizesQuery, useAddNewSizeMutation, useAddNewBrandMutation, useAddNewCategoryMutation, useAddNewProductMutation, useGetBannerQuery, useDeleteProductMutation, useDeleteSizeMutation, useDeleteBrandMutation, useDeleteCategoryMutation, useGetPlaceByIdQuery, useGetPickupPointQuery, useGetCustomersQuery, useGetSellersQuery, useGetTicketListsQuery, useGetLanguagesQuery, useAddPickUpPointMutation, useGetPagesQuery, useDeleteCustomerMutation, useGetCurrencyQuery, useGetOrdersQuery, useAddNewCurrencyMutation, useGetCouponsQuery, useDeleteCurrencyMutation, useDeleteLanguageMutation, useDeleteSupportTicketMutation, useDeleteCouponMutation, useAddNewLanguageMutation, useAddNewCouponMutation, useEditCurrencyMutation, useGetCurrencyByIdQuery, useGetCouponByIdQuery, useEditCouponMutation, useGetSellerProductQuery, useAddPaymentGetMutation, useGetOrderDetailQuery, useAddOrderConfigsMutation, useAddPagesMutation, useDeletePageListMutation, useEditPageListMutation, useGetLanguageByIdQuery, useEditLanguageMutation, useGetBrandByIdQuery, useEditBrandMutation, useGetBlogsQuery, useDeleteBlogsMutation, useDeleteAttributesMutation, useEditSupportTicketMutation, useGetSupportTicketByIdQuery, useGetAttributesQuery, useAddNewBlogsMutation, useGetBlogPostByIdQuery, useEditAllBlogsPostMutation, useGetCustomerByIdQuery, useEditCustomerMutation, useAddNewAttributeMutation, useGetAttributeByIdQuery, useEditAttributeMutation, useAddGeneralSettingMutation, useDeleteSellerBannerMutation, useGetBlogsCategoryQuery, useDeleteBlogCategoryMutation, useAddBlogCategoryMutation, useGetBlogCategoryByIdQuery, useEditBlogCategoryMutation, useDeleteOrderMutation, useGetSellerBannerByIdQuery, useEditSellerBannerMutation, useAddOrderConfigurationMutation, useGetCustomerShippingAdressByIdQuery, useGetColorsQuery, useDeleteColorMutation, useAddColorMutation, useGetColorByIdQuery, useEditColorMutation, useGetFlashDealsQuery, useDeleteFlashDealMutation, useAddFlasDealMutation, useGetFlashDealByIdQuery, useEditFlashDealMutation, useGetProductByIdQuery, useEditProductMutation, useDeleteSellerListMutation, useAddSellerListMutation, useEditSellerListMutation, useGetSellerDetailQuery, useGetSmsTemplateQuery, useAddSmsListMutation, useEditSmsListMutation, useSmsDeleteMutation, useDeletePickupPointMutation, useGetPickupPointByIdQuery, useEditPickupPointMutation, useAddStaffMutation, useGetAllStaffsQuery, useDeleteStaffMutation, useGetRolesQuery, useDeleteRoleMutation, useGetStaffByIdQuery, useEditStaffDataMutation, useAddRoleMutation, useGetRoleByIdQuery, useEditRoleDataMutation, useAddFileSystemMutation, useAddShareRewardMutation, useAddLikeRewardMutation, useAddBulkImportFileMutation, useGetOrderStartByIdQuery, useAddOrderStatusMutation, useGetClubPointUserPointQuery, useAddSetProductPointWithinRangeMutation, useAddPointForAllProductsMutation, useGetClubSetAllPointsTableDataQuery, useAddNewSellerPackageMutation, useGetPointToWalletDataQuery, useEditPointToWalletMutation, useEditAllPointsTableMutation, useGetSellerPackageQuery, useDeleteSellerPackageMutation, useGetSellerPackageByIdQuery, useEditSellerPackageMutation, useGetAllPointsTableByIdQuery, useDeleteSetAllPointsMutation, useDeleteUserPointsMutation, useGetUserPointsByIdQuery, useEditUserPointMutation, useGetListPurchaseQuery, useAddSellerProductMutation, useGetBasicAffiliateQuery, useUpdateLinkValidationTimeMutation, useUpdateAffiliateBasicMutation, useUpdateProductsSharingAffiliateMutation, useUpdateCategoryWiseAffilliateMutation, useGetAffiliateLogsQuery, useGetAffiliateWithdrawRequestQuery, useGetAffiliateUsersQuery, useUpdateAffilliateUserVerificationMutation, useGetAffilliateUserVerificationByIdQuery, useGetRefferalUsersQuery, usePostQuotationMutation, useGetOtpConfigurationListQuery, useUpdateOTPConfigurationMutation, useAddWholeSaleMutation, useGetOTPCredentialListsQuery, useUpdateOtpCredentialMutation, useGetPayFastCredentialQuery, useUpdatePayFastCredentialMutation, useGetFlutterCredentialQuery, useUpdateFlutterCredentialMutation, useGetTingoCredentialQuery, useUpdateTingoCredentialMutation, useGetFlutterActivationQuery, useUpdateFlutterActivationMutation, useGetPayFastActivationQuery, useUpdatePayFastActivationMutation, useGetTingoActivationQuery, useUpdateTingoActivationMutation, useGetRazorPayActivationQuery, useUpdateRazorPayActivationMutation, useGetPayuMoneyActivationQuery, useUpdatePayumoneyActivationMutation, useGetPayTmActivationQuery, useUpdatePayTmActivationMutation, useGetRazorPayCredentialQuery, useUpdateRazorPayCredentialMutation, useGetPayuMoneyCredentialQuery, useUpdatePayuMoneyCredentialMutation, useGetPayTmCredentialQuery, useUpdatePayTmCredentialMutation, useGetDeliveryBoyStatusQuery, useUpdateDeliveryBoyStatusMutation, useGetDeliveryboyPaymentConfigurationQuery, useUpdateDeliveryboyPaymentConfigurationMutation, useGetPickupLocationForDeliveryQuery, useGetNotificationConfigurationForDeliveryQuery, useUpdateNotificationConfigurationForDeliveryMutation, useGetSettingSiteConfigurationQuery, useUpdateSettingSiteConfigurationMutation, useGetSettingSalesDataQuery, useUpdateSettingSalesMutation, useGetSettingProductsQuery, useUpdateSettingProductsMutation, useGetSettingMoneyAndNumberFormatQuery, useUpdateMoneyFormatMutation, useGetSystemSettingPrefixQuery, useUpdateSystemSettingPrefixMutation, useGetSettingWeighingScaleQuery, useUpdateSettingWeighingScaleMutation, useGetSettingEmailQuery, useUpdateSettingEmailMutation, useGetSettingAwardPointQuery, useUpdateAwardPointMutation, useGetFacebookCredentailQuery, useUpdateFacebookCredentailMutation, useGetTwitterCredentailQuery, useUpdateTwitterCredentailMutation, useGetLinkedInCredentailQuery, useUpdateLinkedInCredentailMutation, useGetInstagramCredentailQuery, useUpdateInstagramCredentailMutation, useGetGoogleCredentailQuery, useUpdateGoogleCredentailMutation, useGetPOSCategoryQuery, useGetPOSBrandsQuery, useGetPOSCategoryByIdQuery, useGetPOSBrandByIdQuery, useGetPOSSubCategoryIdQuery, useAddPOSCustomerMutation, useGetPOSCustomerGroupQuery, useGetPOSUserDetailIdQuery, useGetWholsaleProductsByIdQuery, useGetCustomerRoleQuery, useGetTimeFormatQuery, useAddDCustomerMutation, useGetCustomerSelectedShippingAddressByIdQuery, useGetCustomerSelectedBillingAddressByIdQuery, useGetComboProductsByIdQuery, useAddPosPaymentMutation, useGetTicketBuildingDQuery, useGetTicketBlockDQuery, useGetTicketFloorDQuery, useGetTicketWardDQuery, useGetTicketOfficeRoomDQuery, useGetTicketareaDQuery, useAddSupportTicketDMutation, useGetTicketCompaintTypeDQuery, useGetTicketCompaintNatureDQuery, useGetTicketAssignToDQuery, useGetTicketListingDQuery, useGetTicketListingFilledDQuery, useGetTicketRoleDQuery, useGetModalAssignToDataQuery, useGetTicketMessageDataQuery, useGetTicketDataByIdQuery, useGetTicketStatusQuery, useUpdateTicketDaataMutation, useUpdateSupportTicketDetailMutation, useGetTComplaintTypeQuery, useDeleteComplaintTypeMutation, useAddComplaintTypeMutation, useGetTComplaintNatureQuery, useDeleteComplaintNatureMutation, useAddComplaintNatureMutation, useGetTComplaintTypeByIdQuery, useGetTComplaintNatureByIdQuery } = productsApi
