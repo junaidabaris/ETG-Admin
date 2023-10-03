@@ -147,12 +147,10 @@ function CategoriesAdmin() {
                         </td>
 
                         <td style={{ display: 'table-cell' }}>
-                          <img src="https://mmslfashions.in/public/uploads/all/0fszFBvsXqbAUVAsKTXrOAVHBnuvUvHsVeWjuqji.png" alt="Banner" className="h-50px" />
+                          <img src={item?.banner?.url} alt="Banner" className="h-60px" />
                         </td>
                         <td style={{ display: 'table-cell' }}>
-                          <span className="avatar avatar-square avatar-xs">
-                            <img src="https://mmslfashions.in/public/uploads/all/qWtVvdVrkexRR41VVaNV6W7yzjMGUVrD3HqfnYNA.png" alt="Icon" />
-                          </span>
+                        <img src={item?.icon?.url} alt="Icon"  className="h-60px" />
                         </td>
                         <td style={{ display: 'table-cell' }}>
                           <label className="aiz-switch aiz-switch-success mb-0">

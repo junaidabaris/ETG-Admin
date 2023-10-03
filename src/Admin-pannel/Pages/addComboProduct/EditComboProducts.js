@@ -6,6 +6,7 @@ import { AiFillDelete } from "react-icons/ai";
 import ModalCombo from "./ModalCombo";
 import { useParams } from "react-router";
 import axios from "axios";
+import { token } from "../../common/TokenArea";
 
 function EditComboProducts() {
 
@@ -15,7 +16,8 @@ function EditComboProducts() {
     const [searchs, setSearch] = useState('')
     const [cartData, setcartData] = useState(null)
 
-    const { data: searchPro } = useGetProductSearchQuery(searchs)
+    const { data: searchPro } = useGetProductSearchQuery({ token: token, paylode: searchs })
+
     const [showCombo, setShowCombo] = useState([])
     const [comboRate, setComboRate] = useState(0);
 

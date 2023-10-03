@@ -33,7 +33,7 @@ function AddDeliveryChalanReport() {
     const [idpick, setItPick] = useState()
     const { data: pickupPoints } = useGetPickupPointQuery();
     const { data: customers } = useGetCustomersQuery(token);
-    const { data: searchPro } = useGetProductSearchQuery(searchs)
+    const { data: searchPro } = useGetProductSearchQuery({ token: token, paylode: searchs })
     const [showCombo, setShowCombo] = useState([])
 
     const [addDeleveryChallan, { isError, isSuccess, isLoading: addCOmbLoad }] = useAddDeleveryChallanMutation()

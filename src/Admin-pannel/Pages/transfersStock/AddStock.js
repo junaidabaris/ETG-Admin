@@ -5,11 +5,13 @@ import GenerateTr from "../../Components/addPurchaseList/GenerateTr"
 import { AiFillDelete } from "react-icons/ai"
 import axios from "axios"
 import GenerateStock from "./GenerateStock"
+import { token } from "../../common/TokenArea"
 
 function AddStock() {
     const [show, setShow] = useState(false)
     const [searchs, setSearch] = useState('')
-    const { data: searchPro } = useGetProductSearchQuery(searchs)
+    const { data: searchPro } = useGetProductSearchQuery({ token: token, paylode: searchs })
+
     const { data: pickUp } = useGetPickupPointQuery();
     const { data: sellerD } = useGetSellersQuery()
 

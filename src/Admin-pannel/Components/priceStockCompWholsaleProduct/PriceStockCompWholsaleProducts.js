@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
 function PriceStocCompkWholsaleProducts({ item, setMainVal, main, data }) {
+    console.log(main);
+    console.log(data);
     const [row, setRow] = useState([])
     const [state, setState] = useState({
         unit_price: item?.unit_price,
@@ -73,15 +75,17 @@ function PriceStocCompkWholsaleProducts({ item, setMainVal, main, data }) {
         const clone = { ...main }
         const obj = {
             product_id: data[0]?.productId,
-            variant_id: item._id,
+            variant_id: item.uid,
             ...state,
             wholesale: row
         }
         const arr = clone.products
         arr.push(obj)
         clone.products = arr
-        console.log(obj);
         setMainVal(clone)
+        console.log(clone);
+        console.log(data);
+        console.log(state);
     }
 
 

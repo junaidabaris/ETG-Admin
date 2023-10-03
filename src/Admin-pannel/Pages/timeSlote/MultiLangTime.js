@@ -3,7 +3,7 @@ import { useGetAreaQuery } from "../../Components/all-products/allproductsApi/al
 import { token } from "../../common/TokenArea"
 
 function MultiLangTime({ data, item, i, addNewAttributeData, onChangeHandler, setValue }) {
-    const { data: val } = useGetAreaQuery(token)
+    // const { data: val } = useGetAreaQuery(token)
 
     return <div className="card">
         <div className="card-header">
@@ -19,7 +19,7 @@ function MultiLangTime({ data, item, i, addNewAttributeData, onChangeHandler, se
                     <label htmlFor="name">Time</label>
                     <input type="time" placeholder="time" id="time" name="time" value={item.itme} className="form-control" required fdprocessedid="8s3s9v" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
                 </div>
-                <div className="form-group mb-3">
+                {/* <div className="form-group mb-3">
                     <label htmlFor="name">Area</label>
 
                     <select className="form-select" aria-label="Default select example" name="area_id" value={item.area_id} onChange={(e) => { onChangeHandler(e, item.language_id) }} >
@@ -29,7 +29,7 @@ function MultiLangTime({ data, item, i, addNewAttributeData, onChangeHandler, se
                         })}
 
                     </select>
-                </div>
+                </div> */}
                 <div className="form-group mb-3">
                     <label htmlFor="name">Approve</label>
                     <div className="form-check">

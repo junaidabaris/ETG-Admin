@@ -91,7 +91,13 @@ function AsideAdmin() {
   const [crm, setCrm] = useState(false);
   const [saless, setSaless] = useState(false);
   const [finince, setFinance] = useState(false);
+  const [jwell, setJwell] = useState(false);
+  const [genral, setgenral] = useState(false);
+  const [dimand, setdimand] = useState(false);
+  const [metal, setMetal] = useState(false);
+  const [alltasks, setAllTasks] = useState(false)
   const idShow = window.localStorage.getItem('adminId')
+  const adminIslogin = window.localStorage.getItem('adminIslogin')
   if (isDelevery === 'true') {
     return <div className="aiz-sidebar left c-scrollbar c-scrollbar-2" style={{ backgroundColor: "#e1e1db" }}>
       <div className="aiz-side-nav-logo-wrap">
@@ -1063,7 +1069,149 @@ function AsideAdmin() {
                 </div>
               </li>
 
+              {idShow == '642177b99fd9c29aab59d245' && <>
+                <li className="aiz-side-nav-item" >
+                  <Link to="#" className="aiz-side-nav-link" onClick={() => { setJwell(!jwell) }}>
+                    <i className="las la-backward aiz-side-nav-icon" />
+                    <span className="aiz-side-nav-text">Jewellery</span>
+                    <span className="aiz-side-nav-arrow" />
+                  </Link>
+                  <ul className={`aiz-side-nav-list level-2 mm-collapse ${jwell ? "mm-show" : "extra"}`} id="product">
 
+                    <li className="aiz-side-nav-item">
+                      <Link to="#" className="aiz-side-nav-link " onClick={() => { setdimand(!dimand) }}>
+                        <span className="aiz-side-nav-text">Diamond Masters</span>
+                        <span className="aiz-side-nav-arrow" />
+                      </Link>
+                      <ul style={{ marginLeft: "15px" }} className={`aiz-side-nav-list level-2 mm-collapse ${dimand ? "mm-show" : "extra"}`} id="product">
+                        <li className="aiz-side-nav-item">
+                          <Link to="add-diamond-color" className="aiz-side-nav-link ">
+                            <span className="aiz-side-nav-text">Add Diamond Color</span>
+                          </Link>
+                        </li>
+                        <li className="aiz-side-nav-item">
+                          <Link to="add-diamond-clarity" className="aiz-side-nav-link">
+                            <span className="aiz-side-nav-text">Add Diamond Clarity</span>
+                          </Link>
+                        </li>
+                        <li className="aiz-side-nav-item">
+                          <Link to="list-diamond-clarity" className="aiz-side-nav-link">
+                            <span className="aiz-side-nav-text">List Diamond Clarity</span>
+                          </Link>
+                        </li>
+                        <li className="aiz-side-nav-item">
+                          <Link to="add-diamond-Quality" className="aiz-side-nav-link">
+                            <span className="aiz-side-nav-text">Add Diamond Quality</span>
+                          </Link>
+                        </li>
+                        <li className="aiz-side-nav-item">
+                          <Link to="list-diamond-Quality" className="aiz-side-nav-link">
+                            <span className="aiz-side-nav-text">List Diamond Quality</span>
+                          </Link>
+                        </li>
+                        <li className="aiz-side-nav-item">
+                          <Link to="add-diamond-shape" className="aiz-side-nav-link">
+                            <span className="aiz-side-nav-text">Add Diamond Shape</span>
+                          </Link>
+                        </li>
+                        <li className="aiz-side-nav-item">
+                          <Link to="list-diamond-shape" className="aiz-side-nav-link">
+                            <span className="aiz-side-nav-text">List Diamond Shape</span>
+                          </Link>
+                        </li>
+                        <li className="aiz-side-nav-item">
+                          <Link to="add-diamond-sieves" className="aiz-side-nav-link">
+                            <span className="aiz-side-nav-text">Add Diamond Sieves</span>
+                          </Link>
+                        </li>
+                        <li className="aiz-side-nav-item">
+                          <Link to="list-diamond-sieves" className="aiz-side-nav-link">
+                            <span className="aiz-side-nav-text">List Diamond Sieves</span>
+                          </Link>
+                        </li>
+                      </ul>
+                    </li>
+
+                    <li className="aiz-side-nav-item">
+                      <Link to="#" className="aiz-side-nav-link " onClick={() => { setgenral(!genral) }}>
+                        <span className="aiz-side-nav-text">General Masters</span>
+                        <span className="aiz-side-nav-arrow" />
+                      </Link>
+                      <ul style={{ marginLeft: "15px" }} className={`aiz-side-nav-list level-2 mm-collapse ${genral ? "mm-show" : "extra"}`} id="product">
+                        <li className="aiz-side-nav-item">
+                          <Link to="color-stone" className="aiz-side-nav-link ">
+                            <span className="aiz-side-nav-text">Color Stone</span>
+                          </Link>
+                        </li>
+                        <li className="aiz-side-nav-item">
+                          <Link to="labour-charge-type" className="aiz-side-nav-link ">
+                            <span className="labour-charge-type">Labour Charge Type</span>
+                          </Link>
+                        </li>
+                        <li className="aiz-side-nav-item">
+                          <Link to="labour-charge" className="aiz-side-nav-link ">
+                            <span className="labour-charge">Labour Charge</span>
+                          </Link>
+                        </li>
+                        <li className="aiz-side-nav-item">
+                          <Link to="price" className="aiz-side-nav-link ">
+                            <span className="labour-charge">Price</span>
+                          </Link>
+                        </li>
+                        <li className="aiz-side-nav-item">
+                          <Link to="shop-for-modules" className="aiz-side-nav-link ">
+                            <span className="labour-charge">Shop For Module</span>
+                          </Link>
+                        </li>
+                        <li className="aiz-side-nav-item">
+                          <Link to="occasion" className="aiz-side-nav-link ">
+                            <span className="labour-charge">Occasion</span>
+                          </Link>
+                        </li>
+                        <li className="aiz-side-nav-item">
+                          <Link to="ring-size" className="aiz-side-nav-link ">
+                            <span className="labour-charge">Ring Size</span>
+                          </Link>
+                        </li>
+                        <li className="aiz-side-nav-item">
+                          <Link to="jwellery/categoryType" className="aiz-side-nav-link">
+                            <span className="labour-charge">Category Type</span>
+                          </Link>
+                        </li>
+                        <li className="aiz-side-nav-item">
+                          <Link to="add-category-sequence" className="aiz-side-nav-link">
+                            <span className="labour-charge">Add Category Sequence</span>
+                          </Link>
+                        </li>
+                      </ul>
+                    </li>
+                    <li className="aiz-side-nav-item">
+                      <Link to="#" className="aiz-side-nav-link " onClick={() => { setMetal(!metal) }}>
+                        <span className="aiz-side-nav-text">Metel Masters</span>
+                        <span className="aiz-side-nav-arrow" />
+                      </Link>
+                      <ul style={{ marginLeft: "15px" }} className={`aiz-side-nav-list level-2 mm-collapse ${metal ? "mm-show" : "extra"}`} id="product">
+                        <li className="aiz-side-nav-item">
+                          <li className="aiz-side-nav-item">
+                            <Link to="metal-type" className="aiz-side-nav-link ">
+                              <span className="aiz-side-nav-text">Metal Type</span>
+                            </Link>
+                          </li>
+                          <Link to="metal-purity" className="aiz-side-nav-link ">
+                            <span className="aiz-side-nav-text">Metal Purity</span>
+                          </Link>
+                        </li>
+                        <li className="aiz-side-nav-item">
+                          <Link to="metal-weight" className="aiz-side-nav-link ">
+                            <span className="aiz-side-nav-text">MetalWeight</span>
+                          </Link>
+                        </li>
+                      </ul>
+                    </li>
+
+                  </ul>
+                </li>
+              </>}
 
 
 
@@ -3481,6 +3629,55 @@ function AsideAdmin() {
 
                 </ul>
               </li>
+              <li className="aiz-side-nav-item">
+                <Link
+                  className="aiz-side-nav-link"
+                  to="#"
+                  onClick={() => {
+                    setAllTasks(!alltasks);
+                  }}
+                >
+                  <span className="aiz-side-nav-text">Field Service</span>
+                </Link>
+                <ul
+                  className={`aiz-side-nav-list level-2 mm-collapse ${alltasks ? "mm-show" : "extra"
+                    }`}
+                >
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="all-tasks">
+                      <span className="aiz-side-nav-text">All Tasks</span>
+                    </Link>
+                  </li>{" "}
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="to-schedule">
+                      <span className="aiz-side-nav-text">To Schedule</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="to-invoice">
+                      <span className="aiz-side-nav-text">To Invoice</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="my-tasks">
+                      <span className="aiz-side-nav-text">My Tasks</span>
+                    </Link>
+                  </li>{" "}
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="by-user">
+                      <span className="aiz-side-nav-text">By User</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link" to="tasks-analysis">
+                      <span className="aiz-side-nav-text">Tasks Analysis</span>
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+
+
+
 
               <li className="aiz-side-nav-item">
                 <Link

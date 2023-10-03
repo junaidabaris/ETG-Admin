@@ -7,6 +7,7 @@ import { AiFillDelete } from "react-icons/ai";
 import axios from "axios";
 import ModalCombo from "../../Pages/addComboProduct/ModalCombo";
 import { ToastContainer, toast } from "react-toastify";
+import { token } from "../../common/TokenArea";
 
 function AddVtechQuotation() {
 
@@ -38,7 +39,7 @@ function AddVtechQuotation() {
 
     const { data: pickupPoints } = useGetPickupPointQuery();
     const { data: customers } = useGetCustomersQuery();
-    const { data: searchPro } = useGetProductSearchQuery(searchs)
+    const { data: searchPro } = useGetProductSearchQuery({ token: token, paylode: searchs })
     const [showCombo, setShowCombo] = useState([])
     const [comboRate, setComboRate] = useState(0)
 

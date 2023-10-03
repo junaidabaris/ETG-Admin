@@ -20,6 +20,8 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { token } from "../../common/TokenArea";
 
+import { Checkbox, ConfigProvider, Radio } from 'antd';
+
 const toastSuccessMessage = () => {
     toast.success("Product added Successfully", {
         position: "top-center"
@@ -33,55 +35,6 @@ const toastErrorMessage = () => {
 };
 
 
-const addFile = async (clonedObj, setspcOr) => {
-    // setspcOr(true)
-
-
-    const url = 'https://onlineparttimejobs.in/api/product/add_product'
-    const images = new FormData();
-    let cloned = [...clonedObj]
-    let varclone = []
-
-    for (let ind = 0; ind < cloned?.length; ind++) {
-        let element = cloned[ind].variations;
-        for (let k = 0; k < element.length; k++) {
-            let varImgs = []
-            let element2 = element[k];
-            for (let indi = 0; indi < element2.images?.length; indi++) {
-                images.delete('image');
-                const element3 = element2?.images[indi];
-                images.append('image', element3);
-                const res = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
-                const obj = { public_id: res.data.public_id, url: res.data.url }
-                varImgs.push(obj)
-            }
-
-            images.delete('image');
-            images.append('image', element2.mainImage_url);
-            const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
-            varclone.push({ ...element2, images: varImgs, mainImage_url: { public_id: res2.data.public_id, url: res2.data.url } })
-            varImgs = []
-        }
-
-
-        cloned[ind].variations = varclone
-        varclone = []
-    }
-
-    try {
-        const res = await axios.post(url, { list: cloned }, {
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        toastSuccessMessage()
-        // setspcOr(false)
-    } catch (error) {
-        toastErrorMessage()
-        // setspcOr(false)
-    }
-}
 
 function AddNewProductsPage() {
     // setspcOr(false)
@@ -96,8 +49,7 @@ function AddNewProductsPage() {
         discount: '',
     })
     const token = window.localStorage.getItem('token')
-  
-    const [proAtt, setProAtt] = useState()
+
     const params = useParams();
     const { data: unitMast } = useGetUnitMasterQuery(token)
 
@@ -152,6 +104,7 @@ function AddNewProductsPage() {
         mrp: '',
         meta_title: '',
         meta_description: '',
+        meta_keywords: '',
         meta_img: '',
         // low stock quantity
         Quantity: '',
@@ -194,14 +147,6 @@ function AddNewProductsPage() {
         }
         getCatData();
     }, [])
-    // const onChangeHandler = (e) => {
-    //     let slug = e.target.value + new Date().getUTCMilliseconds();
-    //     const inpName = e.target.name;
-    //     const inpVal = e.target.value;
-    //     const clonedObj = { ...inputval, slug };
-    //     clonedObj[inpName] = inpVal;
-    //     setInputVal(clonedObj)
-    // };
     const [attributesVal, setattributesVals] = useState()
 
     const setattributesVal = (val) => {
@@ -211,22 +156,6 @@ function AddNewProductsPage() {
 
     const [spinn, setspinn] = useState(false)
     const [spcOr, setspcOr] = useState(false)
-
-
-    const submitAddProductData = async () => {
-        setspinn(true)
-        const seller_id = sellerD && sellerD[0]._id;
-        const brand_id = brandData.data && brandData.data[0]._id;
-        const slug = 'youtube' + new Date().getUTCMilliseconds();
-        const clonedObj = { ...inputval, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, seller_id, slug, productDescription: productDescription };
-
-        const clone = { attributes: [proAtt?._id], attributeSet: proAtt?.values }
-        addFile(clonedObj, clonedObj.gallery_image, clone, setspcOr, token)
-
-        setspinn(false)
-
-    };
-
 
     const handleVariantData = (data) => {
         setVariantsData(data)
@@ -244,30 +173,67 @@ function AddNewProductsPage() {
         setTags(tags.filter((el, i) => i !== index))
     ];
 
-
+    const [proAtt, setProAtt] = useState()
     const [data1, setData1] = useState()
     const [data2, setData2] = useState()
     const getDatas = async () => {
-        const res = await axios.get('https://onlineparttimejobs.in/api/attributeSetMaster')
-        setData1(res.data)
-    }
-
-    // const token = window.localStorage.getItem('adminToken')
-    const getDatas1 = async () => {
-        const res = await axios.get(`https://onlineparttimejobs.in/api/accountCompany`, {
+        const res = await axios.get('https://onlineparttimejobs.in/api/attributeSetMaster/admin', {
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 Authorization: `Bearer ${token}`,
             },
         })
-        setData2(res.data)
+        setData1(res.data)
     }
 
-    useEffect(() => {
-        // getDatas()
-        // getDatas1()
-    }, [])
 
+    useEffect(() => {
+        getDatas()
+    }, [])
+    const changettriPro = (e) => {
+        const maped = data1.find((item) => {
+            return item._id === e.target.value
+        })
+        setProAtt(maped);
+    }
+
+    const removeRowAt = (id) => {
+        const clone = { ...proAtt }
+        const filterd = clone.values.filter((item) => {
+            if (item._id === id) {
+                return
+            } else {
+                return item
+            }
+        })
+        clone.values = filterd
+        setProAtt(clone)
+    }
+
+    const changeValues = (e) => {
+        const clone = { ...proAtt }
+        const filterd = clone.values.map((item) => {
+            if (item._id === e.target.name) {
+                return { ...item, value: e.target.value }
+            } else {
+                return item
+            }
+        })
+        clone.values = filterd
+        setProAtt(clone)
+    }
+
+    const [shoing, setShoaing] = useState({
+        featured: false,
+        todays_deal: false,
+        trending: false,
+    })
+    const changeHandr = (e) => {
+        const clone = { ...shoing }
+        const name = e.target.name
+        clone[e.target.name] = !clone[name]
+        setShoaing(clone)
+    }
 
 
 
@@ -284,6 +250,8 @@ function AddNewProductsPage() {
                     language_id: item._id,
                     lable: item.name,
                     todays_deal: false,
+                    isGlobalImage: false,
+                    isGlobalAttribute: false,
                     quotation: false,
                     featured: false,
                     cash_on_delivery: false,
@@ -325,43 +293,74 @@ function AddNewProductsPage() {
 
             setVal(maped)
         }
-    }, [data,currdata])
+    }, [data, currdata])
+
+    const changeDataForm = (index) => {
+        setFinalCatD(val[index].category_id)
+        setTags(val[index].tags)
+        setVariantsData(val[index].variations)
+        setShoaing({
+            featured: val[index].featured,
+            todays_deal: val[index]?.todays_deal,
+            trending: val[index]?.trending,
+        })
+    }
+
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
-        const maped = val.map((item, id) => {
-            if (newValue == id) {
-                const obj = { ...item, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription }
-                return obj
-            } else {
-                return item
-            }
-        })
-        setVal(maped)
-        setTags([])
-        setFinalCatD([])
-        setFlashdeal({
-            start_Date: '',
-            end_Date: '',
-            discount_type: '',
-            discount: '',
-        })
+        // const maped = val.map((item, id) => {
+        //     if (newValue == id) {
+        //         console.log(newValue);
+        //         console.log(id);
+        //         const obj = { ...item, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription }
+        //         return obj
+        //     } else {
+        //         return item
+        //     }
+        // })
+        changeDataForm(newValue)
+        // setVal(maped)
+        // setTags([])
+        // setFinalCatD([])
+        // setattributesVals([])
+        // setFlashdeal({
+        //     start_Date: '',
+        //     end_Date: '',
+        //     discount_type: '',
+        //     discount: '',
+        // })
     };
-   
+
     const onChangeHandler = (e, id, bul) => {
-        const maped = val.map((item) => {
-            if (item.language_id == id) {
-                // const obj = { ...item, [e.target.name]: e.target.value }
-                const obj = { ...item, [e.target.name]: e.target.value, }
-                return obj
-            } else {
-                return item
-            }
-        })
-        setVal(maped)
+        if (bul) {
+            const maped = val.map((item) => {
+                if (item.language_id == id) {
+                    // const obj = { ...item, [e.target.name]: e.target.value }
+                    const obj = { ...item, [e.target.name]: bul, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription }
+                    return obj
+                } else {
+                    return item
+                }
+            })
+            setVal(maped)
+
+        } else {
+            const maped = val.map((item) => {
+                if (item.language_id == id) {
+                    // const obj = { ...item, [e.target.name]: e.target.value }
+                    const obj = { ...item, [e.target.name]: e.target.value, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription }
+                    return obj
+                } else {
+                    return item
+                }
+            })
+            setVal(maped)
+
+        }
     }
 
-    const [disNextVal , setdisNextVal] = useState(true)
+    const [disNextVal, setdisNextVal] = useState(true)
     const freshDeals = (e) => {
         const clone = { ...flashDeal }
         clone[e.target.name] = e.target.value
@@ -370,14 +369,123 @@ function AddNewProductsPage() {
             setdisNextVal(false)
         }
     }
+
+
+
+
+    const addFile = async (clonedObj) => {
+        const url = 'https://onlineparttimejobs.in/api/product/add_product'
+        const images = new FormData();
+        let cloned = [...clonedObj]
+        let varclone1 = []
+        for (let indi = 0; indi < cloned?.length; indi++) {
+            const element3 = cloned[indi];
+            for (let ind = 0; ind < element3.images?.length; ind++) {
+                images.delete('image');
+                const element0 = element3?.images[ind];
+                images.append('image', element0);
+                try {
+                    const res = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+                    const obj = { public_id: res.data.public_id, url: res.data.url }
+                    varclone1.push(obj)
+                } catch (error) {
+                    console.log("Gallery Image  not uploded --outer");
+                }
+
+            }
+            cloned[indi].images = varclone1
+            varclone1 = []
+            images.delete('image');
+
+            images.append('image', element3?.mainImage_url);
+            if (element3?.mainImage_url) {
+                try {
+                    const res = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+                    const obj = { public_id: res.data.public_id, url: res.data.url }
+                    cloned[indi].mainImage_url = obj
+                } catch (error) {
+                    console.log("Gallery Image  not uploded--outer");
+                }
+            }
+
+        }
+
+        let varclone = []
+
+        for (let ind = 0; ind < cloned?.length; ind++) {
+            let element = cloned[ind].variations;
+            for (let k = 0; k < element.length; k++) {
+                let varImgs = []
+                let element2 = element[k];
+                for (let indi = 0; indi < element2.images?.length; indi++) {
+                    images.delete('image');
+                    const element3 = element2?.images[indi];
+                    images.append('image', element3);
+                    try {
+                        const res = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+                        const obj = { public_id: res.data.public_id, url: res.data.url }
+                        varImgs.push(obj)
+                    } catch (error) {
+                        console.log("Gallery Image  not uploded");
+                    }
+
+                }
+
+                images.delete('image');
+                images.append('image', element2.mainImage_url);
+                if (element2.mainImage_url) {
+                    try {
+                        const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+                        varclone.push({ ...element2, images: varImgs, mainImage_url: { public_id: res2.data.public_id, url: res2.data.url } })
+                        varImgs = []
+                    } catch (error) {
+                        console.log("Thumnail Image  not uploded")
+                    }
+                }
+
+            }
+
+            if (varclone?.length) {
+                cloned[ind].variations = varclone
+            }
+            varclone = []
+        }
+
+        const neClone = []
+        for (let v = 0; v < cloned.length; v++) {
+            const element = cloned[v];
+            if (v == 0) {
+                neClone.push(element)
+            }
+            if (!element.name) {
+                const obj = { ...cloned[0], language_id: element.language_id }
+                neClone.push(obj)
+            }
+        }
+        try {
+            const res = await axios.post(url, { list: neClone }, {
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            toastSuccessMessage()
+            setspcOr(false)
+        } catch (error) {
+            toastErrorMessage()
+            setspcOr(false)
+        }
+    }
+
+
     const addNewAttributeData = async (e, id) => {
-        
+
         e.preventDefault();
         let clone2 = [...val]
-        setspinn(true)
+        setspcOr(true)
         const maped = clone2.map((item) => {
             if (item.language_id == id) {
-                const obj = { ...item, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription }
+                const obj = { ...item, ...shoing, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription, attributes: [proAtt?._id], attributeSet: proAtt?.values }
                 return obj
             } else {
                 return item
@@ -385,12 +493,8 @@ function AddNewProductsPage() {
         })
         setVal(maped)
         addFile(maped, token)
-        setspinn(false)
-
 
     };
-
-
     const setTabs = (i, str, id) => {
         if (str == 'nex') {
             setValue(i + 1)
@@ -399,7 +503,7 @@ function AddNewProductsPage() {
         }
         const maped = val.map((item) => {
             if (item.language_id == id) {
-                const obj = { ...item, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription }
+                const obj = { ...item, ...shoing, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription, attributes: [proAtt?._id], attributeSet: proAtt?.values }
                 return obj
             } else {
                 return item
@@ -409,14 +513,60 @@ function AddNewProductsPage() {
         setTags([])
         setFinalCatD([])
         setVariantsData([])
+        setProAtt({})
+        setattributesVals([])
+        setShoaing({
+            featured: false,
+            todays_deal: false,
+            trending: false,
+        })
         setFlashdeal({
             start_Date: '',
             end_Date: '',
             discount_type: '',
             discount: '',
         })
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
     }
-    
+    const onchangeImges = (e, id) => {
+        const inpVal = e.target.files;
+        const maped = val.map((item) => {
+            if (item.language_id == id) {
+                const obj = { ...item, images: inpVal }
+                return obj
+            } else {
+                return item
+            }
+        })
+        setVal(maped)
+    }
+    const onchangeImges1 = (e, id) => {
+        const inpVal = e.target.files[0];
+        const maped = val.map((item) => {
+            if (item.language_id == id) {
+                const obj = { ...item, mainImage_url: inpVal }
+                return obj
+            } else {
+                return item
+            }
+        })
+        setVal(maped)
+    }
+
+    const SaveData = (i, str, id) => {
+        const maped = val.map((item) => {
+            if (item.language_id == id) {
+                const obj = { ...item, ...shoing, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription, attributes: [proAtt?._id], attributeSet: proAtt?.values }
+                return obj
+            } else {
+                return item
+            }
+        })
+        setVal(maped)
+    }
 
     return (
         <>
@@ -444,7 +594,6 @@ function AddNewProductsPage() {
                             </TabList>
                         </Box>
                         {val && val.map((item, i) => {
-
                             return <TabPanel value={i} key={i}>
                                 <div className="px-15px px-lg-25px">
                                     <div className="aiz-titlebar text-left mt-2 mb-3">
@@ -477,16 +626,16 @@ function AddNewProductsPage() {
 
                                                                         options={categ}
                                                                         showCheckbox
-                                                                        selectedValues={[]}
+                                                                        selectedValues={finalCatD}
                                                                         onRemove={(selectedCat) => {
                                                                             const selectedIds = selectedCat.map((cat) => {
-                                                                                return cat._id
+                                                                                return cat
                                                                             })
                                                                             setFinalCatD(selectedIds)
                                                                         }}
                                                                         onSelect={(selectedCat) => {
                                                                             const selectedIds = selectedCat.map((cat) => {
-                                                                                return cat._id
+                                                                                return cat
                                                                             })
                                                                             setFinalCatD(selectedIds)
                                                                         }}
@@ -498,7 +647,7 @@ function AddNewProductsPage() {
                                                             <div className="form-group row" id="seller">
                                                                 <label className="col-md-3 col-from-label">Seller</label>
                                                                 <div className="col-md-8">
-                                                                    <select className="form-select" aria-label="Default select example" name="seller_id" onChange={(e) => { onChangeHandler(e, item.language_id) }} >
+                                                                    <select className="form-select" aria-label="Default select example" value={item?.seller_id} name="seller_id" onChange={(e) => { onChangeHandler(e, item.language_id) }} >
                                                                         <option>Select Seller</option>
                                                                         {sellerD && sellerD.map((item) => {
                                                                             return <option value={item._id} key={item._id}>{item.firstname + " " + item.lastname}</option>
@@ -511,7 +660,7 @@ function AddNewProductsPage() {
                                                             <div className="form-group row" id="brand">
                                                                 <label className="col-md-3 col-from-label">Brand</label>
                                                                 <div className="col-md-8">
-                                                                    <select className="form-select" aria-label="Default select example" name="brand_id" onChange={(e) => { onChangeHandler(e, item.language_id) }} >
+                                                                    <select className="form-select" value={item?.brand_id} aria-label="Default select example" name="brand_id" onChange={(e) => { onChangeHandler(e, item.language_id) }} >
                                                                         <option>Select Brand</option>
                                                                         {brandData.data && brandData.data.map((item) => {
                                                                             return <option value={item._id} key={item._id}>{item.name || item._id}</option>
@@ -573,17 +722,64 @@ function AddNewProductsPage() {
                                                                 </div>
                                                             </div>
 
+
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Gallery Images</label>
+                                                                <div className="col-md-8">
+                                                                    <input type="file" className="form-control" name="gallery_image" multiple accept="image/*" onChange={(e) => { onchangeImges(e, item.language_id) }} />
+                                                                </div>
+                                                            </div>
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Thumbnail Image</label>
+                                                                <div className="col-md-8">
+                                                                    <input type="file" name="mainImage_url" accept="image/*" className="form-control" onChange={(e) => { onchangeImges1(e, item.language_id) }} />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label"> Product Attribute </label>
+
+                                                                <div className="col-md-8">
+                                                                    <select className="form-select" aria-label="Default select example" name="unit" onChange={changettriPro}>
+                                                                        <option value={1}>Select Unit</option>
+                                                                        {data1 && data1.map((item) => {
+                                                                            return <option value={item._id} key={item._id} id={item._id}>{item.name}</option>
+                                                                        })}
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            {proAtt && <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Set Attribute Values</label>
+                                                                <div className="col-md-8">
+                                                                    {proAtt?.values && proAtt.values.map((item, i) => {
+                                                                        return <div style={{ display: "flex", margin: "5px 0" }} key={i}>
+                                                                            <label className="col-md-3 col-from-label">{item?.name}</label>
+                                                                            <input placeholder="Value" name={item?._id} className="form-control" onChange={changeValues} />
+                                                                            <div style={{ fontSize: "17px", margin: "0 5px" }}> <RxCross1 onClick={() => { removeRowAt(item?._id) }} /></div>
+                                                                        </div>
+                                                                    })}
+                                                                </div>
+                                                            </div>}
+
+
+
                                                             <div className="form-group row">
                                                                 <label className="col-md-3 col-from-label">Refundable</label>
                                                                 <div className="col-md-8">
-                                                                    <ToggleStatus name="refundable" isStatus={item.refundable} changeStatus={changeStatus} />
+                                                                    <label className="aiz-switch aiz-switch-success mb-0">
+                                                                        <input type="checkbox" name={'refundable'} checked={item.refundable} onChange={(e) => { onChangeHandler(e, item.language_id, !item.refundable) }} />
+                                                                        <span />
+                                                                    </label>
                                                                 </div>
                                                             </div>
 
                                                             <div className="form-group row">
                                                                 <label className="col-md-3 col-from-label">Quotation</label>
                                                                 <div className="col-md-8">
-                                                                    <ToggleStatus name="quotation" isStatus={item.quotation} changeStatus={changeStatus} />
+                                                                    <label className="aiz-switch aiz-switch-success mb-0">
+                                                                        <input type="checkbox" name={'quotation'} checked={item.quotation} onChange={(e) => { onChangeHandler(e, item.language_id, !item.quotation) }} />
+                                                                        <span />
+                                                                    </label>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -633,6 +829,12 @@ function AddNewProductsPage() {
                                                                 <label className="col-md-3 col-from-label">Meta Title</label>
                                                                 <div className="col-md-8">
                                                                     <input type="text" value={item?.meta_title} className="form-control" name="meta_title" placeholder="Meta Title" fdprocessedid="1hz7zu" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
+                                                                </div>
+                                                            </div>
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Meta Keyword</label>
+                                                                <div className="col-md-8">
+                                                                    <input type="text" value={item?.meta_keywords} className="form-control" name="meta_keywords" placeholder="Meta Key Word" fdprocessedid="1hz7zu" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
                                                                 </div>
                                                             </div>
 
@@ -746,7 +948,8 @@ function AddNewProductsPage() {
                                                             <div className="form-group row">
                                                                 <label className="col-md-6 col-from-label">Status</label>
                                                                 <div className="col-md-6">
-                                                                    <ToggleStatus name="featured" isStatus={item.featured} changeStatus={changeStatus} />
+                                                                    <input type="checkbox" name={'featured'} checked={shoing.featured} onChange={changeHandr} />
+                                                                    <span />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -760,8 +963,7 @@ function AddNewProductsPage() {
                                                             <div className="form-group row">
                                                                 <label className="col-md-6 col-from-label">Status</label>
                                                                 <div className="col-md-6">
-                                                                    <ToggleStatus name="todays_deal" isStatus={item.todays_deal} changeStatus={changeStatus} />
-
+                                                                    <input type="checkbox" name={'todays_deal'} checked={shoing.todays_deal} onChange={changeHandr} />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -775,7 +977,7 @@ function AddNewProductsPage() {
                                                             <div className="form-group row">
                                                                 <label className="col-md-6 col-from-label">Status</label>
                                                                 <div className="col-md-6">
-                                                                    <ToggleStatus name="trending" isStatus={item.trending} changeStatus={changeStatus} />
+                                                                    <input type="checkbox" name={'trending'} checked={shoing.trending} onChange={changeHandr} />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -786,7 +988,7 @@ function AddNewProductsPage() {
 
 
                                                         <div className="card-header">
-                                                            <h5 className="mb-0 h6">**Flash Deal (This Field is mandatory)</h5>
+                                                            <h5 className="mb-0 h6">**Flash Deal </h5>
                                                         </div>
                                                         <div className="card-body">
                                                             <div className="form-group mb-3">
@@ -826,8 +1028,11 @@ function AddNewProductsPage() {
 
                                             </div>
 
+
                                             <ProductDescriptionWrapper />
-                                            <ProductsVariation item={item} handleVariantData={handleVariantData} setattributes={setattributesVal} setattributesVal={setattributesVal} setVariantsData={setVariantsData} />
+
+                                            <ProductsVariation item={item} handleVariantData={handleVariantData} setattributes={setattributesVal} setattributesVal={setattributesVal} setVariantsData={setVariantsData} onChangeHandler={onChangeHandler} />
+
 
                                             <div className="row">
                                                 <div className="col-md-3 form-group physical_product_show" id="quantity">
@@ -843,6 +1048,24 @@ function AddNewProductsPage() {
                                                     <input type="number" placeholder="Shipping cost" name="shipping_cost" className="form-control" required fdprocessedid="pvn15" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
                                                 </div>
                                                 <div className="col-md-3 form-group physical_product_show" id="shipping_cost">
+                                                    <label className="title-color">Save Data ! </label>
+
+                                                    <div>
+                                                        <ConfigProvider
+                                                            theme={{
+                                                                components: {
+                                                                    Checkbox: {
+                                                                        colorPrimary: '#ff4d4f',
+                                                                    },
+                                                                },
+
+                                                            }}
+                                                        >
+                                                            <Checkbox className="chBox" onClick={() => { SaveData(i, '', item.language_id) }} >Checkbox</Checkbox>
+                                                        </ConfigProvider>
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-3 form-group physical_product_show" id="shipping_cost">
                                                     <label className="title-color">Shipping cost multiply with quantity </label>
                                                     <label className="switcher title-color">
                                                         <input className="switcher_input" type="checkbox" name=" Shipping_cost_multiply_with_quantity" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
@@ -855,13 +1078,13 @@ function AddNewProductsPage() {
 
                                     </div>
                                     {val.length == i + 1 ? <div className="form-group mb-3 text-right">
-                                        <button type="button" disable={data?.length == 1} className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setTabs(i, 'pre', item.language_id) }}>Prev</button>
+                                        <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setTabs(i, 'pre', item.language_id) }}>Prev</button>
                                         <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={(e) => { addNewAttributeData(e, item.language_id) }}>Save</button>
                                     </div>
                                         :
                                         <div className="form-group mb-3 text-right">
                                             {i !== 0 && <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setTabs(i, 'pre', item.language_id) }}>Prev</button>}
-                                            <button type="button" className="btn btn-primary" disabled={disNextVal} fdprocessedid="uzw7ye" onClick={() => { setTabs(i, 'nex', item.language_id) }}>Next</button>
+                                            <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setTabs(i, 'nex', item.language_id) }}>Save & Next</button>
                                         </div>
 
                                     }

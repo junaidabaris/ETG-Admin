@@ -5,6 +5,7 @@ import { RxCross1 } from "react-icons/rx";
 import { AiFillDelete } from "react-icons/ai";
 import ModalCombo from "../addComboProduct/ModalCombo";
 import axios from "axios";
+import { token } from "../../common/TokenArea";
 
 function Add_quotation() {
 
@@ -29,7 +30,8 @@ function Add_quotation() {
         }
     )
 
-    const { data: searchPro } = useGetProductSearchQuery(searchs)
+    const { data: searchPro } = useGetProductSearchQuery({ token: token, paylode: searchs })
+
     const [showCombo, setShowCombo] = useState([])
     const [comboRate, setComboRate] = useState(0)
 

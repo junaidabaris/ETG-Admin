@@ -10697,3 +10697,11 @@ table tbody tr .show-table {
   padding: 5px;
   border: 1px solid gray;
 }
+
+
+.maiTa{
+  width: 2000px !important;
+}
+.chBox > span > span{
+  padding: 15px;
+}

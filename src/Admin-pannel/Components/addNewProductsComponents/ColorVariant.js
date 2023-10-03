@@ -8,44 +8,19 @@ import { GiPriceTag } from "react-icons/gi";
 import PriceModal from "./PriceModal";
 import { useParams } from "react-router-dom";
 export const ColorVariant = ({ data, deleteRow, pickUp, handleVariant, setVariantsData, bringSelectedVariantImage, index, item }) => {
-    const [formData, setFormData] = useState(data);
+    const [formData, setFormData] = useState(item);
     const [prices, setprices] = useState(data.prices);
     const onChangeHandler = (e) => {
         const inputName = e.target.name;
         const inputVal = e.target.value;
-        // if (e.target.name === 'discount') {
-        //     const inputName = e.target.name;
-        //     const inputVal = e.target.value;
-        //     setFormData({ ...formData, sale_rate: formData.mrp - formData.discount, [inputName]: inputVal });
-        //     setVariantsData(formData)
-        // }
-        if (e.target.value === 'Percent') {
-
-            // const resss = axios.post(`https://onlineparttimejobs.in/api/product/variation_cost`, formData)
-            // const inputName = e.target.name;  
-            // const inputVal = e.target.value;
-            const calculatedSalePercent = formData.mrp * formData.discount / 100
-            const calculatedSalerate = formData.mrp - calculatedSalePercent
-            setFormData({ ...formData, sale_rate: calculatedSalerate, [inputName]: inputVal });
-            setVariantsData(formData)
-        } else if (e.target.value === 'Amount') {
-            // const inputName = e.target.name;
-            // const inputVal = e.target.value;
-            setFormData({ ...formData, sale_rate: formData.mrp - formData.discount, [inputName]: inputVal });
-            setVariantsData(formData)
-        }
-        else {
-            const inputName = e.target.name;
-            const inputVal = e.target.value;
-            setFormData({ ...formData, [inputName]: inputVal });
-            setVariantsData(formData)
-        }
+        setFormData({ ...formData, [inputName]: inputVal });
+        setVariantsData(formData)
     };
 
     const params = useParams()
     useEffect(() => {
         if (formData) {
-            handleVariant(formData)
+            handleVariant({ ...formData})
         }
     }, [formData])
     useEffect(() => {
@@ -56,7 +31,6 @@ export const ColorVariant = ({ data, deleteRow, pickUp, handleVariant, setVarian
     const onchangeImagehandle = async (e) => {
         const inpVal = e.target.files;
         const cloneObj = { ...formData, images: inpVal }
-
         setVariantsData(cloneObj)
         setFormData({ ...cloneObj });
     }
@@ -68,7 +42,7 @@ export const ColorVariant = ({ data, deleteRow, pickUp, handleVariant, setVarian
         setFormData({ ...cloneObj });
     }
     const setData = (data, i) => {
-        const clone = { ...formData, prices: data, id: Math.random() }
+        const clone = { ...data }
         setFormData(clone)
     }
     const [modalShow, setModalShow] = useState(false);
@@ -113,7 +87,7 @@ export const ColorVariant = ({ data, deleteRow, pickUp, handleVariant, setVarian
             <td>
                 {params?.id ?
                     <>
-                        {data?.images[0]?.url && data?.images?.map((item) => {
+                        {data?.images?.length && data?.images[0]?.url && data?.images?.map((item) => {
                             return <img key={item.url} style={{ width: "100px", height: "100px" }} src={item?.url} />
                         })}
                         <input type="file" name="gallery_image" multiple accept="image/*" className="form-control" onChange={onchangeImagehandle} />
@@ -125,7 +99,7 @@ export const ColorVariant = ({ data, deleteRow, pickUp, handleVariant, setVarian
             <td>
                 {params?.id ?
                     <>
-                        {shoing && <img style={{ width: "100px", height: "100px" }} src={data?.mainImage_url?.url} />}
+                        {data?.mainImage_url?.url && <img style={{ width: "100px", height: "100px" }} src={data?.mainImage_url?.url} />}
                         <input type="file" name="mainImage_url" accept="image/*" className="form-control" onChange={onchangeImagehandle1} />
                     </>
 
@@ -144,6 +118,7 @@ export const ColorVariant = ({ data, deleteRow, pickUp, handleVariant, setVarian
             {modalShow2 && <PriceModal show={modalShow2}
                 onHide={() => setModalShow2(false)}
                 prices={prices}
+                data={data}
                 setData={setData}
                 index={index}
             />}

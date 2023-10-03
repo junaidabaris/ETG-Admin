@@ -6,11 +6,12 @@ import { RxCross1 } from "react-icons/rx"
 import axios from "axios"
 import GenerateStockV from "./GenerateStockV"
 import VstockModal from "./VstockModal"
+import { token } from "../../common/TokenArea"
 
 function AddVtechStockac() {
     const [show, setShow] = useState(false)
     const [searchs, setSearch] = useState('')
-    const { data: searchPro } = useGetProductSearchQuery(searchs)
+    const { data: searchPro } = useGetProductSearchQuery({ token: token, paylode: searchs })
     const { data: pickUp } = useGetPickupPointQuery();
     const { data: sellerD } = useGetSellersQuery()
 

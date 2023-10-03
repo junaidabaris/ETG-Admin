@@ -59,6 +59,8 @@ function Profile() {
                 country: detailSeller?.country,
                 state: detailSeller?.state,
                 city: detailSeller?.city,
+                currency_id: detailSeller?.currency_id,
+                language_id: detailSeller?.language_id,
                 sellerid: window.localStorage.getItem('isSellerId'),
             }
             setState(obj)
@@ -73,6 +75,8 @@ function Profile() {
             setShow(false)
         }, 1000);
     }
+
+    console.log(state);
 
     return (
         <>
@@ -282,16 +286,13 @@ function Profile() {
 
 
 
-
-
-
                                         <div className="form-group row mb-3">
                                             <label className="col-md-2 col-form-label">
                                                 Your Language
                                             </label>
                                             <div className="col-md-10">
-                                                <select className="form-select" name="language_id" id="languId" onChange={onchengeHandle} aria-label="Default select example">
-                                                    <option selected>{state?.language ? state.language : 'Select Language'}</option>
+                                                <select className="form-select" name="language_id"  value={state?.language_id} id="languId" onChange={onchengeHandle} aria-label="Default select example">
+                                                    <option selected>Select Language</option>
                                                     {language && language.map((item) => {
                                                         return <option key={item._id} value={item._id}>{item.name}</option>
                                                     })}
@@ -305,8 +306,8 @@ function Profile() {
                                                 Your Currency
                                             </label>
                                             <div className="col-md-10">
-                                                <select className="form-select" name="currency_id" id="currId" onChange={onchengeHandle} aria-label="Default select example">
-                                                    <option selected>{state?.currency ? state.currency : 'Select Currency'}</option>
+                                                <select className="form-select" name="currency_id" value={state?.currency_id} id="currId" onChange={onchengeHandle} aria-label="Default select example">
+                                                    <option selected>Select Currency</option>
                                                     {currency && currency.map((item) => {
                                                         return <option key={item._id} value={item._id}>{item.name}</option>
                                                     })}

@@ -20,6 +20,7 @@ import { useAddPurchaseCartMutation } from '../../all-products/allproductsApi/al
 import axios from 'axios';
 import { AiFillAmazonCircle } from 'react-icons/ai';
 import { FiEdit } from 'react-icons/fi';
+import { token } from '../../../common/TokenArea';
 
 function AddPosComp() {
   const [viewCustomerD, setViewCustomerD] = useState();
@@ -57,15 +58,19 @@ function AddPosComp() {
 
   const SaveData = async (val) => {
     if (!val) {
-      console.log('last', showCombo?.cart?.products);
       setModalShow(false)
       const arr = [...showCombo?.cart?.products]
       const aaa = arr.map((item) => {
         console.log(item);
         return { product: item.product[0]._id, variant: item.variant, sku: item.sku, count: 1 }
       })
-      const resp = await axios.post('https://onlineparttimejobs.in/api/pos/cart/get',
-        { products: aaa, shippingCost: 0, discount_type: bringedDiscountVal.discount_type, discount: bringedDiscountVal.discount, order_tax: bringedOrderTaxVal.order_tax }
+      const resp = await axios.post('https://onlineparttimejobs.in/api/pos/cart/get',{ products: aaa, shippingCost: 0, discount_type: bringedDiscountVal.discount_type, discount: bringedDiscountVal.discount, order_tax: bringedOrderTaxVal.order_tax },
+        // {
+        //   headers: {
+        //     'Content-type': 'application/json; charset=UTF-8',
+        //     'Authorization': 'Bearer ' + token
+        //   },
+        // }
       )
       setShowCombo(resp.data)
     } else {
@@ -91,7 +96,6 @@ function AddPosComp() {
   }
 
   const sendDataCus = (item) => {
-    console.log(item);
     setSmShow(false)
   }
 
@@ -163,7 +167,6 @@ function AddPosComp() {
               </thead>
               <tbody style={{ height: '310px' }}>
                 {showCombo && showCombo?.cart?.products?.map((item, i) => {
-                  console.log('showCombo.item---', showCombo)
                   return <tr key={i}>
                     <td style={{ display: 'table-cell' }}>
                       <span className='txt-bold ps-1'>{item.product_id[0]?.name}</span>

@@ -19,72 +19,21 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { token } from "../../common/TokenArea";
-
+import ProductParams from "../addNewProductsComponents/ProductParams";
+import { Checkbox, ConfigProvider, Radio } from 'antd';
 const toastSuccessMessage = () => {
-    toast.success("Product added Successfully", {
+    toast.success("Product updated Successfully", {
         position: "top-center"
     })
 };
 
 const toastErrorMessage = () => {
-    toast.error("Product not added", {
+    toast.error("Product not updated", {
         position: "top-center"
     })
 };
 
-
-const addFile = async (clonedObj, setspcOr) => {
-    // setspcOr(true)
-
-
-    const url = 'https://onlineparttimejobs.in/api/product/add_product'
-    const images = new FormData();
-    let cloned = [...clonedObj]
-    let varclone = []
-
-    for (let ind = 0; ind < cloned?.length; ind++) {
-        let element = cloned[ind].variations;
-        for (let k = 0; k < element.length; k++) {
-            let varImgs = []
-            let element2 = element[k];
-            for (let indi = 0; indi < element2.images?.length; indi++) {
-                images.delete('image');
-                const element3 = element2?.images[indi];
-                images.append('image', element3);
-                const res = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
-                const obj = { public_id: res.data.public_id, url: res.data.url }
-                varImgs.push(obj)
-            }
-
-            images.delete('image');
-            images.append('image', element2.mainImage_url);
-            const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
-            varclone.push({ ...element2, images: varImgs, mainImage_url: { public_id: res2.data.public_id, url: res2.data.url } })
-            varImgs = []
-        }
-
-
-        cloned[ind].variations = varclone
-        varclone = []
-    }
-
-    try {
-        const res = await axios.post(url, { list: cloned }, {
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        toastSuccessMessage()
-        // setspcOr(false)
-    } catch (error) {
-        toastErrorMessage()
-        // setspcOr(false)
-    }
-}
-
 function AddNewProductsPage() {
-    // setspcOr(false)
     const [tags, setTags] = useState([]);
     const [categ, setCateg] = useState([]);
     const [finalCatD, setFinalCatD] = useState();
@@ -152,6 +101,7 @@ function AddNewProductsPage() {
         mrp: '',
         meta_title: '',
         meta_description: '',
+        meta_keywords: '',
         meta_img: '',
         // low stock quantity
         Quantity: '',
@@ -182,8 +132,6 @@ function AddNewProductsPage() {
                     Authorization: `Bearer ${token}`,
                 },
             })
-            // const resData = await reqData.json();
-            // 
             for (let i = 0; i < resData.data.length; i++) {
                 getCategoryName.push({ name: resData.data[i].name, _id: resData.data[i]._id })
 
@@ -194,14 +142,6 @@ function AddNewProductsPage() {
         }
         getCatData();
     }, [])
-    // const onChangeHandler = (e) => {
-    //     let slug = e.target.value + new Date().getUTCMilliseconds();
-    //     const inpName = e.target.name;
-    //     const inpVal = e.target.value;
-    //     const clonedObj = { ...inputval, slug };
-    //     clonedObj[inpName] = inpVal;
-    //     setInputVal(clonedObj)
-    // };
     const [attributesVal, setattributesVals] = useState()
 
     const setattributesVal = (val) => {
@@ -212,20 +152,6 @@ function AddNewProductsPage() {
     const [spinn, setspinn] = useState(false)
     const [spcOr, setspcOr] = useState(false)
 
-
-    const submitAddProductData = async () => {
-        setspinn(true)
-        const seller_id = sellerD && sellerD[0]._id;
-        const brand_id = brandData.data && brandData.data[0]._id;
-        const slug = 'youtube' + new Date().getUTCMilliseconds();
-        const clonedObj = { ...inputval, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, seller_id, slug, productDescription: productDescription };
-
-        const clone = { attributes: [proAtt?._id], attributeSet: proAtt?.values }
-        addFile(clonedObj, clonedObj.gallery_image, clone, setspcOr, token)
-
-        setspinn(false)
-
-    };
 
 
     const handleVariantData = (data) => {
@@ -246,34 +172,77 @@ function AddNewProductsPage() {
 
 
     const [data1, setData1] = useState()
-    const [data2, setData2] = useState()
     const getDatas = async () => {
-        const res = await axios.get('https://onlineparttimejobs.in/api/attributeSetMaster')
-        setData1(res.data)
-    }
-
-    // const token = window.localStorage.getItem('adminToken')
-    const getDatas1 = async () => {
-        const res = await axios.get(`https://onlineparttimejobs.in/api/accountCompany`, {
+        const res = await axios.get('https://onlineparttimejobs.in/api/attributeSetMaster/admin', {
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 Authorization: `Bearer ${token}`,
             },
         })
-        setData2(res.data)
+        setData1(res.data)
+    }
+    useEffect(() => {
+        getDatas()
+    }, [])
+
+    const changettriPro = (e) => {
+        const maped = data1.find((item) => {
+            return item._id === e.target.value
+        })
+        setProAtt(maped);
+    }
+    const removeRowAt = (id) => {
+        const clone = { ...proAtt }
+        const filterd = clone.values.filter((item) => {
+            if (item._id === id) {
+                return
+            } else {
+                return item
+            }
+        })
+        clone.values = filterd
+        setProAtt(clone)
     }
 
-    useEffect(() => {
-        // getDatas()
-        // getDatas1()
-    }, [])
+    const changeValues = (e) => {
+        const clone = { ...proAtt }
+        const filterd = clone.values.map((item) => {
+            if (item._id === e.target.name) {
+                return { ...item, value: e.target.value }
+            } else {
+                return item
+            }
+        })
+        clone.values = filterd
+        setProAtt(clone)
+    }
+
 
 
 
 
 
     const { data, refetch } = useGetLanguagesQuery(token);
-    const { data: currdata } = useGetCurrencyQuery(token);
+
+    const [shoing, setShoaing] = useState({
+        featured: false,
+        todays_deal: false,
+        trending: false,
+    })
+
+    const [value, setValue] = useState(0);
+    const [val, setVal] = useState(data)
+
+    const changeDataForm = (index) => {
+        setFinalCatD(val[index].category_id)
+        setTags(val[index].tags)
+        setVariantsData(val[index].variations)
+        setShoaing({
+            featured: val[index].featured,
+            todays_deal: val[index]?.todays_deal,
+            trending: val[index]?.trending,
+        })
+    }
 
 
 
@@ -281,20 +250,39 @@ function AddNewProductsPage() {
         setValue(newValue);
         const maped = val.map((item, id) => {
             if (newValue == id) {
-                const obj = { ...item, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription }
+                const obj = { ...item, ...shoing, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription, attributes: [proAtt?._id], attributeSet: proAtt?.values }
                 return obj
             } else {
                 return item
             }
         })
         setVal(maped)
+        changeDataForm(newValue)
     };
-    const [value, setValue] = useState(0);
-    const [val, setVal] = useState(data)
+
+
+    const changeHandr = (e) => {
+        const clone = { ...shoing }
+        const name = e.target.name
+        clone[e.target.name] = !clone[name]
+        setShoaing(clone)
+    }
     const onChangeHandler = (e, id, bul) => {
-        const maped = val.map((item) => {
+        if (bul) {
+            const maped = val.map((item) => {
+                if (item.language_id == id) {
+                    const obj = { ...item, [e.target.name]: [!e.target.name], variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription }
+                    return obj
+                } else {
+                    return item
+                }
+            })
+            setVal(maped)
+
+        } else {
+
+        } const maped = val.map((item) => {
             if (item.language_id == id) {
-                // const obj = { ...item, [e.target.name]: e.target.value }
                 const obj = { ...item, [e.target.name]: e.target.value, }
                 return obj
             } else {
@@ -302,6 +290,7 @@ function AddNewProductsPage() {
             }
         })
         setVal(maped)
+
     }
 
     const [disNextVal, setdisNextVal] = useState(true)
@@ -313,34 +302,136 @@ function AddNewProductsPage() {
             setdisNextVal(false)
         }
     }
+
+
+    const addFile = async (clonedObj) => {
+
+        // const url = 'https://onlineparttimejobs.in/api/product/add_product'
+        const url = `https://onlineparttimejobs.in/api/product/${params.id}`
+        const images = new FormData();
+        let cloned = [...clonedObj]
+        let varclone1 = []
+        for (let indi = 0; indi < cloned?.length; indi++) {
+            const element3 = cloned[indi];
+            for (let ind = 0; ind < element3.images?.length; ind++) {
+                images.delete('image');
+                const element0 = element3?.images[ind];
+                images.append('image', element0);
+                if (element0?.url) {
+
+                } else {
+                    try {
+                        const res = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+                        const obj = { public_id: res.data.public_id, url: res.data.url }
+                        varclone1.push(obj)
+                    } catch (error) {
+                        console.log("Gallery Image  not uploded --outer");
+                    }
+                }
+
+            }
+            cloned[indi].images = varclone1
+            varclone1 = []
+            images.delete('image');
+
+            images.append('image', element3?.mainImage_url);
+            if (element3?.mainImage_url?.url) {
+
+            } else {
+                if (element3?.mainImage_url) {
+                    try {
+                        const res = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+                        const obj = { public_id: res.data.public_id, url: res.data.url }
+                        cloned[indi].mainImage_url = obj
+                    } catch (error) {
+                        console.log("Gallery Image  not uploded--outer");
+                    }
+                }
+            }
+
+        }
+
+        let varclone = []
+
+        for (let ind = 0; ind < cloned?.length; ind++) {
+            let element = cloned[ind].variations;
+            for (let k = 0; k < element.length; k++) {
+                let varImgs = []
+                let element2 = element[k];
+                for (let indi = 0; indi < element2.images?.length; indi++) {
+                    images.delete('image');
+                    const element3 = element2?.images[indi];
+                    images.append('image', element3);
+                    if (element3?.url) {
+
+                    } else {
+                        try {
+                            const res = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+                            const obj = { public_id: res.data.public_id, url: res.data.url }
+                            varImgs.push(obj)
+                        } catch (error) {
+                            console.log("Gallery Image  not uploded");
+                        }
+                    }
+
+                }
+
+                images.delete('image');
+                images.append('image', element2.mainImage_url);
+                if (element2.mainImage_url) {
+                    if (element2.mainImage_url?.url) {
+
+                    } else {
+                        try {
+                            const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+                            varclone.push({ ...element2, images: varImgs, mainImage_url: { public_id: res2.data.public_id, url: res2.data.url } })
+                            varImgs = []
+                        } catch (error) {
+                            console.log("Thumnail Image  not uploded")
+                        }
+                    }
+                }
+
+            }
+
+            if (varclone?.length) {
+                cloned[ind].variations = varclone
+            }
+            varclone = []
+        }
+        try {
+            const res = await axios.put(url, { list: cloned }, {
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            toastSuccessMessage()
+            setspcOr(false)
+        } catch (error) {
+            toastErrorMessage()
+            setspcOr(false)
+        }
+    }
     const addNewAttributeData = async (e, id) => {
 
         e.preventDefault();
         let clone2 = [...val]
-        setspinn(true)
+        setspcOr(true)
         const maped = clone2.map((item) => {
             if (item.language_id == id) {
-                const obj = { ...item, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription }
+
+                const obj = { ...item, ...shoing, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription, attributes: [proAtt?._id], attributeSet: proAtt?.values }
                 return obj
             } else {
                 return item
             }
         })
         setVal(maped)
-        // addFile(maped, token)
-        console.log(maped);
-        setspinn(false)
-
-
+        addFile(maped, token)
     };
 
     const { data: productData, isSuccess, isLoading } = useGetProductByIdQuery({ id: params.id, token: token });
-    const changeDataForm = (index)=>{
-        setVal(productData?.product)
-        setFinalCatD(productData?.product[index].category_id)
-        setTags(productData?.product[index].tags)
-        setVariantsData(productData?.product[index].variations)
-    }
 
 
     const setTabs = (i, str, id) => {
@@ -351,7 +442,7 @@ function AddNewProductsPage() {
         }
         const maped = val.map((item) => {
             if (item.language_id == id) {
-                const obj = { ...item, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription }
+                const obj = { ...item, ...shoing, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription, attributes: [proAtt?._id], attributeSet: proAtt?.values }
                 return obj
             } else {
                 return item
@@ -361,11 +452,67 @@ function AddNewProductsPage() {
         changeDataForm(i)
     }
 
+
     useEffect(() => {
-        if (productData) {
-            changeDataForm(0)
+        if (productData && data) {
+            const clone = []
+            for (let j = 0; j < data.length; j++) {
+                const element2 = data[j];
+                for (let i = 0; i < productData?.product.length; i++) {
+                    const element = productData?.product[i];
+                    if (element?.language_id?._id == element2._id) {
+                        clone.push(element)
+                    }
+
+                }
+
+            }
+
+            setVal(clone)
+            if (val) {
+                changeDataForm(0)
+            }
         }
-    }, [productData])
+    }, [productData, data])
+
+
+    const onchangeImges = (e, id) => {
+        const inpVal = e.target.files;
+        const maped = val.map((item) => {
+            if (item.language_id == id) {
+                const obj = { ...item, images: inpVal }
+                return obj
+            } else {
+                return item
+            }
+        })
+        setVal(maped)
+    }
+    const onchangeImges1 = (e, id) => {
+        const inpVal = e.target.files[0];
+        const maped = val.map((item) => {
+            if (item.language_id == id) {
+                const obj = { ...item, mainImage_url: inpVal }
+                return obj
+            } else {
+                return item
+            }
+        })
+        setVal(maped)
+    }
+
+    const SaveData = (i, str, id) => {
+        const maped = val.map((item) => {
+            if (item.language_id == id) {
+                const obj = { ...item, ...shoing, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription, attributes: [proAtt?._id], attributeSet: proAtt?.values }
+                return obj
+            } else {
+                return item
+            }
+        })
+        setVal(maped)
+    }
+
 
     return (
         <>
@@ -374,7 +521,7 @@ function AddNewProductsPage() {
                     <div className="spinner-border" role="status">
                         <span className="visually-hidden">ded</span>
                     </div>
-                    <h6>please wait your product in uploading</h6>
+                    <h6>please wait your product in Updating</h6>
                 </div>}
 
                 {spinn && <div className="preloaderCount">
@@ -387,13 +534,11 @@ function AddNewProductsPage() {
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <TabList onChange={handleChange} aria-label="lab API tabs example">
                                 {data && data.map((item, i) => {
-
                                     return <Tab label={item?.name} value={i} />
                                 })}
                             </TabList>
                         </Box>
                         {val && val.map((item, i) => {
-                            // console.log(item);
                             return <TabPanel value={i} key={i}>
                                 <div className="px-15px px-lg-25px">
                                     <div className="aiz-titlebar text-left mt-2 mb-3">
@@ -429,13 +574,13 @@ function AddNewProductsPage() {
                                                                         selectedValues={item?.category_id}
                                                                         onRemove={(selectedCat) => {
                                                                             const selectedIds = selectedCat.map((cat) => {
-                                                                                return cat._id
+                                                                                return cat
                                                                             })
                                                                             setFinalCatD(selectedIds)
                                                                         }}
                                                                         onSelect={(selectedCat) => {
                                                                             const selectedIds = selectedCat.map((cat) => {
-                                                                                return cat._id
+                                                                                return cat
                                                                             })
                                                                             setFinalCatD(selectedIds)
                                                                         }}
@@ -503,7 +648,7 @@ function AddNewProductsPage() {
                                                                 <div className="col-md-8">
                                                                     <div className="tags_inp_wrapper">
                                                                         <div className='tags-input-container'>
-                                                                            {tags.map((tag, index) => {
+                                                                            {tags?.map((tag, index) => {
                                                                                 return <div className='tag-item' key={index}>
                                                                                     <span className='text'>{tag}</span>
                                                                                     <span className='close' onClick={() => removetagTag(index)}>&times;</span>
@@ -521,6 +666,51 @@ function AddNewProductsPage() {
                                                                     <input type="text" value={item?.barcode} className="form-control" name="barcode" placeholder="Barcode" fdprocessedid="ifjwoo" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
                                                                 </div>
                                                             </div>
+
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Gallery Images</label>
+                                                                <div className="col-md-8">
+                                                                    <input type="file" className="form-control" name="gallery_image" multiple accept="image/*" onChange={(e) => { onchangeImges(e, item.language_id) }} />
+                                                                </div>
+                                                            </div>
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Thumbnail Image</label>
+                                                                <div className="col-md-8">
+                                                                    <input type="file" name="mainImage_url" accept="image/*" className="form-control" onChange={(e) => { onchangeImges1(e, item.language_id) }} />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label"> Product Attribute </label>
+
+                                                                <div className="col-md-8">
+                                                                    <select className="form-select" aria-label="Default select example" name="unit" onChange={changettriPro}>
+                                                                        <option value={1}>Select Unit</option>
+                                                                        {data1 && data1.map((item) => {
+                                                                            return <option value={item._id} key={item._id} id={item._id}>{item.name}</option>
+                                                                        })}
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            {proAtt && <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Set Attribute Values</label>
+                                                                <div className="col-md-8">
+                                                                    {proAtt?.values && proAtt.values.map((item, i) => {
+                                                                        return <div style={{ display: "flex", margin: "5px 0" }} key={i}>
+                                                                            <label className="col-md-3 col-from-label">{item?.name}</label>
+                                                                            <input placeholder="Value" name={item?._id} className="form-control" onChange={changeValues} />
+                                                                            <div style={{ fontSize: "17px", margin: "0 5px" }}> <RxCross1 onClick={() => { removeRowAt(item?._id) }} /></div>
+                                                                        </div>
+                                                                    })}
+                                                                </div>
+                                                            </div>}
+
+
+
+
+
+
+
 
                                                             <div className="form-group row">
                                                                 <label className="col-md-3 col-from-label">Refundable</label>
@@ -584,6 +774,13 @@ function AddNewProductsPage() {
                                                                     <input type="text" value={item?.meta_title} className="form-control" name="meta_title" placeholder="Meta Title" fdprocessedid="1hz7zu" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
                                                                 </div>
                                                             </div>
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Meta Keyword</label>
+                                                                <div className="col-md-8">
+                                                                    <input type="text" value={item?.meta_keywords} className="form-control" name="meta_keywords" placeholder="Meta Key Word" fdprocessedid="1hz7zu" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
+                                                                </div>
+                                                            </div>
+
 
                                                             <div className="form-group row">
                                                                 <label className="col-md-3 col-from-label"></label>
@@ -695,7 +892,8 @@ function AddNewProductsPage() {
                                                             <div className="form-group row">
                                                                 <label className="col-md-6 col-from-label">Status</label>
                                                                 <div className="col-md-6">
-                                                                    <ToggleStatus name="featured" isStatus={item.featured} changeStatus={changeStatus} />
+                                                                    <input type="checkbox" name={'featured'} checked={shoing.featured} onChange={changeHandr} />
+                                                                    <span />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -709,8 +907,7 @@ function AddNewProductsPage() {
                                                             <div className="form-group row">
                                                                 <label className="col-md-6 col-from-label">Status</label>
                                                                 <div className="col-md-6">
-                                                                    <ToggleStatus name="todays_deal" isStatus={item.todays_deal} changeStatus={changeStatus} />
-
+                                                                    <input type="checkbox" name={'todays_deal'} checked={shoing.todays_deal} onChange={changeHandr} />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -724,11 +921,12 @@ function AddNewProductsPage() {
                                                             <div className="form-group row">
                                                                 <label className="col-md-6 col-from-label">Status</label>
                                                                 <div className="col-md-6">
-                                                                    <ToggleStatus name="trending" isStatus={item.trending} changeStatus={changeStatus} />
+                                                                    <input type="checkbox" name={'trending'} checked={shoing.trending} onChange={changeHandr} />
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
+
 
                                                     <div className="card">
 
@@ -775,8 +973,8 @@ function AddNewProductsPage() {
 
                                             </div>
 
-                                            <ProductDescriptionWrapper item={item}/>
-                                            <ProductsVariation item={item} handleVariantData={handleVariantData} setattributes={setattributesVal} setattributesVal={setattributesVal} setVariantsData={setVariantsData} />
+                                            <ProductDescriptionWrapper item={item} />
+                                            <ProductParams item={item} handleVariantData={handleVariantData} setattributes={setattributesVal} setattributesVal={setattributesVal} setVariantsData={setVariantsData} />
 
                                             <div className="row">
                                                 <div className="col-md-3 form-group physical_product_show" id="quantity">
@@ -790,6 +988,24 @@ function AddNewProductsPage() {
                                                 <div className="col-md-3 form-group physical_product_show" id="shipping_cost">
                                                     <label className="title-color">Shipping cost </label>
                                                     <input type="number" placeholder="Shipping cost" name="shipping_cost" className="form-control" required fdprocessedid="pvn15" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
+                                                </div>
+                                                <div className="col-md-3 form-group physical_product_show" id="shipping_cost">
+                                                    <label className="title-color">Save Data ! </label>
+
+                                                    <div>
+                                                        <ConfigProvider
+                                                            theme={{
+                                                                components: {
+                                                                    Checkbox: {
+                                                                        colorPrimary: '#ff4d4f',
+                                                                    },
+                                                                },
+
+                                                            }}
+                                                        >
+                                                            <Checkbox className="chBox" onClick={() => { SaveData(i, '', item.language_id) }} >Checkbox</Checkbox>
+                                                        </ConfigProvider>
+                                                    </div>
                                                 </div>
                                                 <div className="col-md-3 form-group physical_product_show" id="shipping_cost">
                                                     <label className="title-color">Shipping cost multiply with quantity </label>

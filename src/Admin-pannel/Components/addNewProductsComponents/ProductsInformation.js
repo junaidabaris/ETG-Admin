@@ -1,21 +1,23 @@
 import { useState } from "react";
 import ModalCombo from "../../Pages/addComboProduct/ModalCombo";
-import { useGetProductSearchQuery } from "../all-products/allproductsApi/allProductsApi";
+import { useGetCurrencyQuery, useGetProductSearchQuery, useGetSellersQuery } from "../all-products/allproductsApi/allProductsApi";
 import { RxCross1 } from "react-icons/rx";
 import { AiFillDelete } from "react-icons/ai";
 
-function ProductsInformationAdmin({ dataSetNext,wholesaleProductDataById }) {
+function ProductsInformationAdmin({ dataSetNext, wholesaleProductDataById ,getDat,val}) {
     const [show, setShow] = useState(true)
     const [modalShow, setModalShow] = useState(false);
     const [cartData, setcartData] = useState(null)
     const [showCombo, setShowCombo] = useState([])
     const [searchs, setSearch] = useState('')
+    const token = window.localStorage.getItem('token')
 
-    const { data: searchPro } = useGetProductSearchQuery(searchs)
+    const { data: searchPro } = useGetProductSearchQuery({ token: token, paylode: searchs })
 
     const SaveData = (val) => {
         setModalShow(false)
         const arr = [...showCombo, ...val]
+        console.log(arr);
         setShowCombo(arr)
     }
 
@@ -44,9 +46,11 @@ function ProductsInformationAdmin({ dataSetNext,wholesaleProductDataById }) {
         setShowCombo(filterd);
     }
 
-    const sendValues = ()=>{
+    const sendValues = () => {
         dataSetNext(showCombo)
     }
+    const { data } = useGetSellersQuery(token)
+    const { data: listi } = useGetCurrencyQuery(token)
 
     return (
         <>
@@ -69,6 +73,7 @@ function ProductsInformationAdmin({ dataSetNext,wholesaleProductDataById }) {
                     <div className="form-group row">
                         <label className="col-md-3 col-from-label">Product Name <span className="text-danger">*</span></label>
                         <div className="col-md-8">
+
                             <input className="form-control" onKeyDown={handelChange} placeholder="Please add products to order list" />
                             {show && searchPro?.getSearchedProduct?.length > 0 && <div className="showList">
                                 <div style={{ fontSize: "19px" }} onClick={() => { setShow(false) }}><RxCross1 /></div>
@@ -78,6 +83,33 @@ function ProductsInformationAdmin({ dataSetNext,wholesaleProductDataById }) {
                             </div>}
                         </div>
                     </div>
+                    <div className="form-group row">
+                        <label className="col-md-3 col-from-label">Seller <span className="text-danger">*</span></label>
+                        <div className="col-md-8">
+
+                            <select class="form-select" name="seller_id" onChange={getDat} value={val.seller_id} aria-label="Default select example">
+                                <option selected>Open this select menu</option>
+                                {data && data.map((item) => {
+                                    return <option value={item?._id}>{item?.firstname + " " + item?.lastname}</option>
+                                })}
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="form-group row">
+                        <label className="col-md-3 col-from-label">Currency <span className="text-danger">*</span></label>
+                        <div className="col-md-8">
+
+                            <select class="form-select" name="currency_id" onChange={getDat} value={val.currency_id} aria-label="Default select example">
+                                <option selected>Open this select menu</option>
+                                {listi && listi.map((item) => {
+                                    return <option value={item?._id}>{item?.name + " " + item?.symbol}</option>
+                                })}
+                            </select>
+                        </div>
+                    </div>
+
 
                     <div className="row align-items-end">
                         <div className="col-12 sku_combination table-responsive form-group" id="sku_combination">

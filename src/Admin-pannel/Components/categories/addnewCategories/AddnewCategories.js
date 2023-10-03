@@ -13,66 +13,7 @@ import { useParams } from 'react-router-dom';
 
 
 function AddnewCategories() {
-  // const [validated, setValidated] = useState(false);
-
-  const [inputval, setInputVal] = useState({ name: '', parent_id: null, order_level: '', type: '1', banner: '', image: '', meta_title: '', meta_description: '', commision_rate: '', filtering_attributes: '', level: '', top: '', featured: '' });
   const token = window.localStorage.getItem('token')
-
-  const [addCategory, response] = useAddNewCategoryMutation();
-
-
-
-  const [file, setFile] = useState(null);
-
-  const handleFile = (event) => {
-    setFile(event.target.files[0])
-  }
-
-  // const onChangeHandler = (e) => {
-  //   const inpName = e.target.name;
-  //   const inpVal = e.target.value;
-  //   const clonedObj = { ...inputval };
-  //   clonedObj[inpName] = inpVal;
-  //   setInputVal(clonedObj)
-  // };
-
-  const addNewCategory = async (event) => {
-    event.preventDefault();
-    // addCategory(inputval);.
-
-    const clonedObj = { ...inputval };
-
-    const url = 'https://onlineparttimejobs.in/api/category/add_category'
-    const formData = new FormData();
-
-    formData.append('name', clonedObj.name);
-    formData.append('parent_id', clonedObj.parent_id);
-    formData.append('order_level', clonedObj.order_level);
-    formData.append('type', clonedObj.type);
-    formData.append('banner', clonedObj.banner);
-    formData.append('meta_title', clonedObj.meta_title);
-    formData.append('meta_description', clonedObj.meta_description);
-    formData.append('commision_rate', clonedObj.filtering_attributes);
-    formData.append('level', clonedObj.level);
-    formData.append('top', clonedObj.top);
-    formData.append('featured', clonedObj.featured);
-    // formData.append('image', file);
-    console.log(file);
-
-    try {
-      const res = await axios.post(url, formData, {
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      alert('Category Request Send Successfully')
-      document.getElementById("create-course-form").reset();
-    } catch (error) {
-      alert('Category Request Send Fail !')
-    }
-
-  };
 
 
   const toastSuccessMessage = () => {
@@ -94,12 +35,12 @@ function AddnewCategories() {
     if (langData) {
       if (!params) {
         const maped = langData.map((item) => {
-          return { name: "", language_id: item._id, parent_id: '', lable: item.name, order_level: "", type: "", image: "", meta_title: "", meta_description: '', commision_rate: "", level: "", top: "", featured: '' }
+          return { name: "", language_id: item._id, parent_id: '', lable: item.name, order_level: "", type: "", banner: "", meta_title: "", meta_description: '', commision_rate: "", level: "", top: "", featured: '', meta_keyword: "" }
         })
         setVal(maped)
-      }else{
+      } else {
         const maped = langData.map((item) => {
-          return { name: "", language_id: item._id, parent_id: '', lable: item.name, order_level: "", type: "", image: "", meta_title: "", meta_description: '', commision_rate: "", level: "", top: "", featured: '' }
+          return { name: "", language_id: item._id, parent_id: '', lable: item.name, order_level: "", type: "", banner: "", meta_title: "", meta_description: '', commision_rate: "", level: "", top: "", featured: '', meta_keyword: "" }
         })
         setVal(maped)
       }
@@ -108,15 +49,28 @@ function AddnewCategories() {
   const onChangeHandler = (e, id, bul) => {
 
     if (bul) {
-      const maped = val.map((item) => {
-        if (item.language_id == id) {
-          const obj = { ...item, image: e.target.files[0] }
-          return obj
-        } else {
-          return item
-        }
-      })
-      setVal(maped)
+      if (bul == 'imgicon') {
+        const maped = val.map((item) => {
+          if (item.language_id == id) {
+            const obj = { ...item, icon: e.target.files[0] }
+            return obj
+          } else {
+            return item
+          }
+        })
+        setVal(maped)
+      } else {
+        const maped = val.map((item) => {
+          if (item.language_id == id) {
+            const obj = { ...item, banner: e.target.files[0] }
+            return obj
+          } else {
+            return item
+          }
+        })
+        setVal(maped)
+      }
+
     } else {
       const maped = val.map((item) => {
         if (item.language_id == id) {
@@ -130,7 +84,7 @@ function AddnewCategories() {
     }
 
   }
-
+  const [spcOr, setspcOr] = useState(false)
   const submitEditCategoryData = async (data) => {
 
     const url = `https://onlineparttimejobs.in/api/category/${params.id}`
@@ -142,29 +96,128 @@ function AddnewCategories() {
         }
       });
       alert('Edit Catagary Successfully')
+      setspcOr(false)
     } catch (error) {
       alert('Catagary not Edit')
+      setspcOr(false)
     }
   }
 
   const addNewAttributeData = async (e) => {
     e.preventDefault();
     const images = new FormData();
+    setspcOr(true)
     const clone = [...val]
     if (params?.id) {
-      submitEditCategoryData(clone)
-    } else {
       for (let i = 0; i < clone.length; i++) {
         let element = clone[i];
-        if (element?.image) {
-          images.append('image', element?.image);
-          const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
-          images.delete('image');
-          const obj = { ...element, image: { public_id: res2.data.public_id, url: res2.data.url } }
-          clone.splice(i, 1, obj)
+
+        images.append('image', element?.banner);
+        if (element?.banner?.size) {
+          try {
+            const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+            const obj = { ...element, banner: { public_id: res2.data.public_id, url: res2.data.url } }
+            clone.splice(i, 1, obj)
+          } catch (error) {
+
+          }
         }
+        images.delete('image');
+
+      }
+      for (let i = 0; i < clone.length; i++) {
+        let element = clone[i];
+
+        images.append('image', element?.icon);
+        if (element?.icon?.size) {
+          try {
+            const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+            const obj = { ...element, icon: { public_id: res2.data.public_id, url: res2.data.url } }
+            clone.splice(i, 1, obj)
+          } catch (error) {
+
+          }
+        }
+        images.delete('image');
+
+      }
+
+
+
+
+
+
+
+      // for (let i = 0; i < clone.length; i++) {
+      //   let element = clone[i];
+      //   if (element?.banner?.url) {
+
+      //   } else {
+      //     images.append('image', element?.banner);
+      //     try {
+      //       const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+      //       const obj = { ...element, banner: { public_id: res2.data.public_id, url: res2.data.url } }
+      //       clone.splice(i, 1, obj)
+      //     } catch (error) {
+
+      //     }
+      //   }
+      //   images.delete('image');
+
+      //   if (element?.icon?.url) {
+
+      //   } else {
+      //     try {
+      //       images.append('image', element?.icon);
+      //       const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+      //       const obj = { ...element, icon: { public_id: res2.data.public_id, url: res2.data.url } }
+      //       clone.splice(i, 1, obj)
+      //     } catch (error) {
+
+      //     }
+      //   }
+
+
+      //   images.delete('image');
+      // }
+
+      submitEditCategoryData(clone)
+    } else {
+
+      for (let i = 0; i < clone.length; i++) {
+        let element = clone[i];
+
+        images.append('image', element?.banner);
+        if (element?.banner?.size) {
+          try {
+            const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+            const obj = { ...element, banner: { public_id: res2.data.public_id, url: res2.data.url } }
+            clone.splice(i, 1, obj)
+          } catch (error) {
+
+          }
+        }
+        images.delete('image');
+
+      }
+      for (let i = 0; i < clone.length; i++) {
+        let element = clone[i];
+
+        images.append('image', element?.icon);
+        if (element?.icon?.size) {
+          try {
+            const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+            const obj = { ...element, icon: { public_id: res2.data.public_id, url: res2.data.url } }
+            clone.splice(i, 1, obj)
+          } catch (error) {
+
+          }
+        }
+        images.delete('image');
+
       }
       const url = 'https://onlineparttimejobs.in/api/category/add_category'
+
       try {
         const res = await axios.post(url, { list: clone }, {
           headers: {
@@ -173,28 +226,47 @@ function AddnewCategories() {
           },
         });
         toastSuccessMessage()
+        setspcOr(false)
       } catch (error) {
         alert('Category Send Fail !')
+        setspcOr(false)
       }
 
     }
-
-
-
   };
 
+  const [getDat, setGetDat] = useState(false)
+  useEffect(() => {
+    if (params?.id && langData) {
+      const clone = []
+      for (let j = 0; j < langData.length; j++) {
+        const element2 = langData[j];
+        for (let i = 0; i < val?.length; i++) {
+          const element = val[i];
+          if (element?.language_id == element2._id) {
+            clone.push(element)
+          }
 
+        }
+
+      }
+
+      setVal(clone)
+    }
+  }, [params, langData ,getDat])
 
 
   const getDetailCat = async () => {
     try {
-      const res = await axios.get(`https://onlineparttimejobs.in/api/category/${params.id}`, {
+      const res = await axios.get(`https://onlineparttimejobs.in/api/category/admin/${params.id}`, {
         headers: {
           "Content-type": "application/json; charset=UTF-8",
           Authorization: `Bearer ${token}`,
         },
       })
       setVal(res.data);
+      setGetDat(true)
+
     } catch (error) {
       alert('Server Error !')
     }
@@ -212,6 +284,12 @@ function AddnewCategories() {
         <div className="px-15px px-lg-25px">
           <div className="row">
             <div className="col-lg-8 mx-auto">
+              {spcOr && <div className="preloaderCount">
+                <div className="spinner-border" role="status">
+                  <span className="visually-hidden">ded</span>
+                </div>
+                <h6>please wait your Category uploading</h6>
+              </div>}
 
               <Box sx={{ width: '100%', typography: 'body1' }}>
                 <TabContext value={value}>

@@ -30,7 +30,7 @@ function SystemProducts() {
 
     const submitUpdateProdsSettingD = () => {
         const abc = { ...inputVal }
-        prodSetting(abc)
+        prodSetting({ data: abc, token: token })
         document.getElementById("create-course-form").reset();
     };
 
@@ -145,7 +145,7 @@ function SystemProducts() {
                     </div> */}
                     <div className="col-lg-4">
                         <label htmlFor="site_name">Barcode Renderer *</label>
-                        <select name="BarcodeRenderer" id="rows_per_page"  value={inputVal?.BarcodeRenderer} className="form-select" onChange={onChangeHandler}>
+                        <select name="BarcodeRenderer" id="rows_per_page" value={inputVal?.BarcodeRenderer} className="form-select" onChange={onChangeHandler}>
                             <option value={'img'} >Image</option>
                             <option value={'svg'} >SVG</option>
                         </select>

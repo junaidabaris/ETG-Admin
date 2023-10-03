@@ -4,14 +4,14 @@ import Form from 'react-bootstrap/Form';
 import { useState } from 'react';
 
 function ModalCombo(props) {
-    let selectedVariants = []
-    const [values, setValues] = useState(props?.cartData)
     console.log(props?.cartData);
+    let selectedVariants = []
+    const [values, setValues] = useState(props?.cartData?.variations)
     const sendData = (data, i) => {
         let flag = false
         let index;
         if (selectedVariants?.length === 0) {
-            selectedVariants.push({ productName: props?.cartData?.name, ...data, productId: props?.cartData?._id, variant: props?.cartData?.variations[i]._id })
+            selectedVariants.push({ productName: props?.cartData?.name, ...data, productId: props?.cartData?.uid, variantId: data?.uid })
         } else {
             for (let i = 0; i < selectedVariants.length; i++) {
                 if (selectedVariants[i]._id === data._id) {
@@ -23,10 +23,9 @@ function ModalCombo(props) {
                 selectedVariants.splice(index, 1)
             }
             if (!flag) {
-                selectedVariants.push({ productName: props?.cartData?.name, ...data, productId: props?.cartData?._id, variant: props?.cartData?.variations[i]._id })
+                selectedVariants.push({ productName: props?.cartData?.name, ...data, productId: props?.cartData?.uid, variantId: data?.uid })
             }
         }
-
     }
 
     const setQty = (i) => {
@@ -60,7 +59,7 @@ function ModalCombo(props) {
                     <tr>
                         <td><label className="control-label">#</label></td>
                         <td><label className="control-label">Product Name</label></td>
-                        <td><label className="control-label">SKU</label></td>
+                        {/* <td><label className="control-label">SKU</label></td> */}
                         <td><label className="control-label">Variant</label></td>
                         <td><label className="control-label">Actual Rate</label></td>
                         <td><label className="control-label">Quantity</label></td>
@@ -71,6 +70,7 @@ function ModalCombo(props) {
                 <tbody>
 
                     {values && values?.map((item, i) => {
+                        console.log(item);
                         return <tr>
                             <td>
                                 <Form>
@@ -86,9 +86,9 @@ function ModalCombo(props) {
                             <td>
                                 <label name="productName" className="control-label">{props?.cartData?.name}</label>
                             </td>
-                            <td>
+                            {/* <td>
                                 <input type="text" disabled value={item?.sku} name="sku" className="form-control" />
-                            </td>
+                            </td> */}
                             <td>
                                 <input type="text" disabled value={item?.weight} name="rate" className="form-control" />
                             </td>

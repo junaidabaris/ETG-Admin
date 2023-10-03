@@ -6,7 +6,7 @@ import { token } from "../../../common/TokenArea";
 import { useGetCategoriesQuery } from "../../all-products/allproductsApi/allProductsApi";
 
 function MultilangForm({ data, item, i, addNewAttributeData, onChangeHandler, setValue }) {
-    const { data:valDAta } = useGetCategoriesQuery(token);
+    const { data: valDAta } = useGetCategoriesQuery(token);
     return <div className="card">
         <div className="card-header">
             <h5 className="mb-0 h6">Category Information ({item?.lable})</h5>
@@ -27,7 +27,7 @@ function MultilangForm({ data, item, i, addNewAttributeData, onChangeHandler, se
                     <label className="col-md-3 col-form-label">Parent Category</label>
 
                     <div className="col-md-9">
-                        <select className="form-select" name='parent_id'  value={item?.parent_id} onChange={(e) => { onChangeHandler(e, item.language_id) }} required>
+                        <select className="form-select" name='parent_id' value={item?.parent_id} onChange={(e) => { onChangeHandler(e, item.language_id) }} required>
                             <option>Select Parent Catagary</option>
                             <option value='null'>Null</option>
                             {valDAta && valDAta.map((item, i) => {
@@ -59,14 +59,37 @@ function MultilangForm({ data, item, i, addNewAttributeData, onChangeHandler, se
                     </div>
                 </div>
                 <div className="form-group row">
-                    <label className="col-md-3 col-form-label">Icon <small>(32x32)</small></label>
+                    <label className="col-md-3 col-form-label">Banner</label>
                     <div className="col-md-9">
-                        <div className="input-group" data-type="image">
-                            <div className="input-group-prepend">
-                                <div className="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
+                            <div>
+                               {item?.banner?.url && <img src={item?.banner?.url} style={{ width: "100px", height: "100px" }} />} 
+                                <div className="input-group" data-type="image">
+                                    <div className="input-group-prepend">
+                                        <div className="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
+                                    </div>
+                                    <div className="form-control file-amount">
+                                        <input type="file" name="banner" className="selected-files" onChange={(e) => { onChangeHandler(e, item.language_id, 'img') }} />
+                                    </div>
+                                </div>
                             </div>
-                            <div className="form-control file-amount">
-                                <input type="file" name="image" className="selected-files" onChange={(e) => { onChangeHandler(e, item.language_id, 'img') }} />
+                          
+
+                        <div className="file-preview box sm">
+                        </div>
+                    </div>
+                </div>
+                <div className="form-group row">
+                    <label className="col-md-3 col-form-label">Icon </label>
+                    <div className="col-md-9">
+                        <div>
+                            {item?.icon?.url && <img src={item?.icon?.url} style={{ width: "100px", height: "100px" }} />}
+                            <div className="input-group" data-type="image">
+                                <div className="input-group-prepend">
+                                    <div className="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
+                                </div>
+                                <div className="form-control file-amount">
+                                    <input type="file" name="icon" className="selected-files" onChange={(e) => { onChangeHandler(e, item.language_id, 'imgicon') }} />
+                                </div>
                             </div>
                         </div>
                         <div className="file-preview box sm">
@@ -77,21 +100,28 @@ function MultilangForm({ data, item, i, addNewAttributeData, onChangeHandler, se
                 <div className="form-group row">
                     <label className="col-md-3 col-form-label">Meta Title</label>
                     <div className="col-md-9">
-                        <input type="text" className="form-control" name="meta_title"  value={item?.meta_title} placeholder="Meta Title" onChange={(e) => { onChangeHandler(e, item.language_id) }} required />
+                        <input type="text" className="form-control" name="meta_title" value={item?.meta_title} placeholder="Meta Title" onChange={(e) => { onChangeHandler(e, item.language_id) }} required />
                     </div>
                 </div>
 
                 <div className="form-group row">
-                    <label className="col-md-3 col-form-label">Meta description</label>
+                    <label className="col-md-3 col-form-label">Meta Description</label>
                     <div className="col-md-9">
-                        <textarea name="meta_description" rows={5} className="form-control"  value={item?.meta_description} onChange={(e) => { onChangeHandler(e, item.language_id) }} required />
+                        <textarea name="meta_description" rows={5} className="form-control" value={item?.meta_description} onChange={(e) => { onChangeHandler(e, item.language_id) }} required />
+                    </div>
+                </div>
+
+                <div className="form-group row">
+                    <label className="col-md-3 col-form-label">Meta Keyword</label>
+                    <div className="col-md-9">
+                        <textarea name="meta_keyword" rows={5} className="form-control" value={item?.meta_keyword} onChange={(e) => { onChangeHandler(e, item.language_id) }} required />
                     </div>
                 </div>
 
                 <div className="form-group row">
                     <label className="col-md-3 col-form-label">Commission Rate</label>
                     <div className="col-md-9 input-group">
-                        <input type="number" lang="en" min={0} step="0.01" placeholder="Commission Rate"  value={item?.commision_rate} id="commision_rate" name="commision_rate" className="form-control" onChange={(e) => { onChangeHandler(e, item.language_id) }} required />
+                        <input type="number" lang="en" min={0} step="0.01" placeholder="Commission Rate" value={item?.commision_rate} id="commision_rate" name="commision_rate" className="form-control" onChange={(e) => { onChangeHandler(e, item.language_id) }} required />
                         <div className="input-group-append">
                             <span className="input-group-text">%</span>
                         </div>
@@ -99,9 +129,9 @@ function MultilangForm({ data, item, i, addNewAttributeData, onChangeHandler, se
                 </div>
 
                 {/* <div className="form-group row">
-                    <label className="col-md-3 col-form-label">Filtering Attributes</label>
+                    <label className="col-md-3 col-form-label">Featured</label>
                     <div className="col-md-9">
-                        <Form.Select aria-label="Default select example" name='filtering_attributes' className='form-control' onChange={(e) => { onChangeHandler(e, item.language_id) }} required>
+                        <Form.Select aria-label="Default select example" name='featured' className='form-control' onChange={(e) => { onChangeHandler(e, item.language_id) }} required>
                             <option>Open this select menu</option>
                             <option value="1">One</option>
                             <option value="2">Two</option>
@@ -120,25 +150,25 @@ function MultilangForm({ data, item, i, addNewAttributeData, onChangeHandler, se
                 <div className="form-group row">
                     <label className="col-md-3 col-form-label">Top</label>
                     <div className="col-md-9">
-                        <input type="text" className="form-control" name="top"  value={item?.top} placeholder="top" onChange={(e) => { onChangeHandler(e, item.language_id) }} required />
+                        <input type="text" className="form-control" name="top" value={item?.top} placeholder="top" onChange={(e) => { onChangeHandler(e, item.language_id) }} required />
                     </div>
                 </div>
 
                 <div className="form-group row">
                     <label className="col-md-3 col-form-label">Featured</label>
                     <div className="col-md-9">
-                        <input type="text" className="form-control" name="featured"  value={item?.featured} placeholder="featured" onChange={(e) => { onChangeHandler(e, item.language_id) }} required />
+                        <input type="text" className="form-control" name="featured" value={item?.featured} placeholder="featured" onChange={(e) => { onChangeHandler(e, item.language_id) }} required />
                     </div>
                 </div>
 
                 {data.length == i + 1 ? <div className="form-group mb-3 text-right">
-                <button type="submit" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setValue(i - 1) }}>Prev</button>
-                    <button type="submit" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={addNewAttributeData}>Save</button>
+                    <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setValue(i - 1) }}>Prev</button>
+                    <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={addNewAttributeData}>Save</button>
                 </div>
                     :
                     <div className="form-group mb-3 text-right">
-                        {i !== 0 && <button type="submit" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setValue(i - 1) }}>Prev</button>}
-                        <button type="submit" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setValue(i + 1) }}>Next</button>
+                        {i !== 0 && <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setValue(i - 1) }}>Prev</button>}
+                        <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setValue(i + 1) }}>Next</button>
                     </div>
                 }
             </form>

@@ -6,10 +6,12 @@ import { RxCross1 } from "react-icons/rx"
 import { useParams } from "react-router-dom"
 import Barcode from "react-barcode"
 import SallowRow from "./SallowRow"
+import { token } from "../../common/TokenArea"
 
 function PrintBarCode() {
     const [searchs, setSearch] = useState('')
-    const { data: searchPro } = useGetProductSearchQuery(searchs)
+    const { data: searchPro } = useGetProductSearchQuery({ token: token, paylode: searchs })
+
     const [show, setShow] = useState(true)
     const [showData, setShowData] = useState()
     const params = useParams()

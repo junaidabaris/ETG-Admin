@@ -27,7 +27,8 @@ function VtechPurchase() {
     const [modalShow, setModalShow] = useState(false);
     const [showCombo, setShowCombo] = useState([])
     const [searchs, setSearch] = useState('')
-    const { data: searchPro } = useGetProductSearchQuery(searchs)
+    const { data: searchPro } = useGetProductSearchQuery({ token: token, paylode: searchs })
+
     const { data: sellers } = useGetSellersQuery(token)
 
     const [show, setShow] = useState(true)

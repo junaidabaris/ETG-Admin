@@ -428,7 +428,7 @@ import ListVPurchaseStock from "./Admin-pannel/Pages/list-v-tech-Transfer-stock/
 import KnowledgeBase from "./Admin-pannel/Pages/knowledgeBaseCrm";
 import AddNewArtical from "./Admin-pannel/Components/knowledgeBaseCrm/AddNewArtical";
 import Group from "./Admin-pannel/Components/knowledgeBaseCrm/Group";
-import AddPrice from "./Admin-pannel/Pages/addPrices";
+// import AddPrice from "./Admin-pannel/Pages/addPrices";
 import ImportLeads from "./Admin-pannel/Pages/importLeads";
 import Reminder from "./Admin-pannel/Pages/reminder";
 import Proposal from "./Admin-pannel/Pages/salescrm/index";
@@ -584,6 +584,79 @@ import Inventoryfl from "./Admin-pannel/Pages/Inventoryflow";
 import Marketing from "./Admin-pannel/Pages/marketing";
 import Ecommers from "./Admin-pannel/Pages/ecommerse";
 
+
+
+
+
+
+import ColorStonePage from "./Admin-pannel/Pages/generalMaster/colorStone/Index";
+import AddColorStone from "./Admin-pannel/Components/generalMaster/colorStone/addColorStone/AddColorStone";
+import LabourChangeTypePage from "./Admin-pannel/Pages/generalMaster/labourChangeType/Index";
+import LabourChargePage from "./Admin-pannel/Pages/generalMaster/labourCharge/Index";
+import PricePage from "./Admin-pannel/Pages/generalMaster/price/Index";
+import AddPrice from "./Admin-pannel/Components/generalMaster/price/addPrice/AddPrice";
+import ShopForModulePage from "./Admin-pannel/Pages/generalMaster/shopForModule/Index";
+import AddShopForModule from "./Admin-pannel/Components/generalMaster/shopForModule/addShopForModule/AddShopForModule";
+import OccasionPage from "./Admin-pannel/Pages/generalMaster/occasion/Index";
+import AddOccasion from "./Admin-pannel/Components/generalMaster/occasion/addOccasion/AddOccasion";
+import RingSizePage from "./Admin-pannel/Pages/generalMaster/ringSize/Index";
+import AddRingSize from "./Admin-pannel/Components/generalMaster/ringSize/addRingSize/AddRingSize";
+import CouponnPage from "./Admin-pannel/Pages/generalMaster/coupon/Index";
+import AddCoupan from "./Admin-pannel/Components/generalMaster/coupon/addCoupan/AddCoupan";
+
+import MetalPurityPage from "./Admin-pannel/Pages/jewellery/metalPurity/Index";
+import AddMetalType from "./Admin-pannel/Components/jewellery/metalPurity/addMetalType/AddMetalType";
+import MetalWeightPage from "./Admin-pannel/Pages/jewellery/metalWeight/Index";
+import AddDiamondColorPage from "./Admin-pannel/Pages/jewellery/diamond/addDiamondColor/Index";
+import AddDiamondClarityPage from "./Admin-pannel/Pages/jewellery/diamond/addDiamondClarity";
+import AddDiamondQualityPage from "./Admin-pannel/Pages/jewellery/diamond/addDiamondQuality/Index";
+import AddDiamondShapePage from "./Admin-pannel/Pages/jewellery/diamond/addDiamondShape/Index";
+import AddDiamondSievesPage from "./Admin-pannel/Pages/jewellery/diamond/addDiamondSieves/Index";
+// import AddJwelleryProductPage from "./Admin-pannel/Pages/addJwelleryProductPage";
+// import ListProductsJwellPage from "./Admin-pannel/Pages/listProductsJwellPage";
+import EditShopForModulePage from "./Admin-pannel/Pages/editShopForModulePage";
+import EditPricePage from "./Admin-pannel/Pages/editPricePage";
+import EditOccassionPage from "./Admin-pannel/Pages/editOccassionPage";
+import AddLabourChargePage from "./Admin-pannel/Pages/addLabourChargePage";
+import AddLabourChargeTypePage from "./Admin-pannel/Pages/addLabourChargeTypePage";
+import EditLabourChargeTypePage from "./Admin-pannel/Pages/editLabourChargetypePage";
+import EditLabourChargePage from "./Admin-pannel/Pages/editLabourChargePage";
+import EditColorStonepage from "./Admin-pannel/Pages/editColorStonePage";
+import EditRingSize from "./Admin-pannel/Pages/editRingSizepage";
+import EditRingSizePage from "./Admin-pannel/Pages/editRingSizepage";
+import CategoryTypeJwellsPage from "./Admin-pannel/Pages/CatregoryTypeJwellsPage";
+import AddCategoryTypeJwellsPage from "./Admin-pannel/Pages/addCategoryTypeJwellsPage";
+import EditCategoryTypeJwellsPage from "./Admin-pannel/Pages/editCategoryTypeJwellsPage";
+import AddMetalWeightPage from "./Admin-pannel/Pages/addMetalWeightPage";
+import EditMetalWeightPage from "./Admin-pannel/Pages/editMetalWeightPage";
+import AddCategorySequencePage from "./Admin-pannel/Pages/addCategorySequencePage";
+import AddStyleManagementPage from "./Admin-pannel/Pages/addStyleManagmentPage";
+import AddCollectionManagementPage from "./Admin-pannel/Pages/addCollectionManagmentPage";
+import ListDiamondQuality from "./Admin-pannel/Components/jewellery/diamond/listDiamondQuality.js/ListDiamondQuality";
+import EditDiamondQuality from "./Admin-pannel/Components/jewellery/diamond/editDiamondQuality.js/EditDiamondQuality";
+import ListDiamondShieves from "./Admin-pannel/Components/jewellery/diamond/listDiamondShieves/ListDiamondShieves";
+import EditDiamondSieves from "./Admin-pannel/Components/jewellery/diamond/editDiamondSieves/EditDiamondSieves";
+import ListDiamondShape from "./Admin-pannel/Components/jewellery/diamond/listDiamondShape/ListDiamondShape";
+import EditDiamondShape from "./Admin-pannel/Components/jewellery/diamond/editDiamondShape/EditDiamondShape";
+import EditMetalPurity from "./Admin-pannel/Components/jewellery/diamond/editMetalPurity/EditMetalPurity";
+import ListDiamondClarity from "./Admin-pannel/Components/jewellery/diamond/listDiamondClarity/ListDiamondClarity";
+import EditDiamondClarity from "./Admin-pannel/Components/jewellery/diamond/editDiamondClarity/EditDiamondClarity";
+// import AddJwelleryProductPage222 from "./Admin-pannel/Pages/addJwelleryProduct222Page";
+// import AddMetalTypeComp from "./Admin-pannel/Components/jewellery/addMetalTypeComp/AddMetalTypeComp";
+import MetalTypePage from "./Admin-pannel/Pages/jewellery/metalTypePage";
+import AddMetalTypePage from "./Admin-pannel/Pages/addMetalTypePage";
+import EditMetalTypePage from "./Admin-pannel/Pages/editMetalTypePage";
+import AddTimeGroup from "./Admin-pannel/Pages/timegroup/TimeGroup";
+import TLAddB from "./Admin-pannel/Components/HRrecord/Training/TLAddB";
+import AllTaskS from "./Admin-pannel/Pages/FieldService/AllTasks/AllTasks";
+import Toschedule from "./Admin-pannel/Pages/FieldService/ToSchedule";
+import Toinvoice from "./Admin-pannel/Pages/FieldService/AllTasks/ToInvoice";
+import NewButton from "./Admin-pannel/Components/FieldService/AllTask/NewButton";
+import MyTaskS from "./Admin-pannel/Pages/FieldService/MyTasks";
+import Byuser from "./Admin-pannel/Pages/FieldService/Planning/ByUser";
+import TasksAnalysis from "./Admin-pannel/Components/FieldService/Reporting/TasksAnalysis/TasksAnalysis";
+import BarchartA from "./Admin-pannel/Components/FieldService/BarchartA";
+
 function App() {
   const [show, setshow] = useState(true);
 
@@ -664,7 +737,7 @@ function App() {
           <Route path="add_Seller_brand" element={<AddSellerBrnad />} />
 
           <Route path="time-slote" element={<AddTimeSlote />} />
-          <Route path="time-group" element={'add-time-sloteadd-time-slote'} />
+          <Route path="time-group" element={<AddTimeGroup />} />
 
           {/* Front Ui */}
           <Route path="add_banner" element={<AddNewBanner />} />
@@ -888,6 +961,24 @@ function App() {
             <Route path="t-libraries" element={<Traininglibraries />} />
             <Route path="t-result" element={<Trainingresults />} />
           </Route>
+          <Route path="libraries-add" element={<TLAddB />} />
+          {/* <Route path="edit" element={<EditTL />} /> */}
+          <Route path="all-tasks" element={<AllTaskS />} />
+          <Route path="new-button" element={<NewButton />} />
+          <Route path="to-schedule" element={<Toschedule />} />
+          <Route path="to-invoice" element={<Toinvoice />} />
+          <Route path="my-tasks" element={<MyTaskS />} />
+          <Route path="by-user" element={<Byuser />} />
+          <Route path="tasks-analysis" element={<TasksAnalysis />} />
+          <Route path="barchart-analysis" element={<BarchartA />} />
+
+
+
+
+
+
+
+
           <Route path="contract" element={<ContractSV />} />
           <Route path="new-contract" element={<NewContracts />} />
           <Route path="dependant" element={<DependantS />} />
@@ -1287,7 +1378,65 @@ function App() {
             path="staffs-new"
             element={<AddUser />}
           />
-          {/* {daud route end} */}
+          {/* {zilani route } */}
+
+
+
+          <Route path="color-stone" element={<ColorStonePage />} />
+          <Route path="color-stone/edit/:uid" element={<EditColorStonepage />} />
+          <Route path="add-color-stone" element={<AddColorStone />} />
+          <Route path="add-labour-charge-type" element={<AddLabourChargeTypePage />} />
+          <Route path="labour-charge-type" element={<LabourChangeTypePage />} />
+          <Route path="labour-charge-type/edit/:uid" element={<EditLabourChargeTypePage />} />
+          <Route path="add-labour-charge" element={<AddLabourChargePage />} />
+          <Route path="labour-charge" element={<LabourChargePage />} />
+          <Route path="labour-charge/edit/:uid" element={<EditLabourChargePage />} />
+          <Route path="price" element={<PricePage />} />
+          <Route path="price/edit/:uid" element={<EditPricePage />} />
+          <Route path="add-price" element={<AddPrice />} />
+          <Route path="shop-for-modules" element={<ShopForModulePage />} />
+          <Route path="shop-for-modules/edit/:uid" element={<EditShopForModulePage />} />
+          <Route path="add-shop-for-module" element={<AddShopForModule />} />
+          <Route path="occasion" element={<OccasionPage />} />
+          <Route path="occasion/edit/:uid" element={<EditOccassionPage />} />
+          <Route path="add-occasion" element={<AddOccasion />} />
+          <Route path="ring-size" element={<RingSizePage />} />
+          <Route path="ring-size/edit/:uid" element={<EditRingSizePage />} />
+          <Route path="add-ring-size" element={<AddRingSize />} />
+          <Route path="couponn" element={<CouponnPage />} />
+          <Route path="add-couponn" element={<AddCoupan />} />
+          <Route path="jwellery/categoryType" element={<CategoryTypeJwellsPage />} />
+          <Route path="jwellery/categoryType/edit/:uid" element={<EditCategoryTypeJwellsPage />} />
+          <Route path="add-jwellery/categoryType" element={<AddCategoryTypeJwellsPage />} />
+
+          <Route path="add-metal-purity" element={<AddMetalType />} />
+          <Route path="metal-purity" element={<MetalPurityPage />} />
+          <Route path="metal-purity/edit/:uid" element={<EditMetalPurity />} />
+          <Route path="add-metal-weight" element={<AddMetalWeightPage />} />
+          <Route path="metal-weight" element={<MetalWeightPage />} />
+          <Route path="metal-weight/edit/:uid" element={<EditMetalWeightPage />} />
+          <Route path="add-diamond-color" element={<AddDiamondColorPage />} />
+          <Route path="add-diamond-clarity" element={<AddDiamondClarityPage />} />
+          <Route path="list-diamond-clarity" element={<ListDiamondClarity />} />
+          <Route path="list-diamond-clarity/edit/:uid" element={<EditDiamondClarity />} />
+          <Route path="add-diamond-quality" element={<AddDiamondQualityPage />} />
+          <Route path="list-diamond-quality" element={<ListDiamondQuality />} />
+          <Route path="list-diamond-quality/edit/:uid" element={<EditDiamondQuality />} />
+          <Route path="add-diamond-shape" element={<AddDiamondShapePage />} />
+          <Route path="list-diamond-shape" element={<ListDiamondShape />} />
+          <Route path="list-diamond-shape/edit/:uid" element={<EditDiamondShape />} />
+          <Route path="add-diamond-Sieves" element={<AddDiamondSievesPage />} />
+          <Route path="list-diamond-Sieves" element={<ListDiamondShieves />} />
+          <Route path="list-diamond-Sieves/edit/:uid" element={<EditDiamondSieves />} />
+          <Route path="add-category-sequence" element={<AddCategorySequencePage />} />
+          <Route path="add-style" element={<AddStyleManagementPage />} />
+          <Route path="add-collection" element={<AddCollectionManagementPage />} />
+          <Route path="add-metal-type" element={<AddMetalTypePage />} />
+          <Route path="metal-type" element={<MetalTypePage />} />
+          <Route path="metal-type/edit/:uid" element={<EditMetalTypePage />} />
+
+
+
 
           {/* <Route path="crmDashboard" element={<NewDashboardCard />} />
           <Route path="crmContacts" element={<Contacts />} /> */}

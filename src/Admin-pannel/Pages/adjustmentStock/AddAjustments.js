@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { RxCross1 } from 'react-icons/rx'
 import { useAddPurchaseCartMutation, useDeleteCartRowMutation, useGetPickupPointQuery, useGetProductSearchQuery } from '../../Components/all-products/allproductsApi/allProductsApi'
 import GenerateStock from '../transfersStock/GenerateStock'
+import { token } from '../../common/TokenArea'
 
 function AddAdjustments() {
     const [show, setShow] = useState(false)
     const [searchs, setSearch] = useState('')
-    const { data: searchPro } = useGetProductSearchQuery(searchs)
+    const { data: searchPro } = useGetProductSearchQuery({ token: token , paylode: searchs })
+
     const { data: pickUp } = useGetPickupPointQuery();
 
     const [details, setDetails] = useState() // for test object

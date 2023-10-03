@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-export const AttributeItem = ({ item, handleChoiceValues, isSuccess,isLoading,setUpdatedVariants }) => {
+export const AttributeItem = ({ item, handleChoiceValues, isSuccess, isLoading, setUpdatedVariants }) => {
 
     const [tags, setTags] = useState([]);
     const params = useParams()
 
     function handleTagKeyDown(e) {
         if (e.key !== 'Enter') return
-        // debugger
         const value = e.target.value
         if (!value.trim()) return
 
@@ -26,17 +25,12 @@ export const AttributeItem = ({ item, handleChoiceValues, isSuccess,isLoading,se
         }
         e.target.value = ''
     };
-   
+
 
     const removetagTag = (index) => [
         setTags(tags.filter((el, i) => i !== index))
     ];
 
-    useEffect(() => {
-        if (params) {
-            setTags(item?.data)
-        }
-    }, [item])
 
     useEffect(() => {
         // if (!tags?.length) {
@@ -48,17 +42,8 @@ export const AttributeItem = ({ item, handleChoiceValues, isSuccess,isLoading,se
         else if (isSuccess) {
             handleChoiceValues(tags, { id: item._id, title: item.name ? item.name : item.title, data: tags ? [...tags] : '' })
         }
-       
-    }, [tags])
 
-    useEffect(() => {
-        if (isSuccess) {
-            console.log(tags);
-            // handleChoiceValues(tags, { id: item._id, title: item.name ? item.name : item.title, data: tags ? [...tags] : '' })
-        }
-    }, [isSuccess])
-
-
+    }, [tags,isSuccess])
     return (
         <div className="row">
             <div className="col-lg-3">

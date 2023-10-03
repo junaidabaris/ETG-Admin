@@ -10,7 +10,6 @@ function TotalPayableComp({ totalPosProductsPrice, bringedDiscountVal, bringedOr
 
     const calculatedOrderTaxAmount = totalPosProductsPrice * bringedOrderTaxVal?.order_tax / 100;
     const calculatedFinalTotalPayableAmount = totalPosProductsPrice + calculatedOrderTaxAmount - bringedDiscountVal.discount
-    console.log('calculatedOrderTaxAmount---', calculatedOrderTaxAmount)
 
     return (
         <>

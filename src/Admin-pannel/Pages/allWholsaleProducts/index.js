@@ -2,13 +2,19 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { token } from "../../common/TokenArea";
 
 function AllWholsaleProductsPage() {
     const [data, setData] = useState(null)
 
     const getData = async () => {
         try {
-            const res = await axios.get(`https://onlineparttimejobs.in/api/wholesale`)
+            const res = await axios.get(`https://onlineparttimejobs.in/api/wholesale`,{
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                }
+            })
             setData(res.data)
         } catch (error) {
             alert('Server Error ,Fail to Load Data !')
@@ -21,7 +27,12 @@ function AllWholsaleProductsPage() {
 
     const deleteData = async (id) => {
         try {
-            const res = await axios.delete(`https://onlineparttimejobs.in/api/wholesale/delete_wholesales/${id}`)
+            const res = await axios.delete(`https://onlineparttimejobs.in/api/wholesale/delete_wholesales/${id}`, {
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                }
+            })
             alert('Whole sale product Deleted')
             getData()
         } catch (error) {
@@ -122,11 +133,11 @@ function AllWholsaleProductsPage() {
                                                 </td>
                                                 <td style={{ display: 'table-cell' }}>
                                                     <div className="row gutters-5 w-200px w-md-300px mw-100">
-                                                        <div className="col-auto">
+                                                        {/* <div className="col-auto">
                                                             <img src="https://mmslfashions.in/public/assets/img/placeholder.jpg" alt="Image" className="size-50px img-fit" />
-                                                        </div>
+                                                        </div> */}
                                                         <div className="col">
-                                                            <span className="text-muted text-truncate-2">{item?.productId?.name}</span>
+                                                            <span className="text-muted text-truncate-2">{item?.name}</span>
                                                         </div>
                                                     </div>
                                                 </td>

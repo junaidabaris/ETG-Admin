@@ -3,6 +3,7 @@ import { Table } from "react-bootstrap";
 import { useGetProductSearchQuery } from "../../Components/all-products/allproductsApi/allProductsApi";
 import { RxCross1 } from "react-icons/rx";
 import ProductModal from "./ProductModal";
+import { token } from "../../common/TokenArea";
 
 function ProductTransferEntry() {
     const [state, setState] = useState({
@@ -18,7 +19,8 @@ function ProductTransferEntry() {
         staff: "642177b99fd9c29aab59d245",
     })
     const [searchs, setSearch] = useState('')
-    const { data: searchPro } = useGetProductSearchQuery(searchs)
+    const { data: searchPro } = useGetProductSearchQuery({ token: token, paylode: searchs })
+
     const [show, setShow] = useState(true)
     const [modalShow, setModalShow] = useState(false);
 

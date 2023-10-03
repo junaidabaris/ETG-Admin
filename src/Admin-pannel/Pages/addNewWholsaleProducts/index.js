@@ -27,10 +27,18 @@ function AddNewWholesaleProductsPage() {
     }
     const token = window.localStorage.getItem('token')
     const [sendDatas, { isLoading, isError, isSuccess }] = useAddWholeSaleMutation()
+    const [val, setVal] = useState({ seller_id: "", currency_id: "" })
+    const getDat = (e) => {
+        const { name, value } = e.target
+        const clone = { ...val }
+        clone[name] = value
+        setVal(clone)
+    }
 
     const sendData = () => {
-        const val = { seller_id: sellid, productId: data[0]?.productId, products: main.products }
-        sendDatas({data:val,token:token})
+        const tal = { seller_id: val.seller_id, currency_id: val.currency_id, productId: data[0]?.productId, products: main.products }
+        sendDatas({data:tal,token:token})
+        console.log(tal);
 
     }
 
@@ -57,6 +65,7 @@ function AddNewWholesaleProductsPage() {
             toastErrorMessage2()
         };
     }, [isError])
+
     return (
         <>
             <div className="aiz-main-content">
@@ -75,8 +84,9 @@ function AddNewWholesaleProductsPage() {
                         <form className="form form-horizontal mar-top" id="choice_form">
                             <div className="row gutters-5">
                                 <div className="col-lg-8">
-                                    <input type="hidden" name="_token" defaultValue="6klBhNOhEcSYzHAP1WU8ctR90lIocmkKBETVGkNx" />                <input type="hidden" name="added_by" defaultValue="admin" />
-                                    <ProductsInformationAdmin dataSetNext={dataSetNext} />
+
+                                    <ProductsInformationAdmin dataSetNext={dataSetNext} val={val} getDat={getDat} />
+
 
                                     {data && data.map((item, i) => {
                                         return <PriceStocCompkWholsaleProducts key={i} item={item} setMainVal={setMainVal} main={main} data={data} />
@@ -84,12 +94,6 @@ function AddNewWholesaleProductsPage() {
 
                                     <button style={{ margin: "15px 0", width: "200px" }} type="button" class="btn btn-success" onClick={sendData}>Submit</button>
 
-                                    {/* <PriceStocCompkWholsaleProducts />
-                                    <PriceStocCompkWholsaleProducts /> */}
-
-                                    {/* <ProductsDescriptionAdmin /> */}
-                                    {/* <PdfSpecificationAdmin /> */}
-                                    {/* <SeoMetaTagsAdmin /> */}
                                 </div>
                                 <div className="col-lg-4">
                                     <ShippingConfigurationAdmin />

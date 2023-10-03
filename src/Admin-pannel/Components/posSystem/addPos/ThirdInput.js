@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useAddPurchaseCartMutation, useGetProductSearchQuery } from '../../all-products/allproductsApi/allProductsApi';
 import { RxCross1 } from "react-icons/rx"
+import { token } from '../../../common/TokenArea';
 
 
 
@@ -20,7 +21,7 @@ function ThirdInput({ setCart, setcartData, setModalShow }) {
 
     const [show, setShow] = useState(false)
     const [searchs, setSearch] = useState('')
-    const { data: searchPro } = useGetProductSearchQuery(searchs)
+    const { data: searchPro } = useGetProductSearchQuery({ token: token, paylode: searchs })
 
 
     const handelChange = (e) => {
@@ -42,7 +43,7 @@ function ThirdInput({ setCart, setcartData, setModalShow }) {
     return (
         <>
 
-            <div className="container-fluid">
+            <div className="container">
                 <div className="row">
                     <div className="col ps-0">
                         <div className='orderListSec mb-2'>

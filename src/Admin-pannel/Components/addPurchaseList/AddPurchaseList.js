@@ -21,10 +21,11 @@ import { Spinner } from "react-bootstrap";
 import OptionSelect from "./OptionSelect";
 import axios from "axios";
 import Multiselect from "multiselect-react-dropdown";
+import { token } from "../../common/TokenArea";
 function AddPurchaseList() {
 
     const [searchs, setSearch] = useState('')
-    const { data: searchPro } = useGetProductSearchQuery(searchs)
+    const { data: searchPro } = useGetProductSearchQuery({ token: token, paylode: searchs })
     const { data: sellers } = useGetSellersQuery()
 
     const [show, setShow] = useState(true)
