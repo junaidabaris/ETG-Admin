@@ -1,51 +1,119 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
-import { useAddNewBlogsMutation } from '../../all-products/allproductsApi/allProductsApi';
+import { useAddNewBlogsMutation, useGetLanguagesQuery } from '../../all-products/allproductsApi/allProductsApi';
+import { useParams } from 'react-router-dom';
+import { token } from '../../../common/TokenArea';
+
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import MultiForm from './MultiForm';
+
+const toastSuccessMessage = () => {
+  toast.success("Blog added Successfully", {
+    position: "top-center"
+  })
+};
 
 function AddNewPost() {
-  const [inputval, setInputval] = useState({
-    title: '',
-    // category_id: '',
-    slug: '',
-    banner: '',
-    short_description: '',
-    meta_title: '',
-    meta_img: '',
-    description: '',
-
-  });
-
+  const { data: langData, refetch } = useGetLanguagesQuery(token);
+  const [val, setVal] = useState(langData)
   const [addNewBlog, response] = useAddNewBlogsMutation();
 
-  const onChangeHandler = (e) => {
-    const inpName = e.target.name;
-    const inpval = e.target.value;
-    const clonedObj = { ...inputval };
-    clonedObj[inpName] = inpval;
-    setInputval(clonedObj)
-  };
+  const onChangeHandler = (e, id, bul) => {
 
-  const addNewPostData = (e) => {
-    e.preventDefault();
-    addNewBlog(inputval)
-    console.log(inputval)
-    document.getElementById("create-course-form").reset();
-  };
+    if (bul) {
+      if (bul == 'meta') {
+        const maped = val.map((item) => {
+          if (item.language_id == id) {
+            const obj = { ...item, meta_img: e.target.files[0] }
+            return obj
+          } else {
+            return item
+          }
+        })
+        console.log(maped);
+        setVal(maped)
+      } else {
+        const maped = val.map((item) => {
+          if (item.language_id == id) {
+            const obj = { ...item, banner: e.target.files[0] }
+            return obj
+          } else {
+            return item
+          }
+        })
+        setVal(maped)
+      }
 
-  console.log(response);
+    } else {
+      const maped = val.map((item) => {
+        if (item.language_id == id) {
+          const obj = { ...item, [e.target.name]: e.target.value }
+          return obj
+        } else {
+          return item
+        }
+      })
+      setVal(maped);
+    }
 
-  const toastSuccessMessage = () => {
-    toast.success("Post added Successfully", {
-      position: "top-center"
-    })
-  };
-
-  if (response.isSuccess === true) {
-    toastSuccessMessage()
-  };
-  if (response.isError === true) {
-    alert('!Error Brand not added')
   }
+
+  const addNewAttributeData = (e) => {
+    // addNewBlog(inputval)
+    console.log(val)
+    // document.getElementById("create-course-form").reset();
+  };
+
+
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  
+  const params = useParams()
+  useEffect(() => {
+    if (langData) {
+      if (!params) {
+        const maped = langData.map((item) => {
+          return {
+            language_id: item._id,
+            title: '',
+            lable: item.name,
+            slug: '',
+            banner: '',
+            short_description: '',
+            meta_title: '',
+            meta_img: '',
+            description: '',
+          }
+        })
+        setVal(maped)
+      } else {
+        const maped = langData.map((item) => {
+          return {
+            language_id: item._id,
+            title: '',
+            lable: item.name,
+            slug: '',
+            banner: '',
+            short_description: '',
+            meta_title: '',
+            meta_img: '',
+            description: '',
+          }
+        })
+        setVal(maped)
+      }
+    }
+  }, [langData])
+
+
 
 
   return (
@@ -60,124 +128,36 @@ function AddNewPost() {
                 </div>
                 <div className="card-body">
 
-                  <form id="create-course-form" className="form-horizontal" onSubmit={addNewPostData}>
-                    <input type="hidden" name="_token" defaultValue="07UCSsugYybFwAvxOOLHIzxK3Bh478ewEmm13oXv" />
 
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label">
-                        Blog Title
-                        <span className="text-danger">*</span>
-                      </label>
-                      <div className="col-md-9">
-                        <input type="text" placeholder="Blog Title" id="title" name="title" className="form-control" required onChange={onChangeHandler} />
-                      </div>
-                    </div>
 
-                    {/* <div className="form-group row" id="category">
-                      <label className="col-md-3 col-from-label">
-                        Category
-                        <span className="text-danger">*</span>
-                      </label>
-                      <div className="col-md-9">
-                        <div>
-                          <select className="form-select" name='category_id' onChange={onChangeHandler}>
-                            <option value={3}>Three</option>
-                            <option value={4}>four</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div> */}
+                  <Box sx={{ width: '100%', typography: 'body1' }}>
+                    <TabContext value={value}>
+                      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <TabList onChange={handleChange} aria-label="lab API tabs example">
+                          {langData && langData.map((item, i) => {
+                            return <Tab label={item?.name} value={i} />
+                          })}
 
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label">Slug
-                        <span className="text-danger">*</span></label>
-                      <div className="col-md-9">
-                        <input type="text" placeholder="Slug" name="slug" id="slug" className="form-control" required onChange={onChangeHandler} />
-                      </div>
-                    </div>
-
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label" htmlFor="signinSrEmail">
-                        Banner
-                        <small>(1300x650)</small>
-                      </label>
-                      <div className="col-md-9">
-                        <div className="input-group" data-type="image">
-                          <div className="input-group-prepend">
-                            <div className="input-group-text bg-soft-secondary font-weight-medium">
-                              Browse
-                            </div>
+                        </TabList>
+                      </Box>
+                      {val && val.map((item, i) => {
+                        return <TabPanel value={i}>
+                          <div className="card">
+                            <MultiForm setValue={setValue} data={val} item={item} i={i} addNewAttributeData={addNewAttributeData} onChangeHandler={onChangeHandler} />
                           </div>
-                          <div className="form-control file-amount">
-                            <input type="file" name="banner" className="selected-files" onChange={onChangeHandler} />
-                          </div>
-                        </div>
-                        <div className="file-preview box sm">
-                        </div>
-                      </div>
-                    </div>
 
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label">
-                        Short Description
-                        <span className="text-danger">*</span>
-                      </label>
-                      <div className="col-md-9">
-                        <textarea name="short_description" rows={5} className="form-control" required onChange={onChangeHandler} />
-                      </div>
-                    </div>
+                        </TabPanel>
+                      })}
 
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label">Meta Title</label>
-                      <div className="col-md-9">
-                        <input type="text" className="form-control" name="meta_title" placeholder="Meta Title" onChange={onChangeHandler} />
-                      </div>
-                    </div>
+                    </TabContext>
+                  </Box>
 
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label" htmlFor="signinSrEmail">
-                        Meta Image
-                        <small>(200x200)+</small>
-                      </label>
-                      <div className="col-md-9">
-                        <div className="input-group" data-toggle="aizuploader" data-type="image">
-                          <div className="input-group-prepend">
-                            <div className="input-group-text bg-soft-secondary font-weight-medium">
-                              Browse
-                            </div>
-                          </div>
-                          <div className="form-control file-amount">
-                            <input type="file" name="meta_img" className="selected-files" onChange={onChangeHandler} />
-                          </div>
-                        </div>
-                        <div className="file-preview box sm">
-                        </div>
-                      </div>
-                    </div>
 
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label">Meta description</label>
-                      <div className="col-md-9">
-                        <textarea name="description" rows={8} className="form-control" onChange={onChangeHandler} />
-                      </div>
-                    </div>
 
-                    <div className="form-group row">
-                      <label className="col-md-3 col-form-label">
-                        Meta Keywords
-                      </label>
-                      <div className="col-md-9">
-                        <input type="text" className="form-control" id="meta_keywords" name="meta_keywords" placeholder="Meta Keywords" onChange={onChangeHandler} />
-                      </div>
-                    </div>
 
-                    <div className="form-group mb-0 text-right">
-                      <button type="submit" className="btn btn-primary">
-                        Save
-                      </button>
-                    </div>
 
-                  </form>
+
+
 
                 </div>
               </div>

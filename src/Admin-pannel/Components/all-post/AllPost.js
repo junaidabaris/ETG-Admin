@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { useDeleteBlogsMutation, useGetBlogsQuery } from "../all-products/allproductsApi/allProductsApi";
+import { token } from "../../common/TokenArea";
 
 function AllPost() {
 
-  const { isLoading, data } = useGetBlogsQuery();
-  console.log(data);
+  const { isLoading, data } = useGetBlogsQuery(token);
 
   const [deleteBlogs, response] = useDeleteBlogsMutation();
 

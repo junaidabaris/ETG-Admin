@@ -246,9 +246,7 @@ function AddnewCategories() {
           if (element?.language_id == element2._id) {
             clone.push(element)
           }
-
         }
-
       }
 
       setVal(clone)

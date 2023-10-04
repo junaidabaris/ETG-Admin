@@ -656,6 +656,12 @@ import MyTaskS from "./Admin-pannel/Pages/FieldService/MyTasks";
 import Byuser from "./Admin-pannel/Pages/FieldService/Planning/ByUser";
 import TasksAnalysis from "./Admin-pannel/Components/FieldService/Reporting/TasksAnalysis/TasksAnalysis";
 import BarchartA from "./Admin-pannel/Components/FieldService/BarchartA";
+import CRM1 from "./Admin-pannel/Pages/crmDashboddo";
+import PurchasoDo from "./Admin-pannel/Pages/purchaseoddo";
+import ReqForQuatation from "./Admin-pannel/Components/purchaseoddo/ReqForQuatation";
+import CreateDraftInvoice from "./Admin-pannel/Components/purchaseoddo/CreateDraftInvoice";
+import EmailMarketing from "./Admin-pannel/Pages/emailMarketingoddo";
+import NewMail from "./Admin-pannel/Components/emailMarketingoddo/NewMail";
 
 function App() {
   const [show, setshow] = useState(true);
@@ -1235,6 +1241,18 @@ function App() {
           <Route path="manufacturing-order" element={<ManufacturingOrder />} />
           <Route path="work-order" element={<WorkOrder />} />
           <Route path="view-work-order" element={<ViewWorkOrder />} />
+
+
+          <Route path="crm-1" element={<CRM1 />} />
+          <Route path="Purchase" element={<PurchasoDo />} />
+          <Route path="req-qua" element={<ReqForQuatation />} />
+          <Route path="draft" element={<CreateDraftInvoice />} />
+          <Route path="email-mark" element={<EmailMarketing />} />
+          <Route path="email-new" element={<NewMail />} />
+
+
+
+
           {/* by Sajid */}
 
           <Route path="settingmanufacture" element={<SettingManfucture />}>

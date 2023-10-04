@@ -66,7 +66,7 @@ function AsideAdmin() {
   // shoaib code 
   const [assetMaster, setAssetMaster] = useState(false);
   const [departmentMaster, setdepartmentMaster] = useState(false)
-
+  const [emailMarketing, setEmailMarketing] = useState(false);
   const { data, isLoading } = useGetAllStatusOrdersQuery()
   const { data: pickup, isLoading: isLoadingPick } = useGetPickupPointQuery()
 
@@ -2936,6 +2936,41 @@ function AsideAdmin() {
                 </ul>
               </li>
 
+
+
+              <li className="aiz-side-nav-item">
+                <Link
+                  className="aiz-side-nav-link"
+                  to="#"
+                  onClick={() => {
+                    setEmailMarketing(!emailMarketing);
+                  }}
+                >
+                  <i className="las la-user-tie aiz-side-nav-icon" />
+                  <span className="aiz-side-nav-text">Email Marketing</span>
+                  <span className="aiz-side-nav-arrow" />
+                </Link>
+                <ul
+                  className={`aiz-side-nav-list level-2 mm-collapse ${emailMarketing ? "mm-show" : "extra"
+                    }`}
+                >
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="email-mark">
+                      <span className="aiz-side-nav-text">
+                        Email Marketing
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link className="aiz-side-nav-link " to="#">
+                      <span className="aiz-side-nav-text">
+                        Mailing List
+                      </span>
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+
               {/* <li className="aiz-side-nav-item">
               <Link
                 className="aiz-side-nav-link"
@@ -3637,7 +3672,10 @@ function AsideAdmin() {
                     setAllTasks(!alltasks);
                   }}
                 >
+                  <i className="las la-user-tie aiz-side-nav-icon" />
                   <span className="aiz-side-nav-text">Field Service</span>
+                  <span className="aiz-side-nav-arrow" />
+
                 </Link>
                 <ul
                   className={`aiz-side-nav-list level-2 mm-collapse ${alltasks ? "mm-show" : "extra"
@@ -3978,7 +4016,7 @@ function AsideAdmin() {
             </ul>{/* .aiz-side-nav */}
 
           </div>{/* .aiz-side-nav-wrap */}
-        </div>
+        </div >
 
       </>
     )

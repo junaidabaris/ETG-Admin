@@ -155,10 +155,10 @@ function PriceModal(props) {
                                 </td>
 
                                 <td>
-                                    <input type="text" name="purchase_rate" className="form-control" defaultValue={""} value={item?.purchase_rate} onChange={(e) => { changeHanle(e, item?.country_id._id) }} />
+                                    <input type="number" name="purchase_rate" className="form-control" defaultValue={""} value={item?.purchase_rate} onChange={(e) => { changeHanle(e, item?.country_id._id) }} />
                                 </td>
                                 <td>
-                                    <input type="text" name="landing_rate" className="form-control" defaultValue={""} value={item?.landing_rate} onChange={(e) => { changeHanle(e, item?.country_id._id) }} />
+                                    <input type="number" name="landing_rate" className="form-control" defaultValue={""} value={item?.landing_rate} onChange={(e) => { changeHanle(e, item?.country_id._id) }} />
                                 </td>
 
                                 <td>
@@ -204,10 +204,10 @@ function PriceModal(props) {
                                     <input type="text" name="hsn_code" className="form-control" value={item?.hsn_code} onChange={(e) => { changeHanle(e, item?.country_id._id) }} />
                                 </td>
                                 <td>
-                                    <input type="text" name="sale_rp" className="form-control" value={item?.sale_rp} onChange={(e) => { changeHanle(e, item?.country_id._id) }} />
+                                    <input type="number" name="sale_rp" className="form-control" value={item?.sale_rp} onChange={(e) => { changeHanle(e, item?.country_id._id) }} />
                                 </td>
                                 <td>
-                                    <input type="text" name="share_rp" className="form-control" value={item?.share_rp} onChange={(e) => { changeHanle(e, item?.country_id._id) }} />
+                                    <input type="number" name="share_rp" className="form-control" value={item?.share_rp} onChange={(e) => { changeHanle(e, item?.country_id._id) }} />
                                 </td>
                             </tr>
 

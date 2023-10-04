@@ -141,9 +141,13 @@ export const productsApi = createApi({
         }),
 
         getBlogs: builder.query({
-            query: () => ({
+            query: (token) => ({
                 url: 'blogs',
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                }
             })
         }),
 
