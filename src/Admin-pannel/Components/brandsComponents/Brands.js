@@ -128,7 +128,7 @@ function Brands() {
                                                 <Link to={`edit/${item.uid}`} className="btn btn-soft-primary btn-icon btn-circle btn-sm" title="Edit">
                                                     <i className="las la-edit" />
                                                 </Link>
-                                                <button type="button" onClick={() => { deleteBrandData(item._id) }} className="btn btn-soft-danger btn-icon btn-circle btn-sm">
+                                                <button type="button" onClick={() => { deleteBrandData(item.uid) }} className="btn btn-soft-danger btn-icon btn-circle btn-sm">
                                                     <i className="las la-trash" />
                                                 </button>
                                             </td>

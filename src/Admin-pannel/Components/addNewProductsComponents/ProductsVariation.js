@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import ToggleStatus from "../toggleStatus/ToggleStatus";
 import { ColorParams } from "./ColorParams";
 // let sendPayload = [];
-function ProductsVariation({ handleVariantData, productData, setattributesVal, setVariantsData, item, onChangeHandler }) {
+function ProductsVariation({ handleVariantData, productData, setattributesVal, setVariantsData, item, onChangeHandler,sellerD }) {
     const [sendPayload, setsendPayload] = useState([])
     const token = window.localStorage.getItem('token')
     const [variationArr, setVariationArr] = useState([]);
@@ -16,7 +16,7 @@ function ProductsVariation({ handleVariantData, productData, setattributesVal, s
     const params = useParams()
 
     const [form_variatio, { data: variationsData, isLoading: isVariantLoading, isSuccess }] = useForm_variatioMutation();
-    const [updatedVariants, setUpdatedVariants] = useState(item.variations)
+    const [updatedVariants, setUpdatedVariants] = useState(item?.variations)
     const { data: countryData } = useGetCounterQuery(token)
     useEffect(() => {
         if (params?.id) {
@@ -30,7 +30,7 @@ function ProductsVariation({ handleVariantData, productData, setattributesVal, s
                         let clone2 = []
                         for (let j = 0; j < countryData?.length; j++) {
                             const val = countryData[j];
-                            const newClo = { country_id: val, mrp: "", purchase_rate: "", landing_rate: "", wholeSale_rate: "", retail_price: "", showRoom_rate: "", sale_price: "", discount: "", discount_type: "Inclusive", tax_type: "Amount", tax: "", sku: "", sale_rate: "" }
+                            const newClo = { country_id: val, mrp: "", purchase_rate: "", landing_rate: "", wholeSale_rate: "", retail_price: "", showRoom_rate: "", sale_price: "", discount: "",  discount_type: "Amount", tax_type: "Inclusive", tax: "", sku: "", sale_rate: "",seller_id:"" }
                             clone2.push(newClo)
                         }
                         element.prices = clone2
@@ -55,7 +55,7 @@ function ProductsVariation({ handleVariantData, productData, setattributesVal, s
                             let clone2 = []
                             for (let j = 0; j < countryData?.length; j++) {
                                 const val = countryData[j];
-                                const newClo = { country_id: val, mrp: "", purchase_rate: "", landing_rate: "", wholeSale_rate: "", retail_price: "", showRoom_rate: "", sale_price: "", discount: "", discount_type: "Inclusive", tax_type: "Amount", tax: "", sku: "", sale_rate: "" }
+                                const newClo = { country_id: val, mrp: "", purchase_rate: "", landing_rate: "", wholeSale_rate: "", retail_price: "", showRoom_rate: "", sale_price: "", discount: "", discount_type: "Amount", tax_type: "Inclusive", tax: "", sku: "", sale_rate: "" ,seller_id:""}
                                 clone2.push(newClo)
                             }
                             element.prices = clone2
@@ -82,7 +82,7 @@ function ProductsVariation({ handleVariantData, productData, setattributesVal, s
                         let clone2 = []
                         for (let j = 0; j < countryData?.length; j++) {
                             const val = countryData[j];
-                            const newClo = { country_id: val, mrp: "", purchase_rate: "", landing_rate: "", wholeSale_rate: "", retail_price: "", showRoom_rate: "", sale_price: "", discount: "", discount_type: "Inclusive", tax_type: "Amount", tax: "", sku: "", sale_rate: "" }
+                            const newClo = { country_id: val, mrp: "", purchase_rate: "", landing_rate: "", wholeSale_rate: "", retail_price: "", showRoom_rate: "", sale_price: "", discount: "", discount_type: "Amount", tax_type: "Inclusive", tax: "", sku: "", sale_rate: "" ,seller_id:""}
                             clone2.push(newClo)
                         }
                         element.prices = clone2
@@ -100,12 +100,6 @@ function ProductsVariation({ handleVariantData, productData, setattributesVal, s
     const [allChoices, setAllChoices] = useState(null);
 
 
-
-    useEffect(() => {
-        if (params) {
-            setAllAttributes(item.variation_Form)
-        }
-    }, [params, item])
 
     const getAttributes = (attributes) => {
         setAllAttributes([...attributes])
@@ -228,7 +222,7 @@ function ProductsVariation({ handleVariantData, productData, setattributesVal, s
                             <label className="col-md-3 col-from-label">Global Attribute</label>
                             <div className="col-md-8">
                                 <label className="aiz-switch aiz-switch-success mb-0">
-                                    <input type="checkbox" name={'isGlobalAttribute'} checked={item.isGlobalAttribute} onChange={(e) => { onChangeHandler(e, item.language_id, !item.isGlobalAttribute) }} />
+                                    <input type="checkbox" name={'isGlobalAttribute'} checked={item?.isGlobalAttribute} onChange={(e) => { onChangeHandler(e, item.language_id, !item.isGlobalAttribute) }} />
                                     <span />
                                 </label>
                             </div>
@@ -276,7 +270,7 @@ function ProductsVariation({ handleVariantData, productData, setattributesVal, s
                                             // console.log('variantItem', variantItem);
 
                                             return (
-                                                <ColorVariant deleteRow={deleteRow} key={i} item={item} data={variantItem} pickUp={pickUp} handleVariant={getUpdatedVariant} setVariantsData={setVariantsData} index={i} />
+                                                <ColorVariant deleteRow={deleteRow} key={i} sellerD={sellerD} item={item} data={variantItem} pickUp={pickUp} handleVariant={getUpdatedVariant} setVariantsData={setVariantsData} index={i} />
                                             )
                                         })}
 

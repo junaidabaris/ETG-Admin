@@ -30,7 +30,7 @@ function SystemSalesConfiguration() {
 
     const submitUpdateSalesSettingD = () => {
         const abc = { ...inputVal, referenceNo: +inputVal.referenceNo }
-        SalesSetting(abc)
+        SalesSetting({ data: abc, token: token})
     };
 
 

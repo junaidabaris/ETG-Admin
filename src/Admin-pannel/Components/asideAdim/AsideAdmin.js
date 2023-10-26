@@ -15,6 +15,7 @@ function AsideAdmin() {
   // const [sales, setSales] = useState(false)
   const [website2, setWebsite2] = useState(false)
   const [refunds, setRefunds] = useState(false)
+  const [roboticmaster, setroboticmaster] = useState(false)
   const [customers, setCustomers] = useState(false)
   const [sellers, setSellers] = useState(false)
   // const [customers, setCustomers] = useState(false)
@@ -68,7 +69,7 @@ function AsideAdmin() {
   const [departmentMaster, setdepartmentMaster] = useState(false)
   const [emailMarketing, setEmailMarketing] = useState(false);
   const { data, isLoading } = useGetAllStatusOrdersQuery()
-  const { data: pickup, isLoading: isLoadingPick } = useGetPickupPointQuery()
+  const { data: pickup, isLoading: isLoadingPick } = useGetPickupPointQuery(window.localStorage.getItem('token'))
 
   const isSuperAdminLogin = window.localStorage.getItem('showMainadmin')
   const isSellerLogin = window.localStorage.getItem('isSellerLogin')
@@ -259,7 +260,8 @@ function AsideAdmin() {
                   <span className="aiz-side-nav-text">Seller Orders</span>
                 </Link>
               </li>
-              <li className="aiz-side-nav-item">
+              
+              {/* <li className="aiz-side-nav-item">
                 <Link
                   className="aiz-side-nav-link"
                   to="#"
@@ -267,7 +269,7 @@ function AsideAdmin() {
                     setAccounts(!Accounts);
                   }}
                 >
-                  {/* <i className="las la-user-tie aiz-side-nav-icon" /> */}
+                  <i className="las la-user-tie aiz-side-nav-icon" />
                   <span className="aiz-side-nav-text">Accounts</span>
                   <span className="aiz-side-nav-arrow" />
                 </Link>
@@ -434,11 +436,6 @@ function AsideAdmin() {
                       <span className="aiz-side-nav-text">Create Budget</span>
                     </Link>
                   </li>
-                  {/* <li className="aiz-side-nav-item">
-                    <Link className="aiz-side-nav-link " to="budgets">
-                      <span className="aiz-side-nav-text">Budgets List</span>
-                    </Link>
-                  </li> */}
                   <li className="aiz-side-nav-item">
                     <Link className="aiz-side-nav-link " to="vouchertype/create">
                       <span className="aiz-side-nav-text">create Voucher Type</span>
@@ -449,13 +446,6 @@ function AsideAdmin() {
                       <span className="aiz-side-nav-text">Voucher Type List</span>
                     </Link>
                   </li>
-                  {/* <li className="aiz-side-nav-item">
-                    <Link className="aiz-side-nav-link " to="#">
-                      <span className="aiz-side-nav-text list-voucher">
-                       List Voucher 
-                      </span>
-                    </Link>
-                  </li> */}
                   <li className="aiz-side-nav-item">
                     <Link className="aiz-side-nav-link " to="report">
                       <span className="aiz-side-nav-text list-voucher">
@@ -471,7 +461,7 @@ function AsideAdmin() {
                     </Link>
                   </li>
                 </ul>
-              </li>
+              </li> */}
 
 
               <li className="aiz-side-nav-item">
@@ -1484,8 +1474,8 @@ function AsideAdmin() {
 
 
 
-              <li className="aiz-side-nav-item" onClick={() => { setFront(!front) }}>
-                <Link to="#" className="aiz-side-nav-link" >
+              <li className="aiz-side-nav-item" >
+                <Link to="#" className="aiz-side-nav-link" onClick={() => { setFront(!front) }}>
                   <i className="las la-shopping-cart aiz-side-nav-icon" />
                   <span className="aiz-side-nav-text">Front Setting</span>
                   <span className="aiz-side-nav-arrow" />
@@ -1510,6 +1500,28 @@ function AsideAdmin() {
                   <li className="aiz-side-nav-item">
                     <Link to="list_popup" className="aiz-side-nav-link ">
                       <span className="aiz-side-nav-text">List Popup</span>
+                    </Link>
+                  </li>
+
+                  <li className="aiz-side-nav-item">
+                    <Link to="faqsMaster" className="aiz-side-nav-link ">
+                      <span className="aiz-side-nav-text">Faqs Master</span>
+                    </Link>
+                  </li>
+
+                  <li className="aiz-side-nav-item">
+                    <Link to="add_faq" className="aiz-side-nav-link ">
+                      <span className="aiz-side-nav-text">Add FAQ</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link to="list_faq" className="aiz-side-nav-link ">
+                      <span className="aiz-side-nav-text">List FAQ</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link to="list_Subscribe" className="aiz-side-nav-link ">
+                      <span className="aiz-side-nav-text">List Subscribe </span>
                     </Link>
                   </li>
 
@@ -1796,13 +1808,18 @@ function AsideAdmin() {
 
 
               {/* Sellers */}
-              <li className="aiz-side-nav-item" onClick={() => { setSellers(!sellers) }}>
-                <Link to="#" className="aiz-side-nav-link" >
+              <li className="aiz-side-nav-item">
+                <Link to="#" className="aiz-side-nav-link"  onClick={() => { setSellers(!sellers) }}>
                   <i className="las la-user aiz-side-nav-icon" />
                   <span className="aiz-side-nav-text">Sellers</span>
                   <span className="aiz-side-nav-arrow" />
                 </Link>
                 <ul className={`aiz-side-nav-list level-2 mm-collapse ${sellers ? "mm-show" : "extra"}`}>
+                  <li className="aiz-side-nav-item">
+                    <Link to="seller/form" className="aiz-side-nav-link ">
+                      <span className="aiz-side-nav-text">Add Seller</span>
+                    </Link>
+                  </li>
                   <li className="aiz-side-nav-item">
                     <Link to="seller" className="aiz-side-nav-link ">
                       <span className="aiz-side-nav-text">All Seller</span>
@@ -2472,6 +2489,26 @@ function AsideAdmin() {
                   <li className="aiz-side-nav-item">
                     <Link to="assets-dashboard" className="aiz-side-nav-link ">
                       <span className="labour-charge-type">Assets Dashboard</span>
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+
+              <li className="aiz-side-nav-item">
+                <Link to="#" className="aiz-side-nav-link" onClick={() => { setroboticmaster(!roboticmaster) }}>
+                  <i className="las la-user-tie aiz-side-nav-icon" />
+                  <span className="aiz-side-nav-text">Robotic-Masters</span>
+                  <span className="aiz-side-nav-arrow" />
+                </Link>
+                <ul className={`aiz-side-nav-list level-2 mm-collapse ${roboticmaster ? "mm-show" : "extra"}`}>
+                  <li className="aiz-side-nav-item">
+                    <Link to="robotic-master" className="aiz-side-nav-link ">
+                      <span className="labour-charge-type">Robotic-Master</span>
+                    </Link>
+                  </li>
+                  <li className="aiz-side-nav-item">
+                    <Link to="robotic-master-list" className="aiz-side-nav-link ">
+                      <span className="labour-charge-type">Robotic-Master-List</span>
                     </Link>
                   </li>
                 </ul>
@@ -3820,7 +3857,7 @@ function AsideAdmin() {
 
                 </ul>
               </li>
-              <li className="aiz-side-nav-item">
+              {/* <li className="aiz-side-nav-item">
                 <Link className="aiz-side-nav-link" to='' onClick={() => { setFinanace(!finanace) }}>
 
 
@@ -3852,7 +3889,7 @@ function AsideAdmin() {
 
 
                 </ul>
-              </li>
+              </li> */}
               <li className="aiz-side-nav-item">
                 <Link className="aiz-side-nav-link" to='' onClick={() => { setLogistic(!logistic) }}>
 

@@ -8,8 +8,9 @@ function AllOrders() {
 
 
 
+  const token = window.localStorage.getItem('token')
 
-  const { isLoading, data } = useGetOrdersQuery();
+  const { isLoading, data } = useGetOrdersQuery(token);
 
   const [deleteOrder, response] = useDeleteOrderMutation();
 
@@ -199,18 +200,14 @@ function AllOrders() {
 
                     <tbody>
 
-                      {data && data?.alluserorders?.map((item, i) => {
+                      {data && data?.map((item, i) => {
                         if (item?.grandTotal) {
                           allTotal = allTotal + +item?.grandTotal
                         }
-
-                        if (!item?.orderStatusTrans) {
-                          console.log(item);
-                        }
-
+                        console.log(item);
                         return <tr key={item._id} style={{ cursor: "pointer" }}
                         //  onClick={()=>{navigate(`/admin/all_orders/order-Details/${item._id}`)}}
-                         >
+                        >
                           <td
                             className="footable-first-visible"
                             style={{ display: "table-cell" }}
@@ -224,16 +221,16 @@ function AllOrders() {
                             {item._id}
                           </td>
                           <td style={{ display: "table-cell" }}>
-                            {item.order_referenceNo}
+                            {item?.referenceNo}
                           </td>
 
 
                           <td style={{ display: "table-cell" }}>{item.createdAt}</td>
                           <td style={{ display: "table-cell" }}>
-                            {item?.user?.firstname + item?.user?.lastname}
+                            {item?.user?.firstname + " "+ item?.user?.lastname}
                           </td>
                           <td style={{ display: "table-cell" }}>
-                            {item?.Seller[0]?.firstname} {item?.Seller[0]?.lastname}
+                            {item?.seller_id?.firstname}  {item?.seller_id?.lastname}
                           </td>
 
                           <td style={{ display: "table-cell" }}>
@@ -243,7 +240,7 @@ function AllOrders() {
                           <td style={{ display: "table-cell" }}>COD</td>
 
                           <td style={{ display: "table-cell" }}>
-                            {item?.orderStatusTrans[item.orderStatusTrans.length - 1]?.orderStatusId?.orderStatusName}
+                            {item?.status[item.status.length - 1]?.orderStatusName}
                           </td>
                           <td style={{ display: "table-cell" }}>
                             {item?.Paid}

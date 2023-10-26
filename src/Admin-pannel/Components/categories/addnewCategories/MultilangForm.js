@@ -61,18 +61,18 @@ function MultilangForm({ data, item, i, addNewAttributeData, onChangeHandler, se
                 <div className="form-group row">
                     <label className="col-md-3 col-form-label">Banner</label>
                     <div className="col-md-9">
-                            <div>
-                               {item?.banner?.url && <img src={item?.banner?.url} style={{ width: "100px", height: "100px" }} />} 
-                                <div className="input-group" data-type="image">
-                                    <div className="input-group-prepend">
-                                        <div className="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
-                                    </div>
-                                    <div className="form-control file-amount">
-                                        <input type="file" name="banner" className="selected-files" onChange={(e) => { onChangeHandler(e, item.language_id, 'img') }} />
-                                    </div>
+                        <div>
+                            {item?.banner?.url && <img src={item?.banner?.url} style={{ width: "100px", height: "100px" }} />}
+                            <div className="input-group" data-type="image">
+                                <div className="input-group-prepend">
+                                    <div className="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
+                                </div>
+                                <div className="form-control file-amount">
+                                    <input type="file" name="banner" className="selected-files" onChange={(e) => { onChangeHandler(e, item.language_id, 'img') }} />
                                 </div>
                             </div>
-                          
+                        </div>
+
 
                         <div className="file-preview box sm">
                         </div>
@@ -103,7 +103,13 @@ function MultilangForm({ data, item, i, addNewAttributeData, onChangeHandler, se
                         <input type="text" className="form-control" name="meta_title" value={item?.meta_title} placeholder="Meta Title" onChange={(e) => { onChangeHandler(e, item.language_id) }} required />
                     </div>
                 </div>
-
+                {i == 0 && <div className="form-group row">
+                    <label className="col-md-3 col-form-label">Slug *</label>
+                    <div className="col-md-9">
+                        <input type="text" className="form-control" name="slug" value={item?.slug} placeholder="Slug" onChange={(e) => { onChangeHandler(e, item.language_id) }} required />
+                    </div>
+                </div>
+                }
                 <div className="form-group row">
                     <label className="col-md-3 col-form-label">Meta Description</label>
                     <div className="col-md-9">
@@ -150,14 +156,22 @@ function MultilangForm({ data, item, i, addNewAttributeData, onChangeHandler, se
                 <div className="form-group row">
                     <label className="col-md-3 col-form-label">Top</label>
                     <div className="col-md-9">
-                        <input type="text" className="form-control" name="top" value={item?.top} placeholder="top" onChange={(e) => { onChangeHandler(e, item.language_id) }} required />
+                        <select className="form-select" name='top' value={item?.top} onChange={(e) => { onChangeHandler(e, item.language_id, 'bul') }} required>
+                            <option value={false}>NO </option>
+                            <option value={true}>YES </option>
+
+                        </select>
                     </div>
                 </div>
 
                 <div className="form-group row">
                     <label className="col-md-3 col-form-label">Featured</label>
                     <div className="col-md-9">
-                        <input type="text" className="form-control" name="featured" value={item?.featured} placeholder="featured" onChange={(e) => { onChangeHandler(e, item.language_id) }} required />
+                        <select className="form-select" name='featured' value={item?.featured} onChange={(e) => { onChangeHandler(e, item.language_id, 'bul') }} required>
+                            <option value={false}>NO </option>
+                            <option value={true}>YES </option>
+
+                        </select>
                     </div>
                 </div>
 

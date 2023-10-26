@@ -4,13 +4,13 @@ import { useEffect } from "react";
 
 function SupportTicketDesk() {
 
-    const { isLoading, data } = useGetTicketListsQuery();
+    const token = window.localStorage.getItem('token')
+    const { isLoading, data } = useGetTicketListsQuery(token);
 
     const [deleteSuppTicket, response] = useDeleteSupportTicketMutation();
 
-
     const deleteSupportticketData = (id) => {
-        deleteSuppTicket(id)
+        deleteSuppTicket({ id: id, token: token })
     };
 
     useEffect(() => {
@@ -48,21 +48,21 @@ function SupportTicketDesk() {
 
                                         {data && data.map((item, i) => {
                                             return <tr key={item._id}>
-                                                <td className="footable-first-visible" style={{ display: 'table-cell' }}>{item.code}</td>
-                                                <td style={{ display: 'table-cell' }}>2023-02-08 13:26:43 </td>
+                                                <td className="footable-first-visible" style={{ display: 'table-cell' }}>{item._id}</td>
+                                                <td style={{ display: 'table-cell' }}>{item?.createdAt} </td>
                                                 <td style={{ display: 'table-cell' }}>{item.subject}</td>
-                                                <td style={{ display: 'table-cell' }}>Abaris Seller</td>
+                                                <td style={{ display: 'table-cell' }}>{item?.user_id?.firstname + " " + item?.user_id?.lastname}</td>
                                                 <td style={{ display: 'table-cell' }}>
                                                     {/* <span className="badge badge-inline badge-danger">{item.status}</span> */}
                                                     <span class="badge badge-inline badge-danger" style={{ color: "black", fontSize: '14px', fontWeight: 'bold', backgroundColor: item?.status === "Solved" ? "green" : item?.status === 'Pending' || 'pending' ? 'yellow' : "red" }}>{item?.status}</span>
                                                 </td>
                                                 <td style={{ display: 'table-cell' }}>
-                                                    2023-02-08 13:26:43
+                                                  {item?.updatedAt}
                                                 </td>
                                                 <td className="text-right footable-last-visible" style={{ display: 'table-cell' }}>
-                                                    <Link to={`edit/${item._id}`} className="btn btn-soft-primary btn-icon btn-circle btn-sm" title="Edit">
+                                                    {/* <Link to={`edit/${item._id}`} className="btn btn-soft-primary btn-icon btn-circle btn-sm" title="Edit">
                                                         <i className="las la-edit" />
-                                                    </Link>
+                                                    </Link> */}
                                                     <Link to={`/admin/support_ticket/detail/${item._id}`} className="btn btn-soft-primary btn-icon btn-circle btn-sm" title="View Details">
                                                         <i className="las la-eye" />
                                                     </Link>

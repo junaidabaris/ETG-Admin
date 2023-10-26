@@ -8,6 +8,7 @@ function TopNavSeller({ showSidebar }) {
     const sellerName = window.localStorage.getItem('isSellerName')
     const showMainadmin = window.localStorage.getItem('showMainadmin')
     const superAdminName = window.localStorage.getItem('superAdminName')
+    const isSellerLogin = window.localStorage.getItem('isSellerLogin')
 
     const [show, setShow] = useState(false)
     const navigate = useNavigate()
@@ -223,6 +224,10 @@ function TopNavSeller({ showSidebar }) {
                                     {isDelevery === 'true' && <>
                                         <span className="d-block fw-500">{DeleveryBoyName}</span>
                                         <span className="d-block small opacity-60">Delevery Boy</span>
+                                    </>}
+                                    {isSellerLogin === 'true' && <>
+                                        <span className="d-block fw-500">{superAdminName}</span>
+                                        <span className="d-block small opacity-60">Seller</span>
                                     </>}
 
 

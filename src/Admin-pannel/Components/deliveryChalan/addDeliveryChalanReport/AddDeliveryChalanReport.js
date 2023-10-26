@@ -31,7 +31,7 @@ function AddDeliveryChalanReport() {
         }
     )
     const [idpick, setItPick] = useState()
-    const { data: pickupPoints } = useGetPickupPointQuery();
+    const { data: pickupPoints } = useGetPickupPointQuery(token);
     const { data: customers } = useGetCustomersQuery(token);
     const { data: searchPro } = useGetProductSearchQuery({ token: token, paylode: searchs })
     const [showCombo, setShowCombo] = useState([])
@@ -39,10 +39,14 @@ function AddDeliveryChalanReport() {
     const [addDeleveryChallan, { isError, isSuccess, isLoading: addCOmbLoad }] = useAddDeleveryChallanMutation()
 
     const setTableItem = async (item) => {
+       try {
         const sendInpData = await axios.get(`https://onlineparttimejobs.in/api/serviceProductStock/${item._id + '&' + idpick}`)
         setcartData(sendInpData?.data);
         setModalShow(true)
         setShow(false)
+       } catch (error) {
+        alert('Select a Pickup Point')
+       }
     }
 
     const handelChange = (e) => {

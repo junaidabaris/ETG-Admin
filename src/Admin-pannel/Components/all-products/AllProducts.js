@@ -249,7 +249,7 @@ function AllProducts() {
                               <i className="las la-copy" />
                             </a> */}
 
-                            <button type="button" onClick={() => { deleteProductData(item._id) }} className="btn btn-soft-danger btn-icon btn-circle btn-sm">
+                            <button type="button" onClick={() => { deleteProductData(item.uid) }} className="btn btn-soft-danger btn-icon btn-circle btn-sm">
                               <i className="las la-trash" />
                             </button>
 

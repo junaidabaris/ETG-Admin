@@ -10,7 +10,7 @@ function AttributesAdmin() {
     const [deleteAttribute, response] = useDeleteAttributesMutation();
 
     const deleteAttributeData = (id) => {
-        deleteAttribute(id)
+        deleteAttribute({ id: id, token: token })
     };
 
     useEffect(() => {
@@ -59,7 +59,7 @@ function AttributesAdmin() {
                                                 <Link to={`edit/${item.uid}`} className="btn btn-soft-primary btn-icon btn-circle btn-sm">
                                                     <i className="las la-edit" />
                                                 </Link>
-                                                <button type="button" onClick={() => deleteAttributeData(item._id)} className="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete">
+                                                <button type="button" onClick={() => deleteAttributeData(item.uid)} className="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete">
                                                     <i className="las la-trash" />
                                                 </button>
                                             </td>

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Actions from "../../Components/allSeller/Actions";
 
 function AssignOrder() {
     const [data, setData] = useState()
@@ -8,11 +9,15 @@ function AssignOrder() {
     const pickupId = window.localStorage.getItem('pickIds')
     const isDeleveryBoy = window.localStorage.getItem('isDeleveryBoy')
     const DeleveryBoyId = window.localStorage.getItem('DeleveryBoyId')
-
+    const token = window.localStorage.getItem('token')
     const getData = async () => {
-        console.log('iiii' ,pickupId);
         try {
-            const res = await axios.get(`https://onlineparttimejobs.in/api/orderAssign/pickupPoints/${pickupId}`)
+            const res = await axios.get(`https://onlineparttimejobs.in/api/orderAssign/pickupPoints`, {
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                },
+            })
             setData(res.data)
         } catch (error) {
             alert('Server Error Fail to load Assign Order')
@@ -20,7 +25,12 @@ function AssignOrder() {
     }
     const getData2 = async () => {
         try {
-            const res = await axios.get(`https://onlineparttimejobs.in/api/assignDeliveryBoy/deliveryBoy/${DeleveryBoyId}`)
+            const res = await axios.get(`https://onlineparttimejobs.in/api/assignDeliveryBoy/deliveryBoy`, {
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                },
+            })
             setData2(res.data)
         } catch (error) {
             alert('Server Error Fail to load Assign Order')
@@ -129,23 +139,23 @@ function AssignOrder() {
                                         <th style={{ display: "table-cell" }}>order ReferenceNo:</th>
                                         <th style={{ display: "table-cell" }}>Order Date:</th>
                                         {/* <th style={{ display: "table-cell" }}>Order Time:</th> */}
-                                        <th
+                                        {/* <th
                                             data-breakpoints="md"
                                             style={{ display: "table-cell" }}
                                         >
                                             Num. of Products
-                                        </th>
-                                        <th
+                                        </th> */}
+                                        {/* <th
                                             data-breakpoints="md"
                                             style={{ display: "table-cell" }}
                                         >
                                             First Name
-                                        </th>
+                                        </th> */}
                                         <th
                                             data-breakpoints="md"
                                             style={{ display: "table-cell" }}
                                         >
-                                            Last Name
+                                            Name
                                         </th>
 
                                         <th
@@ -195,147 +205,131 @@ function AssignOrder() {
                                 </thead>
 
                                 {isDeleveryBoy === 'true' ?
-                                    <tbody>
-                                        {data2 && data2.map((item, i) => {
-                                            return <tr key={i}>
-                                                <td
-                                                    className="footable-first-visible"
-                                                    style={{ display: "table-cell" }}
-                                                >
-                                                    {1 + i}
-                                                </td>
-                                                <td style={{ display: "table-cell" }}>
-                                                    {item?.orderId._id}
-                                                </td>
-                                                <td style={{ display: "table-cell" }}>
-                                                    {item?.orderId?.order_referenceNo}
-                                                </td>
-                                                <td style={{ display: "table-cell" }}>
-                                                    {item?.createdAt}
-                                                </td>
-
-                                                <td style={{ display: "table-cell" }}>
-                                                    {item?.orderId?.products.length}
-                                                </td>
-                                                <td style={{ display: "table-cell" }}>
-                                                    {item?.orderId?.user ? item?.orderId?.user?.firstname : ''}
-                                                </td>
-                                                <td style={{ display: "table-cell" }}>
-                                                    {item?.orderId?.user ? item?.orderId?.user?.lastname : ''}
-                                                </td>
-                                                <td style={{ display: "table-cell" }}>
-
-                                                    {item?.orderId?.Seller[0]?.firstname + ' ' + item?.orderId?.Seller[0]?.lastname}
-                                                </td>
-                                                <td style={{ display: "table-cell" }}>
-                                                    {item?.orderId?.currency ? item?.orderId?.currency?.symbol : 'ZK'} {item?.orderId?.grandTotal}
-                                                </td>
-                                                <td style={{ display: "table-cell" }}>
-                                                    {item?.orderId?.deliveryType}
-                                                </td>
-                                                <td style={{ display: "table-cell" }}>
-                                                    {item?.orderId?.orderStatusTrans ? item?.orderId?.orderStatusTrans[item?.orderId?.orderStatusTrans.length - 1].orderStatusId?.orderStatusName : ''}
-                                                </td>
-                                                <td style={{ display: "table-cell" }}>
-                                                    COD
-                                                </td>
-                                                <td style={{ display: "table-cell" }}>
-                                                    {item?.orderId?.Payment_Status?.paymentStatusName}
-                                                </td>
+                                  <tbody>
 
 
+                                  {data2 && data2?.map((item, i) => {
+                                      return <tr key={item._id} style={{ cursor: "pointer" }}
+                                      //  onClick={()=>{navigate(`/admin/all_orders/order-Details/${item._id}`)}}
+                                      >
+                                          <td
+                                              className="footable-first-visible"
+                                              style={{ display: "table-cell" }}
+                                          >
+                                              {i + 1}
+                                          </td>
+                                          {/* <td style={{ display: "table-cell" }}>
+                                           {item.parent_id}
+                                         </td> */}
+                                          <td style={{ display: "table-cell" }}>
+                                              {item._id}
+                                          </td>
+                                          <td style={{ display: "table-cell" }}>
+                                              {item?.referenceNo}
+                                          </td>
 
-                                                <td
-                                                    className="text-right footable-last-visible"
-                                                    style={{ display: "table-cell" }}
-                                                >
-                                                    <Link
-                                                        className="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                                        to={`/admin/all_orders/order-Details/${item?.orderId._id}`}
-                                                        title="View"
-                                                    >
-                                                        <i className="las la-eye" />
-                                                    </Link>
 
-                                                    <button type="button" onClick={() => deleteOrderData(1)} className="btn btn-soft-danger btn-icon btn-circle btn-sm">
-                                                        <i className="las la-trash" />
-                                                    </button>
+                                          <td style={{ display: "table-cell" }}>{item.createdAt}</td>
+                                          {/* <td style={{ display: "table-cell" }}>-</td> */}
+                                          <td style={{ display: "table-cell" }}>
+                                              {item?.user?.firstname + " " + item?.user?.lastname}
+                                          </td>
+                                          <td style={{ display: "table-cell" }}>
+                                              {item?.seller_id[0]?.firstname}  {item?.seller_id[0]?.lastname}
+                                          </td>
 
-                                                </td>
-                                            </tr>
-                                        })}
+                                          <td style={{ display: "table-cell" }}>
+                                              {item?.currency?.symbol ? item?.currency?.symbol : 'ZK'} {item.grandTotal}
+                                          </td>
+
+                                          <td style={{ display: "table-cell" }}>COD</td>
+
+                                          <td style={{ display: "table-cell" }}>
+                                              {item?.status[item.status.length - 1]?.orderStatusName}
+                                          </td>
+
+                                          <td style={{ display: "table-cell" }}>
+                                              COD
+                                          </td>
+                                          <td style={{ display: "table-cell" }}>
+                                              {item.pickupAddress ? "Pick Up Piont" + " " + item.pickupAddress.pickupPoint_name : "HOME DELEVERY"}
+                                          </td>
 
 
-                                    </tbody>
+
+                                          <td
+                                              style={{ display: "table-cell" }}
+                                          //  style={{ display: "inline-flex" }}
+                                          >
+
+                                              <Actions item={item} deleteOrderData={deleteOrderData} />
+
+                                          </td>
+                                      </tr>
+                                  })}
+
+
+                              </tbody>
                                     :
 
                                     <tbody>
 
 
                                         {data && data.map((item, i) => {
-                                            return <tr key={i}>
+                                            return <tr key={item._id} style={{ cursor: "pointer" }}
+                                            //  onClick={()=>{navigate(`/admin/all_orders/order-Details/${item._id}`)}}
+                                            >
                                                 <td
                                                     className="footable-first-visible"
                                                     style={{ display: "table-cell" }}
                                                 >
-                                                    {1 + i}
+                                                    {i + 1}
+                                                </td>
+                                                {/* <td style={{ display: "table-cell" }}>
+                                                 {item.parent_id}
+                                               </td> */}
+                                                <td style={{ display: "table-cell" }}>
+                                                    {item._id}
                                                 </td>
                                                 <td style={{ display: "table-cell" }}>
-                                                    {item?.orderId._id}
+                                                    {item?.referenceNo}
+                                                </td>
+
+
+                                                <td style={{ display: "table-cell" }}>{item.createdAt}</td>
+                                                {/* <td style={{ display: "table-cell" }}>-</td> */}
+                                                <td style={{ display: "table-cell" }}>
+                                                    {item?.user?.firstname + " " + item?.user?.lastname}
                                                 </td>
                                                 <td style={{ display: "table-cell" }}>
-                                                    {item?.orderId?.order_referenceNo}
-                                                </td>
-                                                <td style={{ display: "table-cell" }}>
-                                                    {item?.createdAt}
+                                                    {item?.seller_id[0]?.firstname}  {item?.seller_id[0]?.lastname}
                                                 </td>
 
                                                 <td style={{ display: "table-cell" }}>
-                                                    {item?.orderId?.products.length}
+                                                    {item?.currency?.symbol ? item?.currency?.symbol : 'ZK'} {item.grandTotal}
                                                 </td>
-                                                <td style={{ display: "table-cell" }}>
-                                                    {item?.orderId?.user ? item?.orderId?.user?.firstname : ''}
-                                                </td>
-                                                <td style={{ display: "table-cell" }}>
-                                                    {item?.orderId?.user ? item?.orderId?.user?.lastname : ''}
-                                                </td>
-                                                <td style={{ display: "table-cell" }}>
 
-                                                    {item?.orderId?.Seller?.length > 0 && item?.orderId?.Seller[0]?.firstname + ' ' + item?.orderId?.Seller[0]?.lastname}
-                                                </td>
+                                                <td style={{ display: "table-cell" }}>COD</td>
+
                                                 <td style={{ display: "table-cell" }}>
-                                                    {item?.orderId.currency ? item?.orderId?.currency?.symbol : 'ZK'} {item?.orderId?.grandTotal}
+                                                    {item?.status[item.status.length - 1]?.orderStatusName}
                                                 </td>
-                                                <td style={{ display: "table-cell" }}>
-                                                    {item?.orderId?.deliveryType}
-                                                </td>
-                                                <td style={{ display: "table-cell" }}>
-                                                    {item?.orderId?.orderStatusTrans ? item?.orderId?.orderStatusTrans[item?.orderId?.orderStatusTrans.length - 1].orderStatusId?.orderStatusName : ''}
-                                                </td>
+
                                                 <td style={{ display: "table-cell" }}>
                                                     COD
                                                 </td>
                                                 <td style={{ display: "table-cell" }}>
-                                                    {item?.orderId?.Payment_Status?.paymentStatusName}
+                                                    {item.pickupAddress ? "Pick Up Piont" + " " + item.pickupAddress.pickupPoint_name : "HOME DELEVERY"}
                                                 </td>
 
 
 
                                                 <td
-                                                    className="text-right footable-last-visible"
                                                     style={{ display: "table-cell" }}
+                                                //  style={{ display: "inline-flex" }}
                                                 >
-                                                    <Link
-                                                        className="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                                        to={`/admin/all_orders/order-Details/${item?.orderId._id}`}
-                                                        title="View"
-                                                    >
-                                                        <i className="las la-eye" />
-                                                    </Link>
 
-                                                    <button type="button" onClick={() => deleteOrderData(1)} className="btn btn-soft-danger btn-icon btn-circle btn-sm">
-                                                        <i className="las la-trash" />
-                                                    </button>
+                                                    <Actions item={item} deleteOrderData={deleteOrderData} />
 
                                                 </td>
                                             </tr>

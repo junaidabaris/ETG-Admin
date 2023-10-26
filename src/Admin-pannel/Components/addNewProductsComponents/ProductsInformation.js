@@ -87,7 +87,7 @@ function ProductsInformationAdmin({ dataSetNext, wholesaleProductDataById ,getDa
                         <label className="col-md-3 col-from-label">Seller <span className="text-danger">*</span></label>
                         <div className="col-md-8">
 
-                            <select class="form-select" name="seller_id" onChange={getDat} value={val.seller_id} aria-label="Default select example">
+                            <select class="form-select" name="seller_id" onChange={getDat} value={val?.seller_id} aria-label="Default select example">
                                 <option selected>Open this select menu</option>
                                 {data && data.map((item) => {
                                     return <option value={item?._id}>{item?.firstname + " " + item?.lastname}</option>
@@ -101,7 +101,7 @@ function ProductsInformationAdmin({ dataSetNext, wholesaleProductDataById ,getDa
                         <label className="col-md-3 col-from-label">Currency <span className="text-danger">*</span></label>
                         <div className="col-md-8">
 
-                            <select class="form-select" name="currency_id" onChange={getDat} value={val.currency_id} aria-label="Default select example">
+                            <select class="form-select" name="currency_id" onChange={getDat} value={val?.currency_id} aria-label="Default select example">
                                 <option selected>Open this select menu</option>
                                 {listi && listi.map((item) => {
                                     return <option value={item?._id}>{item?.name + " " + item?.symbol}</option>

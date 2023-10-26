@@ -33,7 +33,7 @@ function VtechPurchase() {
 
     const [show, setShow] = useState(true)
     const [finalCatD, setFinalCatD] = useState();
-    const { data: pickUp } = useGetPickupPointQuery();
+    const { data: pickUp } = useGetPickupPointQuery(token);
 
     const [setCart, { isLoading, data: cartData, isError: isCartsError }] = useAddPurchaseCartMutation()
 
@@ -73,7 +73,8 @@ function VtechPurchase() {
 
     const sendData = () => {
         const mapedData = showCombo.map((item) => {
-            return { serialNo: item.serialNo, sku: item.sku, variantId: item.variantId._id, productId: item.productId._id,pickupPoints:item.pickupPoints }
+            console.log(item);
+            return { serialNo: item.serialNo, sku: item.sku, variantId: item.variantId._id, productId: item.productId.uid, pickupPoints: item.pickupPoints }
         })
         const obj = { ...storeValue, products: mapedData, supplier: storeValue.seller_id, token: window.localStorage.getItem('adminToken') }
         addPurchaseList(obj);
@@ -132,14 +133,13 @@ function VtechPurchase() {
         setModalShow(false)
         const arr = [...showCombo, ...val]
         const sendArr = arr.map((item) => {
-            return { productId: item.productId, variantId: item.variant, sku: item.sku, qty: item.qty }
+            return { productId: item.productId, variantId: item.variant, sku: item.sku, qty: item.qty, purchase_rate: item?.purchase_Price, pickupPoints: item?.pickupPoint }
         })
-        cartPurchase({ products: sendArr });
+        cartPurchase({ products: sendArr, productList: showCombo });
     };
 
     useEffect(() => {
         if (cartSussuss) {
-            console.log(data);
             setShowCombo(data);
         }
     }, [cartSussuss])
@@ -153,6 +153,7 @@ function VtechPurchase() {
                 cartData={cartData1}
                 SaveData={SaveData}
                 showCombo={showCombo}
+                pickUp={pickUp}
             />}
             <div className="aiz-main-content">
                 <div className="px-15px px-lg-25px">
@@ -248,7 +249,7 @@ function VtechPurchase() {
                                                         <td><label className="control-label">#</label></td>
                                                         <td><label className="control-label">Product Name</label></td>
                                                         <td><label className="control-label">Variant</label></td>
-                                                        <td><label className="control-label">SKU</label></td>
+                                                        <td><label className="control-label">Purchas Rate</label></td>
                                                         <td><label className="control-label">Pickup Point</label></td>
                                                         <td><label className="control-label">Serial/Service Tag No</label></td>
                                                     </tr>

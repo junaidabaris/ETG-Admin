@@ -234,29 +234,45 @@ function AddNewProductsPage() {
     const [val, setVal] = useState(data)
 
     const changeDataForm = (index) => {
-        setFinalCatD(val[index].category_id)
-        setTags(val[index].tags)
-        setVariantsData(val[index].variations)
-        setShoaing({
-            featured: val[index].featured,
-            todays_deal: val[index]?.todays_deal,
-            trending: val[index]?.trending,
-        })
-    }
+        if (!val) {
 
+        } else {
+            if (val[index]?.category_id?.length) {
+                setFinalCatD(val[index]?.category_id)
+            }
+            if (val[index]?.category_id?.length) {
+                setTags(val[index]?.tags)
+            }
+            if (val[index]?.variations?.length) {
+                setVariantsData(val[index]?.variations)
+            }
+
+            const obj = {
+                featured: val[index].featured ? val[index].featured : false,
+                todays_deal: val[index]?.todays_deal ? val[index]?.todays_deal : false,
+                trending: val[index]?.trending ? val[index]?.trending : false,
+            }
+            setShoaing(obj)
+        }
+
+    }
 
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
-        const maped = val.map((item, id) => {
-            if (newValue == id) {
-                const obj = { ...item, ...shoing, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription, attributes: [proAtt?._id], attributeSet: proAtt?.values }
-                return obj
-            } else {
-                return item
-            }
-        })
-        setVal(maped)
+        // const maped = val.map((item, id) => {
+        //     if (newValue == item?.language_id?._id) {
+        //         const obj = { ...item, ...shoing, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD,  attributes: [proAtt?._id], attributeSet: proAtt?.values }
+        //         // productDescription: productDescription, cut off for bug 
+        //         return obj
+        //     } else {
+        //         return item
+        //     }
+        // })
+        // setVal(maped)
+        // console.log(maped);
+        // console.log(event);
+        // console.log(newValue);
         changeDataForm(newValue)
     };
 
@@ -330,8 +346,10 @@ function AddNewProductsPage() {
                 }
 
             }
-            cloned[indi].images = varclone1
-            varclone1 = []
+            if (varclone1?.length) {
+                cloned[indi].images = varclone1
+                varclone1 = []
+            }
             images.delete('image');
 
             images.append('image', element3?.mainImage_url);
@@ -352,7 +370,6 @@ function AddNewProductsPage() {
         }
 
         let varclone = []
-
         for (let ind = 0; ind < cloned?.length; ind++) {
             let element = cloned[ind].variations;
             for (let k = 0; k < element.length; k++) {
@@ -361,10 +378,10 @@ function AddNewProductsPage() {
                 for (let indi = 0; indi < element2.images?.length; indi++) {
                     images.delete('image');
                     const element3 = element2?.images[indi];
-                    images.append('image', element3);
                     if (element3?.url) {
-
+                        varImgs = element2?.images
                     } else {
+                        images.append('image', element3);
                         try {
                             const res = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
                             const obj = { public_id: res.data.public_id, url: res.data.url }
@@ -374,28 +391,27 @@ function AddNewProductsPage() {
                         }
                     }
 
+
                 }
 
                 images.delete('image');
                 images.append('image', element2.mainImage_url);
-                if (element2.mainImage_url) {
-                    if (element2.mainImage_url?.url) {
-
-                    } else {
-                        try {
-                            const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
-                            varclone.push({ ...element2, images: varImgs, mainImage_url: { public_id: res2.data.public_id, url: res2.data.url } })
-                            varImgs = []
-                        } catch (error) {
-                            console.log("Thumnail Image  not uploded")
-                        }
+                if (!element2.mainImage_url?.url) {
+                    try {
+                        const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+                        varclone.push({ ...element2, images: varImgs, mainImage_url: { public_id: res2.data.public_id, url: res2.data.url } })
+                        varImgs = []
+                    } catch (error) {
+                        console.log("Thumnail Image  not uploded")
                     }
+                } else {
+                    varclone.push({ ...element2, images: varImgs, mainImage_url: element2?.mainImage_url })
                 }
 
             }
-
             if (varclone?.length) {
-                cloned[ind].variations = varclone
+                let clonedV = {...cloned[ind] , variations:varclone}
+                cloned.splice(ind , 1 , clonedV)
             }
             varclone = []
         }
@@ -413,22 +429,24 @@ function AddNewProductsPage() {
             setspcOr(false)
         }
     }
+
     const addNewAttributeData = async (e, id) => {
 
         e.preventDefault();
         let clone2 = [...val]
         setspcOr(true)
-        const maped = clone2.map((item) => {
-            if (item.language_id == id) {
+        // const maped = clone2.map((item) => {
+        //     if (item.language_id == id) {
+        //         const obj = { ...item, ...shoing, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD,  attributes: [proAtt?._id], attributeSet: proAtt?.values }
+        //         // productDescription: productDescription, cut off bcz some bug
+        //         return obj
+        //     } else {
+        //         return item
+        //     }
+        // })
+        // setVal(maped)
+        addFile(clone2, token)
 
-                const obj = { ...item, ...shoing, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription, attributes: [proAtt?._id], attributeSet: proAtt?.values }
-                return obj
-            } else {
-                return item
-            }
-        })
-        setVal(maped)
-        addFile(maped, token)
     };
 
     const { data: productData, isSuccess, isLoading } = useGetProductByIdQuery({ id: params.id, token: token });
@@ -442,7 +460,8 @@ function AddNewProductsPage() {
         }
         const maped = val.map((item) => {
             if (item.language_id == id) {
-                const obj = { ...item, ...shoing, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription, attributes: [proAtt?._id], attributeSet: proAtt?.values }
+                const obj = { ...item, ...shoing, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription ? productDescription : item.productDescription, attributes: [proAtt?._id], attributeSet: proAtt?.values }
+                // productDescription: productDescription, cut off bcz some bug
                 return obj
             } else {
                 return item
@@ -463,9 +482,7 @@ function AddNewProductsPage() {
                     if (element?.language_id?._id == element2._id) {
                         clone.push(element)
                     }
-
                 }
-
             }
 
             setVal(clone)
@@ -473,7 +490,9 @@ function AddNewProductsPage() {
                 changeDataForm(0)
             }
         }
+
     }, [productData, data])
+
 
 
     const onchangeImges = (e, id) => {
@@ -504,13 +523,14 @@ function AddNewProductsPage() {
     const SaveData = (i, str, id) => {
         const maped = val.map((item) => {
             if (item.language_id == id) {
-                const obj = { ...item, ...shoing, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription, attributes: [proAtt?._id], attributeSet: proAtt?.values }
+                const obj = { ...item, ...shoing, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD ? finalCatD : item?.category_id, productDescription: productDescription ? productDescription : item.productDescription, attributes: [proAtt?._id], attributeSet: proAtt?.values }
                 return obj
             } else {
                 return item
             }
         })
         setVal(maped)
+        window.scrollTo(0, 0)
     }
 
 
@@ -763,7 +783,7 @@ function AddNewProductsPage() {
 
                                                     {/* <ProductsDescriptionAdmin /> */}
 
-                                                    <div className="card">
+                                                    {i == 0 && <div className="card">
                                                         <div className="card-header">
                                                             <h5 className="mb-0 h6">SEO Meta Tags</h5>
                                                         </div>
@@ -778,6 +798,12 @@ function AddNewProductsPage() {
                                                                 <label className="col-md-3 col-from-label">Meta Keyword</label>
                                                                 <div className="col-md-8">
                                                                     <input type="text" value={item?.meta_keywords} className="form-control" name="meta_keywords" placeholder="Meta Key Word" fdprocessedid="1hz7zu" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
+                                                                </div>
+                                                            </div>
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Slug</label>
+                                                                <div className="col-md-8">
+                                                                    <input type="text" value={item?.slug} className="form-control" name="slug" placeholder="Slug" fdprocessedid="1hz7zu" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
                                                                 </div>
                                                             </div>
 
@@ -819,7 +845,7 @@ function AddNewProductsPage() {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div>}
                                                     {/* <SeoMetaTagsAdmin /> */}
                                                 </div>
                                                 <div className="col-lg-4">
@@ -974,7 +1000,7 @@ function AddNewProductsPage() {
                                             </div>
 
                                             <ProductDescriptionWrapper item={item} />
-                                            <ProductParams item={item} handleVariantData={handleVariantData} setattributes={setattributesVal} setattributesVal={setattributesVal} setVariantsData={setVariantsData} />
+                                            <ProductParams sellerD={sellerD} item={item} handleVariantData={handleVariantData} setattributes={setattributesVal} setattributesVal={setattributesVal} setVariantsData={setVariantsData} onChangeHandler={onChangeHandler} />
 
                                             <div className="row">
                                                 <div className="col-md-3 form-group physical_product_show" id="quantity">
@@ -1020,14 +1046,11 @@ function AddNewProductsPage() {
 
                                     </div>
                                     {val.length == i + 1 ? <div className="form-group mb-3 text-right">
-                                        <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setTabs(i, 'pre', item.language_id) }}>Prev</button>
+                                        {/* <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setTabs(i, 'pre', item.language_id) }}>Prev</button> */}
                                         <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={(e) => { addNewAttributeData(e, item.language_id) }}>Save</button>
                                     </div>
                                         :
-                                        <div className="form-group mb-3 text-right">
-                                            {i !== 0 && <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setTabs(i, 'pre', item.language_id) }}>Prev</button>}
-                                            <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setTabs(i, 'nex', item.language_id) }}>Next</button>
-                                        </div>
+                                        ''
 
                                     }
                                     <ToastContainer />

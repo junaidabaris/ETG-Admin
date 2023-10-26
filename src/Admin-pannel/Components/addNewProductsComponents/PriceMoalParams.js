@@ -72,7 +72,7 @@ function PriceMoalParams(props) {
                     return
                 }
             }
-            
+
         }
         const filterdData = val.filter((item) => {
             return item._id !== id
@@ -106,6 +106,7 @@ function PriceMoalParams(props) {
                             <td><label className="control-label">Landing Cost</label></td>
                             <td><label className="control-label">Tax %</label></td>
                             <td><label className="control-label">Tax Type</label></td>
+                            {/* <td><label className="control-label">Seller</label></td> */}
                             <td><label className="control-label">Sale Rate</label></td>
                             <td><label className="control-label">Wholesale Price</label></td>
                             <td><label className="control-label">Retail Price</label></td>
@@ -170,7 +171,14 @@ function PriceMoalParams(props) {
                                         <option value='Exclusive'>Exclusive</option>
                                     </select>
                                 </td>
-
+                                {/* <td>
+                                    <select className="form-select" aria-label="Default select example" value={item?.seller_id} name="seller_id" onChange={(e) => { changeHanle(e, item?.country_id._id) }}  >
+                                        <option>Select Seller</option>
+                                        {props?.sellerD && props?.sellerD.map((item) => {
+                                            return <option value={item._id} key={item._id}>{item.firstname + " " + item.lastname}</option>
+                                        })}
+                                    </select>
+                                </td> */}
 
                                 <td>
                                     <input type="number" name="sale_rate" className="form-control" required value={item?.sale_rate} onChange={(e) => { changeHanle(e, item?.country_id._id) }} />
@@ -220,7 +228,7 @@ function PriceMoalParams(props) {
                 </table>
             </Modal.Body>
             <Modal.Footer>
-            <button type="button" className="btn btn-success" onClick={() => { sendData(props.index) }}>Save</button>
+                <button type="button" className="btn btn-success" onClick={() => { sendData(props.index) }}>Save</button>
             </Modal.Footer>
         </Modal>
     );

@@ -332,7 +332,10 @@ function AddNewProductsPage() {
         // })
     };
 
-    const onChangeHandler = (e, id, bul) => {
+    const [existPro, setExistPro] = useState(false)
+
+    const onChangeHandler = async (e, id, bul) => {
+
         if (bul) {
             const maped = val.map((item) => {
                 if (item.language_id == id) {
@@ -356,6 +359,16 @@ function AddNewProductsPage() {
                 }
             })
             setVal(maped)
+            if (e.target.name == 'name') {
+                const res = await axios.get(`https://onlineparttimejobs.in/api/product/checkName/${e.target.value}`, {
+                    headers: {
+                        'Content-type': 'application/json; charset=UTF-8',
+                        'Authorization': 'Bearer ' + token
+                    },
+                })
+                setExistPro(res.data?.isExist)
+            }
+
 
         }
     }
@@ -451,19 +464,21 @@ function AddNewProductsPage() {
             varclone = []
         }
 
-        const neClone = []
-        for (let v = 0; v < cloned.length; v++) {
-            const element = cloned[v];
-            if (v == 0) {
-                neClone.push(element)
-            }
-            if (!element.name) {
-                const obj = { ...cloned[0], language_id: element.language_id }
-                neClone.push(obj)
-            }
-        }
+        // const neClone = []
+        // for (let v = 0; v < cloned.length; v++) {
+        //     const element = cloned[v];
+        //     if (v == 0) {
+        //         neClone.push(element)
+        //     }
+        //     if (!element.name) {
+        //         const obj = { ...cloned[0], language_id: element.language_id }
+        //         neClone.push(obj)
+        //     }else{
+        //         neClone.push(element)
+        //     }
+        // }
         try {
-            const res = await axios.post(url, { list: neClone }, {
+            const res = await axios.post(url, { list: cloned }, {
                 headers: {
                     "Content-type": "application/json; charset=UTF-8",
                     Authorization: `Bearer ${token}`,
@@ -482,17 +497,18 @@ function AddNewProductsPage() {
 
         e.preventDefault();
         let clone2 = [...val]
+
         setspcOr(true)
-        const maped = clone2.map((item) => {
-            if (item.language_id == id) {
-                const obj = { ...item, ...shoing, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription, attributes: [proAtt?._id], attributeSet: proAtt?.values }
-                return obj
-            } else {
-                return item
-            }
-        })
-        setVal(maped)
-        addFile(maped, token)
+        // const maped = clone2.map((item) => {
+        //     if (item.language_id == id) {
+        //         const obj = { ...item, ...shoing, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription, attributes: [proAtt?._id], attributeSet: proAtt?.values }
+        //         return obj
+        //     } else {
+        //         return item
+        //     }
+        // })
+        // setVal(maped)
+        addFile(clone2, token)
 
     };
     const setTabs = (i, str, id) => {
@@ -559,14 +575,16 @@ function AddNewProductsPage() {
     const SaveData = (i, str, id) => {
         const maped = val.map((item) => {
             if (item.language_id == id) {
-                const obj = { ...item, ...shoing, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD, productDescription: productDescription, attributes: [proAtt?._id], attributeSet: proAtt?.values }
+                const obj = { ...item, ...shoing, variations: varianstData, flashDeal: flashDeal, variation_Form: attributesVal, tags: tags, category_id: finalCatD ? finalCatD : item?.category_id, productDescription: productDescription ? productDescription : item.productDescription, attributes: [proAtt?._id], attributeSet: proAtt?.values }
                 return obj
             } else {
                 return item
             }
         })
         setVal(maped)
+        window.scrollTo(0, 0)
     }
+
 
     return (
         <>
@@ -614,6 +632,7 @@ function AddNewProductsPage() {
                                                                 <label className="col-md-3 col-from-label">Product Name <span className="text-danger">*</span></label>
                                                                 <div className="col-md-8">
                                                                     <input type="text" className="form-control" value={item?.name} name="name" placeholder="Product Name" required fdprocessedid="3bss68" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
+                                                                    {existPro && <div style={{ color: "red" }}>product already exists with !</div>}
                                                                 </div>
                                                             </div>
 
@@ -626,7 +645,7 @@ function AddNewProductsPage() {
 
                                                                         options={categ}
                                                                         showCheckbox
-                                                                        selectedValues={finalCatD}
+                                                                        selectedValues={item?.category_id}
                                                                         onRemove={(selectedCat) => {
                                                                             const selectedIds = selectedCat.map((cat) => {
                                                                                 return cat
@@ -820,7 +839,7 @@ function AddNewProductsPage() {
 
                                                     {/* <ProductsDescriptionAdmin /> */}
 
-                                                    <div className="card">
+                                                    {i == 0 && <div className="card">
                                                         <div className="card-header">
                                                             <h5 className="mb-0 h6">SEO Meta Tags</h5>
                                                         </div>
@@ -835,6 +854,12 @@ function AddNewProductsPage() {
                                                                 <label className="col-md-3 col-from-label">Meta Keyword</label>
                                                                 <div className="col-md-8">
                                                                     <input type="text" value={item?.meta_keywords} className="form-control" name="meta_keywords" placeholder="Meta Key Word" fdprocessedid="1hz7zu" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
+                                                                </div>
+                                                            </div>
+                                                            <div className="form-group row">
+                                                                <label className="col-md-3 col-from-label">Slug</label>
+                                                                <div className="col-md-8">
+                                                                    <input type="text" value={item?.slug} className="form-control" name="slug" placeholder="Slug" fdprocessedid="1hz7zu" onChange={(e) => { onChangeHandler(e, item.language_id) }} />
                                                                 </div>
                                                             </div>
 
@@ -875,7 +900,7 @@ function AddNewProductsPage() {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div>}
                                                     {/* <SeoMetaTagsAdmin /> */}
                                                 </div>
                                                 <div className="col-lg-4">
@@ -1031,7 +1056,7 @@ function AddNewProductsPage() {
 
                                             <ProductDescriptionWrapper />
 
-                                            <ProductsVariation item={item} handleVariantData={handleVariantData} setattributes={setattributesVal} setattributesVal={setattributesVal} setVariantsData={setVariantsData} onChangeHandler={onChangeHandler} />
+                                            <ProductsVariation sellerD={sellerD} item={item} handleVariantData={handleVariantData} setattributes={setattributesVal} setattributesVal={setattributesVal} setVariantsData={setVariantsData} onChangeHandler={onChangeHandler} />
 
 
                                             <div className="row">
@@ -1078,14 +1103,11 @@ function AddNewProductsPage() {
 
                                     </div>
                                     {val.length == i + 1 ? <div className="form-group mb-3 text-right">
-                                        <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setTabs(i, 'pre', item.language_id) }}>Prev</button>
+                                        {/* <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setTabs(i, 'pre', item.language_id) }}>Prev</button> */}
                                         <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={(e) => { addNewAttributeData(e, item.language_id) }}>Save</button>
                                     </div>
                                         :
-                                        <div className="form-group mb-3 text-right">
-                                            {i !== 0 && <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setTabs(i, 'pre', item.language_id) }}>Prev</button>}
-                                            <button type="button" className="btn btn-primary" fdprocessedid="uzw7ye" onClick={() => { setTabs(i, 'nex', item.language_id) }}>Save & Next</button>
-                                        </div>
+                                        ''
 
                                     }
                                     <ToastContainer />

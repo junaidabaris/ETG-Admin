@@ -662,6 +662,13 @@ import ReqForQuatation from "./Admin-pannel/Components/purchaseoddo/ReqForQuatat
 import CreateDraftInvoice from "./Admin-pannel/Components/purchaseoddo/CreateDraftInvoice";
 import EmailMarketing from "./Admin-pannel/Pages/emailMarketingoddo";
 import NewMail from "./Admin-pannel/Components/emailMarketingoddo/NewMail";
+import AddFaq from "./Admin-pannel/Pages/FAQ/AddFaq";
+import FaqMaster from "./Admin-pannel/Pages/FAQ/faqmaster/FaqMaster";
+import ListFaqAdmin from "./Admin-pannel/Pages/FAQ/ListFaqAdmin";
+import List_Subscribe from "./Admin-pannel/Pages/FAQ/list_Subscribe/List_Subscribe";
+import RoboticMaster from "./Admin-pannel/Components/roboticMaster/RoboticMaster";
+import RoboticMasterEdit from "./Admin-pannel/Components/roboticMaster/RoboticMasterEdit";
+import RoboticList from "./Admin-pannel/Components/roboticMaster/RoboticMasterList";
 
 function App() {
   const [show, setshow] = useState(true);
@@ -682,6 +689,11 @@ function App() {
           <Route path="products/all/comboProduct" element={<ListComboProdust />} />
           <Route path="products/all/comboProduct/edit/:id" element={<EditComboProducts />} />
 
+
+          {/* Mustafa Works */}
+          <Route path="robotic-master" element={<RoboticMaster />} />
+          <Route path="robotic-master-list" element={<RoboticList />} />
+          <Route path="robotic-master/edit/:id" element={<RoboticMasterEdit />} />
 
 
 
@@ -750,8 +762,11 @@ function App() {
           <Route path="list_banner/bannerEdit/:id" element={<AddNewBanner />} />
           <Route path="list_banner" element={<ListBanner />} />
 
+          <Route path="add_faq" element={<AddFaq />} />
+          <Route path="list_faq" element={<ListFaqAdmin />} />
+          <Route path="faqsMaster" element={<FaqMaster />} />
 
-
+          <Route path="list_Subscribe" element={<List_Subscribe />} />
 
           <Route path="attributes" element={<AttributeAdminPage />} />
           <Route path="product_attributes" element={<IndexPages />} />
@@ -794,8 +809,8 @@ function App() {
           <Route path="customer-shippingAddress" element={<CustomerShippingAddress />} />
           <Route path="customer-shippingAddress/detail/:id" element={<CustomerShippingAdressDetail />} />
           {/* <Route path="customer-shippingAddress/create" element={<CustomerShippingAddList />} /> */}
-          {/* <Route path="customer-list/edit/:id" element={<EditCustomer />} /> */}
-          <Route path="customer-list/edit/:id" element={<NewCustomers />} />
+          <Route path="customer-list/edit/:id" element={<AddCustomer />} />
+          <Route path="customer-list/editBillings/:id" element={<NewCustomers />} />
           <Route path="seller" element={<AllSellerPage />} />
 
           {/* <Route path="customer" element={<AllCustomerPage />} /> */}
@@ -977,6 +992,9 @@ function App() {
           <Route path="by-user" element={<Byuser />} />
           <Route path="tasks-analysis" element={<TasksAnalysis />} />
           <Route path="barchart-analysis" element={<BarchartA />} />
+
+
+
 
 
 

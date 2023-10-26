@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify';
-import { useAddStaffMutation, useGetRolesQuery } from '../../../Components/all-products/allproductsApi/allProductsApi';
+import { useAddStaffMutation, useGetCurrencyQuery, useGetLanguagesQuery, useGetRolesQuery } from '../../../Components/all-products/allproductsApi/allProductsApi';
 import axios from 'axios';
 
 function AddNewDeliveryBoy() {
@@ -17,18 +17,26 @@ function AddNewDeliveryBoy() {
         state: '',
         city: '',
         province: '',
+        language_id: '',
+        currency_id: '',
         pin: '',
     });
-
+    const token = window.localStorage.getItem('token')
     const isPickupManagerLogin = window.localStorage.getItem('isPickupManagerLogin')
     const isPickupManagerId = window.localStorage.getItem('isPickupManagerId')
-
+    const { data: currency } = useGetCurrencyQuery(token)
+    const { data: language } = useGetLanguagesQuery(token)
 
     const [pickups, setPickups] = useState(null)
 
     const getPickupPoint = async () => {
         try {
-            const res = await axios.get(`https://onlineparttimejobs.in/api/pickupPoints`)
+            const res = await axios.get(`https://onlineparttimejobs.in/api/pickupPoints`, {
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                },
+            })
             setPickups(res.data)
         } catch (error) {
             alert('Server Error Fail to load pickup Points')
@@ -40,10 +48,10 @@ function AddNewDeliveryBoy() {
     }, [])
 
 
-    let pickupId = '6412fbd218fa66a37ed430d1';
+    // let pickupId = '6412fbd218fa66a37ed430d1';
+    const [pickupId, setpickupId] = useState()
     const handelChange = (e) => {
-        pickupId = e.target.value
-        console.log(e.target.value);
+        setpickupId(e.target.value)
     }
 
 
@@ -76,7 +84,6 @@ function AddNewDeliveryBoy() {
 
     const submitStaffData = async (e) => {
         const formData = new FormData();
-
         if (isPickupManagerLogin === 'true') {
             formData.append('firstname', inputVal.firstname);
             formData.append('lastname', inputVal.lastname);
@@ -88,7 +95,11 @@ function AddNewDeliveryBoy() {
             formData.append('pickupPoint', isPickupManagerId);
             formData.append('province', inputVal.province);
             formData.append('pin', inputVal.pin);
+            formData.append('province', inputVal.province);
+            formData.append('pin', inputVal.pin);
             formData.append('password', inputVal.password);
+            formData.append('password', inputVal.language_id);
+            formData.append('password', inputVal.currency_id);
             formData.append('image', file);
         } else {
             formData.append('firstname', inputVal.firstname);
@@ -101,12 +112,19 @@ function AddNewDeliveryBoy() {
             formData.append('pickupPoint', pickupId);
             formData.append('province', inputVal.province);
             formData.append('pin', inputVal.pin);
+            formData.append('password', inputVal.language_id);
+            formData.append('password', inputVal.currency_id);
             formData.append('password', inputVal.password);
             formData.append('image', file);
         }
 
         try {
-            const res = await axios.post(`https://onlineparttimejobs.in/api/deliveryBoy/add_deliveryBoy`, formData)
+            const res = await axios.post(`https://onlineparttimejobs.in/api/deliveryBoy/add_deliveryBoy`, formData, {
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + token
+                },
+            })
             toastSuccessMessage()
 
         } catch (error) {
@@ -172,6 +190,7 @@ function AddNewDeliveryBoy() {
                                                 <select
                                                     onChange={handelChange}
                                                     style={{ height: 38 + "px", fontSize: 13 + "px", width: "540px" }}>
+                                                    <option>Select Manager</option>
                                                     {pickups && pickups.map((item) => {
                                                         return <option key={item._id} id={item._id} value={item._id}>
                                                             {item.pickupPoint_name}
@@ -234,7 +253,29 @@ function AddNewDeliveryBoy() {
                                             </div>
 
                                         </div>
+                                        {/* <div className="form-group row">
+                                            <label className="col-sm-3 col-from-label" htmlFor="password">Language</label>
 
+                                            <div className="col-sm-9">
+                                                <select className="form-select" aria-label="Default select example" name='language_id' onChange={onChangeHandler}>
+                                                    <option>Select Language</option>
+                                                    {language && language?.map((item) => {
+                                                        return <option key={item._id} value={item._id}>{item.name}</option>
+                                                    })}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className="form-group row">
+                                            <label className="col-sm-3 col-from-label" htmlFor="password">Your Currency</label>
+                                            <div className="col-sm-9">
+                                                <select className="form-select" name="currency_id" id="currId" onChange={onChangeHandler} aria-label="Default select example">
+                                                    <option selected>Select Currency</option>
+                                                    {currency && currency.map((item) => {
+                                                        return <option key={item._id} value={item._id}>{item.name}</option>
+                                                    })}
+                                                </select>
+                                            </div>
+                                        </div> */}
                                         <div className="form-group row">
                                             <label className="col-md-3 col-form-label" htmlFor="signinSrEmail">
                                                 Image

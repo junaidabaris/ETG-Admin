@@ -35,12 +35,12 @@ function AddnewCategories() {
     if (langData) {
       if (!params) {
         const maped = langData.map((item) => {
-          return { name: "", language_id: item._id, parent_id: '', lable: item.name, order_level: "", type: "", banner: "", meta_title: "", meta_description: '', commision_rate: "", level: "", top: "", featured: '', meta_keyword: "" }
+          return { name: "", language_id: item._id, parent_id: '', lable: item.name, order_level: "", type: "", banner: "", meta_title: "", meta_description: '', commision_rate: "", level: "", top:false, featured: false, meta_keyword: "",slug:"" }
         })
         setVal(maped)
       } else {
         const maped = langData.map((item) => {
-          return { name: "", language_id: item._id, parent_id: '', lable: item.name, order_level: "", type: "", banner: "", meta_title: "", meta_description: '', commision_rate: "", level: "", top: "", featured: '', meta_keyword: "" }
+          return { name: "", language_id: item._id, parent_id: '', lable: item.name, order_level: "", type: "", banner: "", meta_title: "", meta_description: '', commision_rate: "", level: "", top: false, featured: false, meta_keyword: "" ,slug:""}
         })
         setVal(maped)
       }
@@ -49,6 +49,18 @@ function AddnewCategories() {
   const onChangeHandler = (e, id, bul) => {
 
     if (bul) {
+      if(bul == 'bul'){
+        const maped = val.map((item) => {
+          if (item.language_id == id) {
+            const obj = { ...item, [e.target.name]: e.target.value }
+            return obj
+          } else {
+            return item
+          }
+        })
+        setVal(maped)
+        return
+      }
       if (bul == 'imgicon') {
         const maped = val.map((item) => {
           if (item.language_id == id) {
@@ -72,6 +84,18 @@ function AddnewCategories() {
       }
 
     } else {
+     if (e.target.name == 'slug') {
+      const maped = val.map((item) => {
+        const newValue = e.target.value.replace(/\s/g, '');
+        if (item.language_id == id) {
+          const obj = { ...item, [e.target.name]: newValue }
+          return obj
+        } else {
+          return item
+        }
+      })
+      setVal(maped);
+     } else {
       const maped = val.map((item) => {
         if (item.language_id == id) {
           const obj = { ...item, [e.target.name]: e.target.value }
@@ -81,6 +105,7 @@ function AddnewCategories() {
         }
       })
       setVal(maped);
+     }
     }
 
   }

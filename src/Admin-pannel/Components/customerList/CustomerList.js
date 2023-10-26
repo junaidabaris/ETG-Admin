@@ -139,7 +139,7 @@ function CustomerList() {
                             <Link to={`edit/${item._id}`} className="btn btn-soft-primary btn-icon btn-circle btn-sm" title="Log in as this Customer">
                               <i className="las la-edit" />
                             </Link>
-                            <Link to="#" className="btn btn-soft-danger btn-icon btn-circle btn-sm" title="Ban this Customer">
+                            <Link to={`editBillings/${item._id}`} className="btn btn-soft-danger btn-icon btn-circle btn-sm" title="Ban this Customer">
                               <i className="las la-user-slash" />
                             </Link>
                             <button type="button" onClick={() => deleteCustomerData(item._id)} className="btn btn-soft-danger btn-icon btn-circle btn-sm">

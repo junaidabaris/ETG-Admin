@@ -7,7 +7,7 @@ import AttributeModal from "./AttributeModal";
 import { GiPriceTag } from "react-icons/gi";
 import PriceModal from "./PriceModal";
 import { useParams } from "react-router-dom";
-export const ColorVariant = ({ data, deleteRow, pickUp, handleVariant, setVariantsData, bringSelectedVariantImage, index, item }) => {
+export const ColorVariant = ({ data, deleteRow, pickUp, handleVariant, setVariantsData, bringSelectedVariantImage, index, item ,sellerD}) => {
     const [formData, setFormData] = useState(item);
     const [prices, setprices] = useState(data.prices);
     const onChangeHandler = (e) => {
@@ -42,6 +42,10 @@ export const ColorVariant = ({ data, deleteRow, pickUp, handleVariant, setVarian
         setFormData({ ...cloneObj });
     }
     const setData = (data, i) => {
+        const clone = { ...data }
+        setFormData(clone)
+    }
+    const setDataArtibutr = (data) => {
         const clone = { ...data }
         setFormData(clone)
     }
@@ -111,7 +115,7 @@ export const ColorVariant = ({ data, deleteRow, pickUp, handleVariant, setVarian
 
             {modalShow && <AttributeModal show={modalShow}
                 onHide={() => setModalShow(false)}
-                setFormData={setFormData}
+                setDataArtibutr={setDataArtibutr}
                 formData={formData}
                 data={data}
             />}
@@ -120,6 +124,7 @@ export const ColorVariant = ({ data, deleteRow, pickUp, handleVariant, setVarian
                 prices={prices}
                 data={data}
                 setData={setData}
+                sellerD={sellerD}
                 index={index}
             />}
         </tr>

@@ -8,9 +8,17 @@ import { ToastContainer, toast } from 'react-toastify';
 
 function SellerAddEditForm() {
     const params = useParams()
+    const { data, isSuccess } = useGetSellerDetailQuery(params.id)
+
+    // const getData = async ()=>{
+    //     try {
+    //         const res = await axios.get(`https://onlineparttimejobs.in/api/staff/profile`)
+    //     } catch (error) {
+
+    //     }
+    // }
     const [validated, setValidated] = useState(false);
     const [sendDataItem, { isSuccess: adsus, isError: adder }] = useAddSellerListMutation()
-    const { data, isSuccess } = useGetSellerDetailQuery(params.id)
     const [status, setSatatus] = useState({ verification_status: false, cash_on_delivery_status: false, bank_payment_status: false })
 
     const [state, setState] = useState({
@@ -18,6 +26,7 @@ function SellerAddEditForm() {
         lastname: "",
         long: "",
         lat: "",
+        password: "",
         addressLine1: "",
         addressLine2: "",
         country: "",
@@ -54,13 +63,13 @@ function SellerAddEditForm() {
             position: "top-center"
         })
     };
-    
+
     const toastErrorMessage = (str) => {
         toast.error(`Seller ${str}  added`, {
             position: "top-center"
         })
     };
-    
+
 
     useEffect(() => {
         if (adsus) {
@@ -76,7 +85,7 @@ function SellerAddEditForm() {
             toastErrorMessage('update')
         }
 
-    }, [adsus, adder,upSuss, uperr])
+    }, [adsus, adder, upSuss, uperr])
 
     const token = window.localStorage.getItem('adminToken')
     const [unders, setUneders] = useState(null)
@@ -94,6 +103,7 @@ function SellerAddEditForm() {
         clone[e.target.name] = e.target.value
         setState(clone)
     }
+    const [photos, setchangePhoto] = useState(null)
 
     const ChengeStatus = (str) => {
         const clone = { ...status }
@@ -109,18 +119,20 @@ function SellerAddEditForm() {
         setSatatus(clone);
     }
 
-    const sendData = (event) => {
+    const sendData = async (event) => {
         event.preventDefault()
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();
         }
-
+        const images = new FormData();
+        images.append('image', photos);
         setValidated(true);
-        const mergData = { ...state, ...status, location: { long: state.long, lat: state.lat } }
+        const res = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+        const mergData = { ...state, ...status, location: { long: state.long, lat: state.lat }, image: res.data }
         if (params.id) {
-            update({ data: mergData, id: params.id,token: token })
+            update({ data: mergData, id: params.id, token: token })
         } else {
             sendDataItem({ data: mergData, token: token });
         }
@@ -177,6 +189,10 @@ function SellerAddEditForm() {
                 <Form.Control type="text" name='lastname' onChange={onChangeHandle} value={state?.lastname} style={{ width: "50%" }} placeholder="Last Name" required />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label>Image</Form.Label>
+                <Form.Control type="file" name='lastname' onChange={(e) => { setchangePhoto(e.target.files[0]) }} value={state?.lastname} style={{ width: "50%" }} placeholder="Last Name" required />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Under Group</Form.Label>
                 <Form.Select aria-label="Default select example" style={{ width: "50%" }} name="AccLedgerGroupId" onChange={onChangeHandle}>
                     {/* <option>Open this select menu</option> */}
@@ -194,6 +210,10 @@ function SellerAddEditForm() {
 
             </div> */}
 
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label>Password</Form.Label>
+                <Form.Control type="text" name='password' onChange={onChangeHandle} value={state?.password} style={{ width: "50%" }} placeholder="password" required />
+            </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Longitutde</Form.Label>
                 <Form.Control type="text" name='long' onChange={onChangeHandle} value={state?.long} style={{ width: "50%" }} placeholder="Longitude" required />

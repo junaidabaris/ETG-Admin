@@ -10,6 +10,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import MultiForm from './MultiForm';
+import axios from 'axios';
 
 const toastSuccessMessage = () => {
   toast.success("Blog added Successfully", {
@@ -18,9 +19,10 @@ const toastSuccessMessage = () => {
 };
 
 function AddNewPost() {
+  const token = window.localStorage.getItem('token')
   const { data: langData, refetch } = useGetLanguagesQuery(token);
   const [val, setVal] = useState(langData)
-  const [addNewBlog, response] = useAddNewBlogsMutation();
+  const [addNewBlog, { isSuccess, isError }] = useAddNewBlogsMutation();
 
   const onChangeHandler = (e, id, bul) => {
 
@@ -34,7 +36,6 @@ function AddNewPost() {
             return item
           }
         })
-        console.log(maped);
         setVal(maped)
       } else {
         const maped = val.map((item) => {
@@ -61,11 +62,56 @@ function AddNewPost() {
     }
 
   }
-
-  const addNewAttributeData = (e) => {
+  const [spcOr, setspcOr] = useState(false)
+  const addNewAttributeData = async (e) => {
     // addNewBlog(inputval)
-    console.log(val)
+    setspcOr(true)
+    const images = new FormData();
+    const clone = [...val]
+    for (let i = 0; i < clone.length; i++) {
+      let element = clone[i];
+
+      if (element?.meta_img) {
+        images.append('image', element?.meta_img);
+        if (element?.meta_img?.size) {
+          try {
+            const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+            const obj = { ...element, meta_img: { public_id: res2.data.public_id, url: res2.data.url } }
+            clone.splice(i, 1, obj)
+          } catch (error) {
+
+          }
+        } else {
+          // if url is peresent
+        }
+        images.delete('image');
+      }
+
+    }
+    for (let i = 0; i < clone.length; i++) {
+      let element = clone[i];
+
+      if (element?.banner) {
+        images.append('image', element?.banner);
+        if (element?.banner?.size) {
+          try {
+            const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+            const obj = { ...element, banner: { public_id: res2.data.public_id, url: res2.data.url } }
+            clone.splice(i, 1, obj)
+          } catch (error) {
+
+          }
+        } else {
+          // if url is peresent
+        }
+        images.delete('image');
+      }
+
+    }
+    // console.log(clone)
+    addNewBlog({ data: {list:clone}, token: token })
     // document.getElementById("create-course-form").reset();
+    setspcOr(false)
   };
 
 
@@ -75,7 +121,13 @@ function AddNewPost() {
     setValue(newValue);
   };
 
-  
+  const toastSuccessMessage = () => {
+    toast.success("Blog added Successfully", {
+      position: "top-center"
+    })
+  };
+
+
   const params = useParams()
   useEffect(() => {
     if (langData) {
@@ -114,7 +166,14 @@ function AddNewPost() {
   }, [langData])
 
 
-
+  useEffect(() => {
+    if (isSuccess) {
+      toastSuccessMessage()
+    }
+    if (isError) {
+      alert('Blog Not Add')
+    }
+  }, [isSuccess, isError])
 
   return (
     <>
@@ -128,7 +187,12 @@ function AddNewPost() {
                 </div>
                 <div className="card-body">
 
-
+                  {spcOr && <div className="preloaderCount">
+                    <div className="spinner-border" role="status">
+                      <span className="visually-hidden">ded</span>
+                    </div>
+                    <h6>please wait your Blog uploading</h6>
+                  </div>}
 
                   <Box sx={{ width: '100%', typography: 'body1' }}>
                     <TabContext value={value}>

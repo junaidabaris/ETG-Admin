@@ -8,7 +8,8 @@ function AddnewPickupPoint() {
     long: '',
     lat: ''
   });
-  const { isLoading, data } = useGetAllStaffsQuery();
+  const token = window.localStorage.getItem('token')
+  const { isLoading, data } = useGetAllStaffsQuery(token);
 
   const [inputVal, setInputVal] = useState({
     pickupPoint_name: '',
@@ -16,7 +17,7 @@ function AddnewPickupPoint() {
     location: {},
     province: '',
     phone: '',
-    pickUpPointStatus: '',
+    pickUpPointStatus: true,
     PickUpManagerSchema: '',
     email: ''
   });
@@ -44,14 +45,14 @@ function AddnewPickupPoint() {
   }
 
   const [addPickUpPointD, response] = useAddPickUpPointMutation();
-
+  // const token = window.localStorage.getItem('token')
 
   const submitPickUpPointData = (e) => {
     e.preventDefault();
     const clone = { ...inputVal }
     clone.location = lonLatObj
-    addPickUpPointD(clone)
-    document.getElementById("create-course-form").reset();
+    addPickUpPointD({ data: clone, token: token })
+    // document.getElementById("create-course-form").reset();
   };
 
 
@@ -136,16 +137,16 @@ function AddnewPickupPoint() {
                       </div>
                     </div>
 
-                    <div className="form-group row row">
+                    {/* <div className="form-group row row">
                       <label className="col-sm-3 col-from-label">Pickup Point Status</label>
                       <div className="col-sm-3">
-                        {/* <label className="aiz-switch aiz-switch-success mb-0" style={{ marginTop: 5 }}>
+                        <label className="aiz-switch aiz-switch-success mb-0" style={{ marginTop: 5 }}>
                           <input defaultValue={1} type="checkbox" name="pickUpPointStatus" onChange={onChangeHandler} />
                           <span className="slider round" />
-                        </label> */}
+                        </label>
                         <ToggleStatus name="pickUpPointStatus" isStatus={inputVal.pickUpPointStatus} changeStatus={changeStatus} />
                       </div>
-                    </div>
+                    </div> */}
 
                     <div className="form-group row row">
                       <label className="col-sm-3 col-from-label" htmlFor="name">Pick-up Point Manager</label>
@@ -153,10 +154,10 @@ function AddnewPickupPoint() {
                         <div >
                           <select className="form-select" name="PickUpManagerSchema" aria-label="Default select example" onChange={onChangeHandler}>
                             <option>Open this select</option>
-                            {data && data.map((item)=>{
+                            {data && data.map((item) => {
                               return <option>{item.firstname} {item.lastname}</option>
                             })}
-                           
+
                           </select>
                         </div>
                       </div>

@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import ToggleStatus from "../toggleStatus/ToggleStatus";
 import { ColorParams } from "./ColorParams";
 // let sendPayload = [];
-function ProductParams({ handleVariantData, productData, setattributesVal, setVariantsData, item, onChangeHandler }) {
+function ProductParams({ handleVariantData, productData, setattributesVal, setVariantsData, item, onChangeHandler ,sellerD}) {
     const [sendPayload, setsendPayload] = useState([])
     const token = window.localStorage.getItem('token')
     const [variationArr, setVariationArr] = useState([]);
@@ -30,7 +30,7 @@ function ProductParams({ handleVariantData, productData, setattributesVal, setVa
                         let clone2 = []
                         for (let j = 0; j < countryData?.length; j++) {
                             const val = countryData[j];
-                            const newClo = { country_id: val, mrp: "", purchase_rate: "", landing_rate: "", wholeSale_rate: "", retail_price: "", showRoom_rate: "", sale_price: "", discount: "", discount_type: "Inclusive", tax_type: "Amount", tax: "", sku: "", sale_rate: "" }
+                            const newClo = { country_id: val, mrp: "", purchase_rate: "", landing_rate: "", wholeSale_rate: "", retail_price: "", showRoom_rate: "", sale_price: "", discount: "", discount_type: "Amount", tax_type: "Inclusive", tax: "", sku: "", sale_rate: "",seller_id:"" }
                             clone2.push(newClo)
                         }
                         element.prices = clone2
@@ -44,6 +44,7 @@ function ProductParams({ handleVariantData, productData, setattributesVal, setVa
                 setUpdatedVariants(clone)
             } else {
                 if (item?.variations?.length) {
+
                     const clone = [...item?.variations]
                     for (let i = 0; i < clone?.length; i++) {
 
@@ -51,11 +52,12 @@ function ProductParams({ handleVariantData, productData, setattributesVal, setVa
                         if (element?.prices?.length) {
                             // element.prices = item?.prices
                             // clone.splice(i, 1, element)
+                            
                         } else if (countryData) {
                             let clone2 = []
                             for (let j = 0; j < countryData?.length; j++) {
                                 const val = countryData[j];
-                                const newClo = { country_id: val, mrp: "", purchase_rate: "", landing_rate: "", wholeSale_rate: "", retail_price: "", showRoom_rate: "", sale_price: "", discount: "", discount_type: "Inclusive", tax_type: "Amount", tax: "", sku: "", sale_rate: "" }
+                                const newClo = { country_id: val, mrp: "", purchase_rate: "", landing_rate: "", wholeSale_rate: "", retail_price: "", showRoom_rate: "", sale_price: "", discount: "",  discount_type: "Amount", tax_type: "Inclusive", tax: "", sku: "", sale_rate: "",seller_id:"" }
                                 clone2.push(newClo)
                             }
                             element.prices = clone2
@@ -71,7 +73,7 @@ function ProductParams({ handleVariantData, productData, setattributesVal, setVa
 
 
         }
-    }, [isVariantLoading, variationsData, isSuccess, countryData])
+    }, [isVariantLoading, variationsData, isSuccess, countryData,item])
 
     const { data: attributesData } = useGetAttributesQuery(token)
     const [colorVariant, setColorVariant] = useState([]);
@@ -85,7 +87,7 @@ function ProductParams({ handleVariantData, productData, setattributesVal, setVa
             setAllAttributes(item.variation_Form)
             setAllChoices(item.variation_Form)
         }
-    }, [params])
+    }, [params,item])
 
     const getAttributes = (attributes) => {
         setAllAttributes([...attributes])
@@ -104,12 +106,13 @@ function ProductParams({ handleVariantData, productData, setattributesVal, setVa
             clone.push(currentAttr)
         }
         setsendPayload(clone)
-     
+
         let filteredData = clone.filter(item => {
             if (item?.data?.length) {
                 return item
             }
         })
+
         if (filteredData.length) {
             form_variatio({ data: { attributes: filteredData, variations: updatedVariants }, token: token })
             setattributesVal(filteredData)
@@ -164,8 +167,6 @@ function ProductParams({ handleVariantData, productData, setattributesVal, setVa
         })
         setUpdatedVariants(filterdData);
     }
-
-
     return (
         <>
             <div className="row">
@@ -246,9 +247,8 @@ function ProductParams({ handleVariantData, productData, setattributesVal, setVa
                                         )}
 
                                         {updatedVariants && updatedVariants?.map((variantItem, i) => {
-                                            // console.log('variantItem', variantItem);
                                             return (
-                                                <ColorParams deleteRow={deleteRow} key={i} item={item} data={variantItem} pickUp={pickUp} handleVariant={getUpdatedVariant} setVariantsData={setVariantsData} index={i} />
+                                                <ColorParams sellerD={sellerD} deleteRow={deleteRow} key={i} item={item} data={variantItem} pickUp={pickUp} handleVariant={getUpdatedVariant} setVariantsData={setVariantsData} index={i} />
                                             )
 
                                         })}

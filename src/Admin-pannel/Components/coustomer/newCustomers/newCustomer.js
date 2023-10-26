@@ -137,13 +137,14 @@ function NewCustomers() {
                                         <TabList onChange={handleChange} aria-label="lab API tabs example">
                                             <Tab label="Customer Details" value="1" />
                                             <Tab label="Basic Details " value="2" />
+                                            <Tab label="Other Documents " value="5" />
                                             <Tab label='Billing' value='11' />
                                             <Tab label='Shipping' value='14' />
                                             <Tab label='Extra Carriculam' value='6' />
                                             <Tab label='Physical Elligibility' value='7' />
                                             <Tab label="Education  " value="4" />
                                             <Tab label="Address & Contact " value="3" />
-                                            <Tab label="Other Documents " value="5" />
+                                            
                                             <Tab label='Other Detail' value='8' />
                                             <Tab label='Document Uploading' value='9' />
                                             <Tab label='Custom Fields' value='10' />

@@ -44,12 +44,16 @@ function EditPickupPoint() {
     };
 
     const params = useParams();
-
-    const { data } = useGetPickupPointByIdQuery(params.id);
+    const token = window.localStorage.getItem('token')
+    const { data } = useGetPickupPointByIdQuery({ id: params.id, token: token });
 
     useEffect(() => {
-        const d = { ...data }
-        setInputVal(d)
+        if (data) {
+            const d = { ...data[0] }
+            setInputVal(d)
+            console.log(data[0]?.location);
+            setLongLatObj({ ...data[0]?.location })
+        }
     }, [data]);
 
     const [editPickUpPointD, response] = useEditPickupPointMutation();
@@ -58,7 +62,7 @@ function EditPickupPoint() {
         e.preventDefault();
         const clone = { ...inputVal }
         clone.location = lonLatObj
-        editPickUpPointD({ id: params.id, data: clone })
+        editPickUpPointD({ id: params.id, data: clone, token: token })
         document.getElementById("create-course-form").reset();
     };
 
@@ -74,7 +78,7 @@ function EditPickupPoint() {
             toastSuccessMessage()
         };
     }, [response.isSuccess])
-    const { data: staffData } = useGetAllStaffsQuery();
+    const { data: staffData } = useGetAllStaffsQuery(token);
 
 
     const difChangehandle = (e) => {
@@ -121,14 +125,14 @@ function EditPickupPoint() {
                                         <div className="form-group row row">
                                             <label className="col-sm-3 col-from-label" htmlFor="longitude">Longitude</label>
                                             <div className="col-sm-9">
-                                                <input type="text" placeholder="Longitude" id="phone" name="long" className="form-control" required onChange={onChangeHandlerLogLat} />
+                                                <input type="text" placeholder="Longitude" id="phone" value={lonLatObj?.long} name="long" className="form-control" required onChange={onChangeHandlerLogLat} />
                                             </div>
                                         </div>
 
                                         <div className="form-group row row">
                                             <label className="col-sm-3 col-from-label" htmlFor="latitude">Latitude</label>
                                             <div className="col-sm-9">
-                                                <input type="text" placeholder="Latitude" id="phone" name="lat" className="form-control" required onChange={onChangeHandlerLogLat} />
+                                                <input type="text" placeholder="Latitude" id="phone" name="lat" value={lonLatObj?.lat} className="form-control" required onChange={onChangeHandlerLogLat} />
                                             </div>
                                         </div>
 
@@ -164,7 +168,7 @@ function EditPickupPoint() {
                                             <label className="col-sm-3 col-from-label" htmlFor="name">Pick-up Point Manager</label>
                                             <div className="col-sm-9">
                                                 <div >
-                                                    <select className="form-select" name="pickUpManagerSchema" aria-label="Default select example" onChange={difChangehandle}>
+                                                    <select className="form-select" name="pickUpManagerSchema" value={inputVal?.pickUpManagerSchema} aria-label="Default select example" onChange={difChangehandle}>
                                                         <option>Open this select menu</option>
                                                         {staffData && staffData.map((item) => {
                                                             return <option key={item._id} value={item._id}>{item.firstname} {item.lastname}</option>

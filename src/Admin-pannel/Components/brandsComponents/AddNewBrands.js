@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
-import { useAddNewBrandMutation, useGetLanguagesQuery } from '../all-products/allproductsApi/allProductsApi';
+import { useAddNewBrandMutation, useAddNewBrandNewMutation, useGetLanguagesQuery } from '../all-products/allproductsApi/allProductsApi';
 import axios from 'axios';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -47,7 +47,7 @@ function AddnewBrandsAdmin() {
     useEffect(() => {
         if (data) {
             const maped = data.map((item) => {
-                return { name: "", language_id: item._id, meta_title: '', meta_description: '', lable: item.name }
+                return { name: "", language_id: item._id, meta_title: '', meta_description: '', lable: item.name, slug: '' }
             })
             setVal(maped)
         }
@@ -71,10 +71,11 @@ function AddnewBrandsAdmin() {
     //     alert('!Error Brand not added')
     // }
 
+    const [addBrand, { isSuccess, isError }] = useAddNewBrandNewMutation()
     const addNewAttributeData = async (e) => {
         e.preventDefault();
         const images = new FormData();
-        const clone  = [...val]
+        const clone = [...val]
 
         for (let i = 0; i < clone.length; i++) {
             let element = clone[i];
@@ -83,12 +84,13 @@ function AddnewBrandsAdmin() {
                 const res2 = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
                 images.delete('image');
                 const obj = { ...element, logo: { public_id: res2.data.public_id, url: res2.data.url } }
-                clone.splice(i ,1, obj)
+                clone.splice(i, 1, obj)
             }
         }
         const url = 'https://onlineparttimejobs.in/api/brand/add'
+        addBrand({ data: { list: clone }, token: token })
         try {
-            const res = await axios.post(url, {list:clone}, {
+            const res = await axios.post(url, { list: clone }, {
                 headers: {
                     "Content-type": "application/json; charset=UTF-8",
                     Authorization: `Bearer ${token}`,

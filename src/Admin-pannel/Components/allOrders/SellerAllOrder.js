@@ -2,12 +2,14 @@ import { Link } from "react-router-dom";
 import { GrUnorderedList } from 'react-icons/gr';
 import { useDeleteOrderMutation, useOwnSellerProductQuery } from "../all-products/allproductsApi/allProductsApi";
 import { useEffect } from "react";
+import Actions from "../allSeller/Actions";
 
 
 function SellerAllOrder() {
     const sellerId = window.localStorage.getItem('isSellerId')
 
-    const { isLoading, data } = useOwnSellerProductQuery(sellerId);
+    const token = window.localStorage.getItem('token')
+    const { isLoading, data } = useOwnSellerProductQuery({id:sellerId ,token:token});
 
     const [deleteOrder, response] = useDeleteOrderMutation();
 
@@ -180,107 +182,58 @@ function SellerAllOrder() {
                                                     allTotal = allTotal + +item?.grandTotal
                                                 }
 
-                                                return <tr key={item._id}>
-                                                    <td
-                                                        className="footable-first-visible"
-                                                        style={{ display: "table-cell" }}
-                                                    >
-                                                        {i + 1}
-                                                    </td>
-                                                    <td style={{ display: "table-cell" }}>
-                                                        {item.parent_id}
-                                                    </td>
-                                                    <td style={{ display: "table-cell" }}>
-                                                        {item._id}
-                                                    </td>
-
-                                                    <td style={{ display: "table-cell" }}>{item.createdAt}</td>
-                                                    <td style={{ display: "table-cell" }}>
-                                                        {item?.user?.firstname + " " + item?.user?.lastname}
-                                                    </td>
-                                                    <td style={{ display: "table-cell" }}>
-                                                        {item?.Seller[0]?.firstname} {item?.Seller[0]?.lastname}
-                                                    </td>
-
-                                                    <td style={{ display: "table-cell" }}>
-                                                        {item.grandTotal}
-                                                    </td>
-
-                                                    <td style={{ display: "table-cell" }}>COD</td>
-
-                                                    <td style={{ display: "table-cell" }}>
-                                                        {item?.orderStatusTrans[item?.orderStatusTrans?.length - 1]?.orderStatusId.orderStatusName}
-                                                    </td>
-                                                    <td style={{ display: "table-cell" }}>
-                                                        {item.pickupAddress ? "Pick Up Piont" + " " + item.pickupAddress.pickupPoint_name : "HOME DELEVERY"}
-                                                    </td>
-
-                                                    {/* <td style={{ display: "table-cell", }}>
-                              
-                              {item.multiInvoice === true && (<><Link
-                                to={`/admin/all_orders/order-Details/${item._id}`}
-                                style={{color: "blue"}}
-                                onClick={()=>{
-                                  window.localStorage.setItem("invoice", "invoice1")
-                                }}
-                              >Invoice1</Link> 
-                              
-                              <Link
-                              to={`/admin/all_orders/order-Details/${item._id}`}
-                              style={{color: "blue"}}
-                              onClick={()=>{
-                                window.localStorage.setItem("invoice", "invoice2")
-                              }}
-                            >Invoice2</Link> </>)}
-  
-                              {item?.multiInvoice === false && (<Link
-                                to={`/admin/all_orders/order-Details/${item._id}`}
-                                style={{color: "blue"}}
-                                onClick={()=>{
-                                  window.localStorage.setItem("invoice", "invoice1")
-                                }}
-                              >Invoice1</Link> 
-                              )}
-                              
-                            
-  
-                            
-                            </td> */}
-
-
-                                                    <td
-                                                        className="text-right footable-last-visible"
-                                                        style={{ display: "inline-flex" }}
-                                                    >
-                                                        {/* <Link
-                                className="btn btn-soft-primary btn-icon btn-circle btn-sm me-2"
-                                to="#"
-                                title="order status"
-                              >
-                                <GrUnorderedList />
-                              </Link> */}
-
-                                                        <Link
-                                                            className="btn btn-soft-primary btn-icon btn-circle btn-sm me-2"
-                                                            to={`/admin/all_orders/order-Details/${item._id}`}
-                                                            title="View"
-                                                        >
-                                                            <i className="las la-eye" />
-                                                        </Link>
-
-                                                        {/* <a
-                                className="btn btn-soft-info btn-icon btn-circle btn-sm"
-                                href="https://mmslfashions.in/invoice/8"
-                                title="Download Invoice"
-                              >
-                                <i className="las la-download" />
-                              </a> */}
-
-                                                        <button type="button" onClick={() => deleteOrderData(item._id)} className="btn btn-soft-danger btn-icon btn-circle btn-sm" title="delete">
-                                                            <i className="las la-trash" />
-                                                        </button>
-
-                                                    </td>
+                                                return <tr key={item._id} style={{ cursor: "pointer" }}
+                                                //  onClick={()=>{navigate(`/admin/all_orders/order-Details/${item._id}`)}}
+                                                >
+                                                  <td
+                                                    className="footable-first-visible"
+                                                    style={{ display: "table-cell" }}
+                                                  >
+                                                    {i + 1}
+                                                  </td>
+                                                  {/* <td style={{ display: "table-cell" }}>
+                                                    {item.parent_id}
+                                                  </td> */}
+                                                  <td style={{ display: "table-cell" }}>
+                                                    {item._id}
+                                                  </td>
+                                                  <td style={{ display: "table-cell" }}>
+                                                    {item?.referenceNo}
+                                                  </td>
+                        
+                        
+                                                  <td style={{ display: "table-cell" }}>{item.createdAt}</td>
+                                                  <td style={{ display: "table-cell" }}>
+                                                    {item?.user?.firstname + " "+ item?.user?.lastname}
+                                                  </td>
+                                                  <td style={{ display: "table-cell" }}>
+                                                    {item?.seller_id?.firstname}  {item?.seller_id?.lastname}
+                                                  </td>
+                        
+                                                  <td style={{ display: "table-cell" }}>
+                                                    {item?.currency?.symbol ? item?.currency?.symbol : 'ZK'} {item.grandTotal}
+                                                  </td>
+                        
+                                                  <td style={{ display: "table-cell" }}>COD</td>
+                        
+                                                  <td style={{ display: "table-cell" }}>
+                                                    {item?.status[item.status.length - 1]?.orderStatusName}
+                                                  </td>
+                                                
+                                                  <td style={{ display: "table-cell" }}>
+                                                    {item.pickupAddress ? "Pick Up Piont" + " " + item.pickupAddress.pickupPoint_name : "HOME DELEVERY"}
+                                                  </td>
+                        
+                        
+                        
+                                                  <td
+                                                    className="text-right footable-last-visible"
+                                                    style={{ display: "inline-flex" }}
+                                                  >
+                        
+                                                    <Actions item={item} deleteOrderData={deleteOrderData} />
+                        
+                                                  </td>
                                                 </tr>
                                             })}
 

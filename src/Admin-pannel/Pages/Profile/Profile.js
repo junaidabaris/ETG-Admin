@@ -1,20 +1,28 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useGetCurrencyQuery, useGetLanguagesQuery, useGetSellerDetailQuery, useUpdateSellerMutation } from "../../Components/all-products/allproductsApi/allProductsApi";
+import { useGetCurrencyQuery, useGetLanguagesQuery, useGetSellerDetailQuery, useUpdateSellerMutation, useUpdateSellerProMutation } from "../../Components/all-products/allproductsApi/allProductsApi";
 import { token } from "../../common/TokenArea";
 
 
 function Profile() {
     const isSellerId = window.localStorage.getItem('adminId')
+    const isDeleveryBoy = window.localStorage.getItem('isDeleveryBoy')
+    const isSellerLogin = window.localStorage.getItem('isSellerLogin')
     const adminId = window.localStorage.getItem('adminId')
-
-    const { data: detailSeller } = useGetSellerDetailQuery(token)
+    const tokenD = window.localStorage.getItem('token')
+    const { data: detailSeller } = useGetSellerDetailQuery(tokenD)
     const [update, { isLoading }] = useUpdateSellerMutation()
 
     const [show, setShow] = useState(false)
-    const { data: language } = useGetLanguagesQuery(token)
+
+    // const [currency ,setcurrency] = useState(null)
+    // const [language ,setlanguage] = useState(null)
+
     const { data: currency } = useGetCurrencyQuery(token)
+    const { data: language } = useGetLanguagesQuery(token)
+
+
 
     const [state, setState] = useState({
         firstname: "",
@@ -43,6 +51,28 @@ function Profile() {
     }
 
     useEffect(() => {
+        if (isDeleveryBoy) {
+            // const obj = {
+            //     firstname: detailSeller?.firstname,
+            //     lastname: detailSeller?.lastname,
+            //     email: detailSeller?.email,
+            //     mobile: detailSeller?.mobile,
+            //     currency_id: "",
+            //     language_id: "",
+            //     addressLine1: detailSeller?.addressLine1,
+            //     addressLine2: detailSeller?.addressLine2,
+            //     landmark: detailSeller?.landmark,
+            //     province: detailSeller?.province,
+            //     company: detailSeller?.company,
+            //     country: detailSeller?.country,
+            //     state: detailSeller?.state,
+            //     city: detailSeller?.city,
+            //     currency_id: detailSeller?.currency_id,
+            //     language_id: detailSeller?.language_id,
+            //     sellerid: window.localStorage.getItem('isSellerId'),
+            // }
+            // setState(obj)
+        }
         if (detailSeller) {
             const obj = {
                 firstname: detailSeller?.firstname,
@@ -67,16 +97,24 @@ function Profile() {
         }
     }, [detailSeller])
 
-    const sendData = () => {
-        update({ data: state, token: token })
-        console.log(state);
-        setShow(true)
-        setTimeout(() => {
-            setShow(false)
-        }, 1000);
+    const [senDSeller] = useUpdateSellerProMutation()
+    const sendData = async () => {
+        if (isSellerLogin) {
+            senDSeller({ data: state, token: token })
+            setShow(true)
+            setTimeout(() => {
+                setShow(false)
+            }, 1000);
+        } else {
+            update({ data: state, token: token })
+            setShow(true)
+            setTimeout(() => {
+                setShow(false)
+            }, 1000);
+        }
+
     }
 
-    console.log(state);
 
     return (
         <>
@@ -291,7 +329,7 @@ function Profile() {
                                                 Your Language
                                             </label>
                                             <div className="col-md-10">
-                                                <select className="form-select" name="language_id"  value={state?.language_id} id="languId" onChange={onchengeHandle} aria-label="Default select example">
+                                                <select className="form-select" name="language_id" value={state?.language_id} id="languId" onChange={onchengeHandle} aria-label="Default select example">
                                                     <option selected>Select Language</option>
                                                     {language && language.map((item) => {
                                                         return <option key={item._id} value={item._id}>{item.name}</option>

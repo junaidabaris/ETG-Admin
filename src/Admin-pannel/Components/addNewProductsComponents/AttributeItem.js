@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 export const AttributeItem = ({ item, handleChoiceValues, isSuccess, isLoading, setUpdatedVariants }) => {
 
-    const [tags, setTags] = useState([]);
+    const [tags, setTags] = useState(item?.data);
     const params = useParams()
 
     function handleTagKeyDown(e) {

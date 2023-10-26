@@ -7,7 +7,7 @@ import AttributeModal from "./AttributeModal";
 import { GiPriceTag } from "react-icons/gi";
 import { useParams } from "react-router-dom";
 import PriceMoalParams from "./PriceMoalParams";
-export const ColorParams = ({ data, deleteRow, pickUp, handleVariant, setVariantsData, bringSelectedVariantImage, index, item }) => {
+export const ColorParams = ({ data, deleteRow, pickUp, handleVariant, setVariantsData, bringSelectedVariantImage, index, item ,sellerD }) => {
     const [formData, setFormData] = useState(data);
     const [prices, setprices] = useState(data.prices);
     const onChangeHandler = (e) => {
@@ -45,7 +45,10 @@ export const ColorParams = ({ data, deleteRow, pickUp, handleVariant, setVariant
     }
     const [modalShow, setModalShow] = useState(false);
     const [modalShow2, setModalShow2] = useState(false);
-    
+    const setDataArtibutr = (data) => {
+        const clone = { ...data }
+        setFormData(clone)
+    }
     return (
         <tr className="sizzings">
             <td>
@@ -105,7 +108,7 @@ export const ColorParams = ({ data, deleteRow, pickUp, handleVariant, setVariant
 
             {modalShow && <AttributeModal show={modalShow}
                 onHide={() => setModalShow(false)}
-                setFormData={setFormData}
+                setDataArtibutr={setDataArtibutr}
                 formData={formData}
                 data={data}
             />}
@@ -114,6 +117,7 @@ export const ColorParams = ({ data, deleteRow, pickUp, handleVariant, setVariant
                 prices={prices}
                 data={data}
                 setData={setData}
+                sellerD={sellerD}
                 index={index}
             />}
         </tr>

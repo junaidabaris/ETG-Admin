@@ -72,7 +72,7 @@ function BulkImport() {
               <h5 className="mb-0 h6"><strong>Upload Product File</strong></h5>
             </div>
             <div className="card-body">
-              <FileUploadCom url={"https://onlineparttimejobs.in/api/bulkimport/products_latest"} />
+              <FileUploadCom url={"https://onlineparttimejobs.in/api/bulkimport/product_revise"} />
 
 
             </div>

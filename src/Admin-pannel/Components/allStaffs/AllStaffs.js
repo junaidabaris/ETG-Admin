@@ -2,8 +2,9 @@ import { Link } from "react-router-dom";
 import { useDeleteStaffMutation, useGetAllStaffsQuery } from "../all-products/allproductsApi/allProductsApi";
 
 function AllStaffs() {
+  const token = window.localStorage.getItem('token')
 
-  const { isLoading, data } = useGetAllStaffsQuery();
+  const { isLoading, data } = useGetAllStaffsQuery(token);
 
   const [deleteStaffD, response] = useDeleteStaffMutation();
 

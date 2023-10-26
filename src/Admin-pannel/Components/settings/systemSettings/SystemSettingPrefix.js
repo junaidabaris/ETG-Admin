@@ -7,9 +7,9 @@ function SystemSettingPrefix() {
     const [inputVal, setInputval] = useState({
         SalesReferencePrefix: '', ReturnSalePrefix: '', PaymentReferencePrefix: '', PurchasePaymentPrefix: '', DeliveryReferencePrefix: '', QuotationReferencePrefix: '', PurchaseReferencePrefix: '', ReturnPurchasePrefix: '', TransferReferencePrefix: '', ExpensePrefix: '', QuantityAdjustmentPrefix: ''
     });
+    const token = window.localStorage.getItem('token')
 
-    const { data } = useGetSystemSettingPrefixQuery();
-    console.log('SystemSettingPrefixD---', data)
+    const { data } = useGetSystemSettingPrefixQuery(token);
 
     useEffect(() => {
         const clon = { ...data }
@@ -28,10 +28,13 @@ function SystemSettingPrefix() {
 
     const [updateSystemPrefixD, response] = useUpdateSystemSettingPrefixMutation();
 
+
     const submitUpdateSystemPrefixD = () => {
-        const abc = { ...inputVal }
-        console.log('abc----', abc)
-        updateSystemPrefixD(abc)
+        const abc = {
+            SalesReferencePrefix: inputVal.SalesReferencePrefix, ReturnSalePrefix: inputVal.ReturnSalePrefix, PaymentReferencePrefix: inputVal.PaymentReferencePrefix, PurchasePaymentPrefix: inputVal.PurchasePaymentPrefix, DeliveryReferencePrefix: inputVal.DeliveryReferencePrefix, QuotationReferencePrefix: inputVal.QuotationReferencePrefix, PurchaseReferencePrefix: inputVal.PurchaseReferencePrefix, ReturnPurchasePrefix: inputVal.ReturnPurchasePrefix, TransferReferencePrefix: inputVal.TransferReferencePrefix, ExpensePrefix: inputVal.ExpensePrefix, QuantityAdjustmentPrefix: inputVal.QuantityAdjustmentPrefix
+        }
+        console.log(abc);
+        updateSystemPrefixD({ data: abc, token: token })
         document.getElementById("create-course-form").reset();
     };
 
@@ -56,7 +59,6 @@ function SystemSettingPrefix() {
 
     useEffect(() => {
         if (response.isError === true) {
-            console.log('isErrorPrefix-----', response.error.data.message)
             toastErrorMessage(response.error.data.message)
         };
     }, [response]);

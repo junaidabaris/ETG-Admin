@@ -5,8 +5,7 @@ import { useDeletePickupPointMutation, useGetPickupPointQuery } from "../../all-
 
 function PickupPoints() {
 
-  const { isLoading, data } = useGetPickupPointQuery();
-  console.log(data);
+  const { isLoading, data } = useGetPickupPointQuery(window.localStorage.getItem('token'));
 
   const [deletePickupPoint, res] = useDeletePickupPointMutation();
 

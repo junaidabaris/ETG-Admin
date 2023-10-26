@@ -17,13 +17,13 @@ function MultiForm({ data, item, i, addNewAttributeData, onChangeHandler, setVal
                     </div>
                 </div>
 
-                <div className="form-group row">
+                {i == 0 && <div className="form-group row">
                     <label className="col-md-3 col-form-label">Slug
                         <span className="text-danger">*</span></label>
                     <div className="col-md-9">
                         <input type="text" placeholder="Slug" name="slug" value={item?.slug} id="slug" className="form-control" required onChange={(e) => { onChangeHandler(e, item.language_id) }} />
                     </div>
-                </div>
+                </div>}
 
                 <div className="form-group row">
                     <label className="col-md-3 col-form-label" htmlFor="signinSrEmail">
@@ -38,7 +38,7 @@ function MultiForm({ data, item, i, addNewAttributeData, onChangeHandler, setVal
                                 </div>
                             </div>
                             <div className="form-control file-amount">
-                                <input type="file" name="banner" className="selected-files" onChange={(e) => { onChangeHandler(e, item.language_id,'banner') }} />
+                                <input type="file" name="banner" className="selected-files" onChange={(e) => { onChangeHandler(e, item.language_id, 'banner') }} />
                             </div>
                         </div>
                         <div className="file-preview box sm">
@@ -75,7 +75,7 @@ function MultiForm({ data, item, i, addNewAttributeData, onChangeHandler, setVal
                                 </div>
                             </div>
                             <div className="form-control file-amount">
-                                <input type="file" name="meta_img" className="selected-files" onChange={(e) => { onChangeHandler(e, item.language_id,'meta') }} />
+                                <input type="file" name="meta_img" className="selected-files" onChange={(e) => { onChangeHandler(e, item.language_id, 'meta') }} />
                             </div>
                         </div>
                         <div className="file-preview box sm">

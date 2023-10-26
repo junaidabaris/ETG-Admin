@@ -10700,8 +10700,11 @@ table tbody tr .show-table {
 
 
 .maiTa{
-  width: 2000px !important;
+  width: 3000px !important;
 }
 .chBox > span > span{
   padding: 15px;
+}
+.physical_product_show{
+  width: 1400px;
 }

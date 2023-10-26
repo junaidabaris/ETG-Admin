@@ -11,12 +11,23 @@ function AllDeliveryBoys() {
     const isPickupManagerLogin = window.localStorage.getItem('isPickupManagerLogin')
     const isPickupManagerId = window.localStorage.getItem('isPickupManagerId')
 
+    const token = window.localStorage.getItem('token')
     const getData = async () => {
-        const res = await axios.get(`https://onlineparttimejobs.in/api/deliveryBoy`)
+        const res = await axios.get(`https://onlineparttimejobs.in/api/deliveryBoy`, {
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                'Authorization': 'Bearer ' + token
+            },
+        })
         setdata(res.data)
     }
     const getData2 = async () => {
-        const res = await axios.get(`https://onlineparttimejobs.in/api/deliveryBoy/pickupPoint/${isPickupManagerId}`)
+        const res = await axios.get(`https://onlineparttimejobs.in/api/deliveryBoy/pickupPoint/${isPickupManagerId}`,{
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                'Authorization': 'Bearer ' + token
+            },
+        })
         setdata(res.data)
     }
 

@@ -69,6 +69,7 @@ function LoginSection({ setshow }) {
         if (data?.finddeliveryBoy?.role_id.role_name === 'delevery boy') {
             window.localStorage.setItem('isDeleveryBoy', true)
             window.localStorage.setItem('DeleveryBoyId', data?.finddeliveryBoy?._id)
+            window.localStorage.setItem('token', data?.token)
             window.localStorage.setItem('DeleveryBoyName', data?.finddeliveryBoy?.firstname + " " + data?.finddeliveryBoy?.lastname)
 
         }
@@ -78,7 +79,7 @@ function LoginSection({ setshow }) {
             window.localStorage.setItem('isPickupManagerLogin', true)
             window.localStorage.setItem('isPickupManagerId', data?.findStaff?._id)
 
-            window.localStorage.setItem('pickIds', data?.pickIds[0])
+            // window.localStorage.setItem('pickIds', data?.pickIds[0])
             window.localStorage.setItem('isPickupManagerName', data?.findStaff?.firstname + " " + data?.findStaff?.lastname)
 
         }
@@ -100,10 +101,13 @@ function LoginSection({ setshow }) {
         else {
             window.localStorage.setItem('isSellerLogin', true)
             window.localStorage.setItem('isSellerId', data?.findSeller?._id)
-            window.localStorage.setItem('isSellerName', data?.findSeller?.firstname + " " + data?.findSeller?.lastname)
+            window.localStorage.setItem('token', data?.token)
+            window.localStorage.setItem('superAdminName', data?.findSeller?.firstname + " " + data?.findSeller?.lastname)
         }
+        window.localStorage.setItem('token', data?.token)
         setTimeout(() => {
             navigate('/admin')
+            window.location.reload()
         }, 1000);
     }
 

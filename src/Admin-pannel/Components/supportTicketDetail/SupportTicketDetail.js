@@ -20,7 +20,8 @@ function SupportTicketDetail() {
         reply: "",
     });
 
-    const { data } = useGetSupportTicketByIdQuery(params.id);
+    const token = window.localStorage.getItem('token')
+    const { data, refetch } = useGetSupportTicketByIdQuery({ id: params.id, token: token });
 
     useEffect(() => {
         const obj = { ...data }
@@ -47,7 +48,7 @@ function SupportTicketDetail() {
     const submitEditSupportTicketData = (e) => {
         // console.log('inputval---', inputval)
         e.preventDefault();
-        updateReplySupportTicket(inputval)
+        updateReplySupportTicket({ data: inputval, token: token })
         document.getElementById("create-course-form").reset();
     };
 
@@ -60,6 +61,7 @@ function SupportTicketDetail() {
     useEffect(() => {
         if (response.isSuccess === true) {
             toastSuccessMessage()
+            refetch()
         };
         if (response.isError === true) {
             alert('!Ticket not updated')
@@ -77,7 +79,7 @@ function SupportTicketDetail() {
         }
     }
     useEffect(() => {
-        getData()
+        // getData()
     }, []);
 
 
@@ -91,12 +93,12 @@ function SupportTicketDetail() {
                         <div className="card">
                             <div className="card-header row gutters-5">
                                 <div className="text-center text-md-left">
-                                    <h5 className="mb-md-0 h5">Good evening, top urgently send my item to home delivery address. Thanks. #1000003631</h5>
+                                    <h5 className="mb-md-0 h5">{data?.getaTicket?.subject}</h5>
                                     <div className="mt-2">
-                                        <span> Azharuddin Shamim </span>
-                                        <span className="ml-2"> 2023-02-07 09:13:22 </span>
+                                        <span> {data?.getaTicket?.user_id?.firstname + " " + data?.getaTicket?.user_id?.lastname} </span>
+                                        <span className="ml-2">{data?.getaTicket?.createdAt} </span>
                                         <span className="badge badge-inline badge-secondary ml-2 text-capitalize">
-                                            Pending
+                                            {data?.getaTicket?.status}
                                         </span>
                                     </div>
                                 </div>
@@ -173,40 +175,32 @@ function SupportTicketDetail() {
 
                                 <div className="pad-top">
                                     <ul className="list-group list-group-flush">
-                                        <li className="list-group-item px-0">
-                                            <div className="media">
-                                                <a className="media-left" href="#">
-                                                    <span className="avatar avatar-sm mr-3"><img src="https://mmslfashions.in/public/assets/img/avatar-place.png" /></span>
-                                                </a>
-                                                <div className="media-body">
-                                                    <div className>
-                                                        <span className="text-bold h6">Azharuddin Shamim</span>
-                                                        <p className="text-muted text-sm fs-11">2023-01-22 11:13:01</p>
+                                        {data?.ticketList?.length && data?.ticketList?.map((item) => {
+                                            return <li className="list-group-item px-0">
+                                                <div className="media">
+                                                    <a className="media-left" href="#">
+                                                        <span className="avatar avatar-sm mr-3"><img src="https://mmslfashions.in/public/assets/img/avatar-place.png" /></span>
+                                                    </a>
+
+                                                    <div className="media-body">
+                                                        {item?.staff_id ?  <div>
+                                                            <span className="text-bold h6">{item?.staff_id?.firstname + " " + item?.staff_id?.lastname}</span>
+                                                            <p className="text-muted text-sm fs-11">{item?.createdAt}</p>
+                                                        </div> : <div>
+                                                            <span className="text-bold h6">{item?.user_id?.firstname + " " + item?.user_id?.lastname}</span>
+                                                            <p className="text-muted text-sm fs-11">{item?.createdAt}</p>
+                                                        </div>}
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div className>
-                                                <p>Hi, plz delivery my item to home delivery address. Thanks.<br /></p>
-                                                <div className="mt-3">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li className="list-group-item px-0">
-                                            <div className="media">
-                                                <a className="media-left" href="#">
-                                                    <span className="avatar avatar-sm m-3"><img src="https://mmslfashions.in/public/assets/img/avatar-place.png" /></span>
-                                                </a>
-                                                <div className="media-body">
-                                                    <div className="comment-header">
-                                                        <span className="text-bold h6 text-muted">Azharuddin Shamim</span>
-                                                        <p className="text-muted text-sm fs-11">2023-02-07 09:13:22</p>
+                                                <div className>
+                                                    <p>{item?.subject}.<br /></p>
+                                                    <div className="mt-3">
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div>
-                                                Good evening, top urgently send my item to home delivery address. Thanks.                            <br />
-                                            </div>
-                                        </li>
+                                            </li>
+                                        })}
+
+
                                     </ul>
                                 </div>
                             </div>

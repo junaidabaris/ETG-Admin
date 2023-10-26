@@ -19,8 +19,8 @@ function PodEnteris(props) {
 
 
     const [state, setState] = useState({
-        customer_id: props.data.getaOrderById.user._id,
-        order_id: props.data.getaOrderById._id,
+        customer_id: props.data?.user?._id,
+        order_id: props.data?._id,
         createdBy: setId,
         AwbNo: "",
         // Pkt_Status: "",
@@ -72,13 +72,13 @@ function PodEnteris(props) {
         }
     }
 
-    useEffect(() => {
-        if (isDelevery === 'true') {
-            getData1()
-        } else {
-            getData()
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (isDelevery === 'true') {
+    //         getData1()
+    //     } else {
+    //         getData()
+    //     }
+    // }, []);
 
     const getPodEntryDataById = async () => {
         try {
@@ -91,7 +91,7 @@ function PodEnteris(props) {
         }
     };
     useEffect(() => {
-        getPodEntryDataById()
+        // getPodEntryDataById()
     }, []);
 
 

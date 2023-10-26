@@ -19,7 +19,7 @@ function FormsMultiLang({ data, item, i, addNewAttributeData, onChangeHandler, s
                             <div className="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
                         </div>
                         <div className="form-control file-amount">
-                            <input type="file" className="selected-files" name='image' onChange={(e) => { onChangeHandler(e, item.language_id,'img') }} required />
+                            <input type="file" className="selected-files" name='image' onChange={(e) => { onChangeHandler(e, item.language_id, 'img') }} required />
                         </div>
                     </div>
                     <div className="file-preview box sm">
@@ -30,6 +30,10 @@ function FormsMultiLang({ data, item, i, addNewAttributeData, onChangeHandler, s
                     <label htmlFor="name">Meta Title</label>
                     <input type="text" name='meta_title' value={item.meta_title} className="form-control" placeholder="Meta Title" onChange={(e) => { onChangeHandler(e, item.language_id) }} required />
                 </div>
+                {i == 0 && <div className="form-group mb-3">
+                    <label htmlFor="name">Slug</label>
+                    <input type="text" name='slug' value={item.slug} className="form-control" placeholder="Slug" onChange={(e) => { onChangeHandler(e, item.language_id) }} required />
+                </div>}
                 <div className="form-group mb-3">
                     <label htmlFor="name">Meta description</label>
                     <textarea name="meta_description" rows={5} value={item.meta_description} className="form-control" onChange={(e) => { onChangeHandler(e, item.language_id) }} required />

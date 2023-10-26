@@ -95,7 +95,7 @@ function PriceModal(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body style={{ overflow: "auto" }}>
-                <table className="table table-bordered physical_product_show maiTa" width={"2000px"}>
+                <table className="table table-bordered physical_product_show maiTa" width={"2600px"}>
                     <thead>
 
                         <tr>
@@ -107,6 +107,7 @@ function PriceModal(props) {
                             <td><label className="control-label">Landing Cost</label></td>
                             <td><label className="control-label">Tax %</label></td>
                             <td><label className="control-label">Tax Type</label></td>
+                            {/* <td><label className="control-label">Seller</label></td> */}
                             <td><label className="control-label">Sale Rate</label></td>
                             <td><label className="control-label">Wholesale Price</label></td>
                             <td><label className="control-label">Retail Price</label></td>
@@ -171,6 +172,14 @@ function PriceModal(props) {
                                         <option value='Exclusive'>Exclusive</option>
                                     </select>
                                 </td>
+                                {/* <td>
+                                    <select className="form-select" aria-label="Default select example" value={item?.seller_id} name="seller_id" onChange={(e) => { changeHanle(e, item?.country_id._id) }}  >
+                                        <option>Select Seller</option>
+                                        {props?.sellerD && props?.sellerD.map((item) => {
+                                            return <option value={item._id} key={item._id}>{item.firstname + " " + item.lastname}</option>
+                                        })}
+                                    </select>
+                                </td> */}
 
 
                                 <td>
@@ -215,7 +224,7 @@ function PriceModal(props) {
                     </tbody>
                     <tbody>
                         <tr>
-                            <td colSpan={4}><button type="button" class="btn btn-success"  onClick={coped}>Copy Price To All</button></td>
+                            <td colSpan={4}><button type="button" class="btn btn-success" onClick={coped}>Copy Price To All</button></td>
                         </tr>
                     </tbody>
                 </table>

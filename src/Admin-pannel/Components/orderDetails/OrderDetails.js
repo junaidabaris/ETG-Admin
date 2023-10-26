@@ -14,7 +14,8 @@ function OrderDetails() {
   const [modalShow, setModalShow] = useState(false);
   const invoice = window.localStorage.getItem("invoice");
   const isPickupManagerId = window.localStorage.getItem("isPickupManagerId");
-  const isPickupManagerLogin = window.localStorage.getItem("isPickupManagerLogin");
+  const isDeleveryBoy = window.localStorage.getItem("isDeleveryBoy");
+  const isSellerId = window.localStorage.getItem("isSellerId");
   const adminId = window.localStorage.getItem("adminId");
 
   const param = useParams();
@@ -24,27 +25,32 @@ function OrderDetails() {
     Note: "",
     userid: "641eabc2be788d5482d2f9cc",
   });
-
+  const [shows, setShows] = useState(true)
   const onChangehandler = (e) => {
+
     const inVal = e.target.value;
     const inpName = e.target.name;
     const clone = { ...inputVal };
     clone[inpName] = inVal;
     setInputVal(clone);
+    if (e.target.name == 'orderStatusId') {
+      setShows(false)
+    }
   };
   const [addorderStD, resp] = useAddOrderStatusMutation();
 
   const submitOrderStd = () => {
-    addorderStD(inputVal);
-    setInputVal({
-      orderId: param.id,
-      orderStatusId: "6423edb20944088884f88cca",
-      Note: "",
-      userid: "641eabc2be788d5482d2f9cc",
-    })
+    addorderStD({ data: inputVal, token: token });
+    // setInputVal({
+    //   orderId: param.id,
+    //   orderStatusId: "6423edb20944088884f88cca",
+    //   Note: "",
+    //   userid: "641eabc2be788d5482d2f9cc",
+    // })
   };
 
-  const { data, isSuccess, isLoading, error } = useGetOrderDetailQuery(param.id);
+  const token = window.localStorage.getItem('token')
+  const { data, isSuccess, isLoading, error } = useGetOrderDetailQuery({ id: param.id, token: token });
   const { data: orderStatusData } = useGetOrderStartByIdQuery();
   const [orderStatusD, setorderStatusD] = useState(orderStatusData)
 
@@ -69,14 +75,23 @@ function OrderDetails() {
 
   const getPickupPoint = async () => {
     try {
-      const res = await axios.get(`https://onlineparttimejobs.in/api/pickupPoints`)
+      const res = await axios.get(`https://onlineparttimejobs.in/api/pickupPoints`, {
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+          Authorization: `Bearer ${token}`,
+        },
+      })
       setPickups(res.data)
     } catch (error) {
       alert('Server Error Fail to load pickup Points')
     }
   }
   useEffect(() => {
+    if(isDeleveryBoy == 'true'){
+      return
+    }
     getPickupPoint()
+    // setShows(false)
   }, [])
 
   const isSuperAdminLogin = window.localStorage.getItem('adminId')
@@ -120,16 +135,18 @@ function OrderDetails() {
 
   const sendAssign = async () => {
     try {
-      const res = await axios.post(`https://onlineparttimejobs.in/api/orderStatusTransaction/add_OrderStatusTrans`, pickupData)
-      addorderStD(inputVal)
+      const res = await axios.post(`https://onlineparttimejobs.in/api/orderStatusTransaction/add_OrderStatusTrans`, pickupData, {
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      // addorderStD(inputVal)
       alert('Assign To PickUp Point Manager Successfully')
     } catch (error) {
       alert('Faild To Assign PickUp Point Manager !!')
     }
   }
-
-
-
 
 
   // DELEVERY BOY
@@ -144,7 +161,12 @@ function OrderDetails() {
   })
 
   const getData = async () => {
-    const res = await axios.get(`https://onlineparttimejobs.in/api/deliveryBoy/pickupPoint/${isPickupManagerId}`)
+    const res = await axios.get(`https://onlineparttimejobs.in/api/deliveryBoy/pickupPoint`, {
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Authorization: `Bearer ${token}`,
+      },
+    })
     setdataBoy(res.data)
   }
 
@@ -156,13 +178,14 @@ function OrderDetails() {
       setorderStatusD(res.data)
 
     } catch (error) {
-      alert('Status Not Load')
+      // alert('Status Not Load')
     }
   }
 
   useEffect(() => {
     if (isDelevery === 'true') {
       getData1()
+      // return
     }
     getData()
   }, [])
@@ -183,13 +206,17 @@ function OrderDetails() {
 
   const sendAssignBoy = async () => {
     try {
-      const res = await axios.post('https://onlineparttimejobs.in/api/assignDeliveryBoy/add_AssignDeliveryBoy', boyBody)
+      const res = await axios.post('https://onlineparttimejobs.in/api/assignDeliveryBoy/add_AssignDeliveryBoy', boyBody, {
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+          Authorization: `Bearer ${token}`,
+        },
+      })
       alert('Assign To Delevery Boy Successfully')
     } catch (error) {
       alert('Assign To Delevery Boy Failed')
     }
   }
-
   return (
     <>
       {isLoading && (
@@ -208,14 +235,14 @@ function OrderDetails() {
                 <div className="col-lg-6">
                   <div className="card-header topCardHeader">
                     <h6 className="mb-0">
-                      Order No - {data?.getaOrderById?.order_referenceNo}
+                      Order No - {data[0].order_referenceNo}
                     </h6>
                   </div>
                 </div>
                 <div className="col-lg-6">
                   <div className="card-header topCardHeader">
                     <h6 className="mb-0 order-creation-d">
-                      Order Created On - {data?.getaOrderById?.createdAt}
+                      Order Created On - {data[0].createdAt}
                     </h6>
                   </div>
                 </div>
@@ -253,8 +280,8 @@ function OrderDetails() {
                       <div className="customerName">
                         Customer Name:{" "}
                         <span>
-                          {data?.getaOrderById?.user?.firstname + " " +
-                            data?.getaOrderById?.user?.lastname}
+                          {data[0].user?.firstname + " " +
+                            data[0].user?.lastname}
                         </span>
                       </div>
                     </div>
@@ -269,12 +296,12 @@ function OrderDetails() {
                         <select
                           className="form-select"
                           name="managerId"
-                          aria-label="Default select example"
-                          defaultValue={""}
+                          // aria-label="Default select example"
                           onChange={handelChange}
+                          // value={data && data[0]?.status[0]?._id}
 
                           style={{ height: 38 + "px", fontSize: 13 + "px" }}>
-
+                          <option>Select PickUp Point</option>
                           {pickups && pickups.map((item) => {
                             return <option key={item._id} id={item._id} >
                               {item.pickupPoint_name}
@@ -298,12 +325,6 @@ function OrderDetails() {
                       </button>
 
                     </div>}
-
-
-
-
-
-
 
 
                   </div>
@@ -335,11 +356,11 @@ function OrderDetails() {
                       aria-label="Default select example"
                       defaultValue={""}
                       onChange={onChangehandler}
-
+                      value={shows ? data[0]?.status[0]?._id : inputVal.orderStatusId}
                       style={{ height: 38 + "px", fontSize: 13 + "px" }}>
-                      <option value={data?.getOrderTrans[0]?.orderStatusId._id}>
+                      {/* <option value={data?.getOrderTrans[0]?.orderStatusId._id}>
                         {data?.getOrderTrans[0]?.orderStatusId.orderStatusName}
-                      </option>
+                      </option> */}
                       {orderStatusData &&
                         orderStatusData.map((item, i) => {
 
@@ -378,7 +399,7 @@ function OrderDetails() {
 
                   {/* DELEVRY BOY */}
 
-                  {isPickupManagerLogin === 'true' && <div className="assignPickup">
+                  {isDeleveryBoy === 'false' && <div className="assignPickup">
                     <h6>Assign To Delevery Boy</h6>
                     <div className="d-flex align-items-center form-group">
                       <label htmlFor="update_delivery_status">
@@ -393,6 +414,7 @@ function OrderDetails() {
                         style={{ height: 38 + "px", fontSize: 13 + "px" }}>
                         <option>Select Delivery Boy</option>
                         {dataBoy && dataBoy.map((item) => {
+                          <option>Select Option</option>
                           return <option key={item._id} id={item._id} value={item._id}>
                             {item.firstname} {item?.lastname}
                           </option>
@@ -428,50 +450,50 @@ function OrderDetails() {
                   <div className="addressDetailSec">
                     <div className="addressDetailInfo">
                       <h6 className="heading-wrapper">Billing Address</h6>
-                      {/* { data?.getaOrderById?.btype === "billing" && ()} */}
+                      {/* { data[0].btype === "billing" && ()} */}
                       <ul>
                         <li>
                           <strong>Address Line 1:</strong>
-                          <span>{data?.getaOrderById?.billingAddress?.baddressLine1}</span>
+                          <span>{data[0].billing?.baddressLine1}</span>
                         </li>
                         <li>
                           <strong> Address Line 2: </strong>
-                          <span>{data?.getaOrderById?.billingAddress?.baddressLine2}</span>
+                          <span>{data[0].billing?.baddressLine2}</span>
                         </li>
                         <li>
                           <strong>Province:</strong>
-                          <span>{data?.getaOrderById?.billingAddress?.bprovince}</span>
+                          <span>{data[0].billing?.bprovince}</span>
                         </li>
 
 
                         <li>
                           <strong>ZIP:</strong>
-                          <span>{data?.getaOrderById?.billingAddress?.bzip}</span>
+                          <span>{data[0].billing?.bzip}</span>
                         </li>
                         <li>
                           <strong>City:</strong>
-                          <span>{data?.getaOrderById?.billingAddress?.bcity}</span>
+                          <span>{data[0].billing?.bcity}</span>
                         </li>
                         <li>
                           <strong> State:</strong>
-                          <span>{data?.getaOrderById?.billingAddress?.bstate}</span>
+                          <span>{data[0].billing?.bstate}</span>
                         </li>
                         <li>
                           <strong>Country:</strong>
-                          <span>{data?.getaOrderById?.billingAddress?.bcountry}</span>
+                          <span>{data[0].billing?.bcountry}</span>
                         </li>
 
 
                         {/* <li>
                             <strong>Company*:</strong>
-                            {data?.getaOrderById?.bcompany}
+                            {data[0].bcompany}
                           </li> */}
                       </ul>
                     </div>
                   </div>
                 </div>
 
-                {data?.getaOrderById?.products[0]?.deliveryType === "HOME DELIVERY" ? (
+                {data[0].products[0]?.deliveryType === "HOME DELIVERY" ? (
                   <div className="col-md-4">
                     <div className="addressDetailSec">
                       <div className="addressDetailInfo">
@@ -479,56 +501,57 @@ function OrderDetails() {
                         <ul>
                           <li>
                             <strong>Address Line 1:</strong>
-                            {/* <span>{data?.getaOrderById?.shippingAddress_save?.addressLine1}</span> */}
-                            {data?.getaOrderById?.shippingAddress_save?.addressLine1}
+                            <span><span> {data[0].shipping?.addressLine1 ? data[0].shipping?.addressLine1 : data[0].shipping?.baddressLine1}</span>
+                            </span>
                           </li>
                           <li>
                             <strong> Address Line 2: </strong>
-                            {/* <span>{data?.getaOrderById?.shippingAddress_save?.addressLine2}</span> */}
-                            {data?.getaOrderById?.shippingAddress_save?.addressLine2}
+                            {/* <span>{data[0].shipping?.addressLine2}</span> */}
+                            <span> {data[0].shipping?.addressLine2 ? data[0].shipping?.addressLine2 : data[0].shipping?.baddressLine2}</span>
 
                           </li>
                           <li>
                             <strong>City:</strong>
                             <span>
-                              {data?.getaOrderById?.shippingAddress_save?.city ? data?.getaOrderById?.shippingAddress_save?.city : data?.getaOrderById?.billingAddress?.city}
+                              {data[0].shipping?.city ? data[0].shipping?.city : data[0].shipping?.bcity}
                             </span>
                           </li>
                           <li>
                             <strong> State:</strong>
-                            {/* <span>{data?.getaOrderById?.shippingAddress_save?.state}</span> */}
-                            <span>{data?.getaOrderById?.shippingAddress_save?.state ? data?.getaOrderById?.shippingAddress_save?.state : data?.getaOrderById?.billingAddress?.state}</span>
+                            {/* <span>{data[0].shipping?.state}</span> */}
+                            <span>{data[0].shipping?.state ? data[0].shipping?.state : data[0].billing?.bstate}</span>
+
 
                           </li>
                           <li>
                             <strong>Province:</strong>
-                            {/* <span>{data?.getaOrderById?.shippingAddress_save?.province}</span> */}
-                            <span>{data?.getaOrderById?.shippingAddress_save?.province ? data?.getaOrderById?.shippingAddress_save?.province : data?.getaOrderById?.billingAddress?.province}</span>
+                            {/* <span>{data[0].shipping?.province}</span> */}
+                            <span>{data[0].shipping?.province ? data[0].shipping?.province : data[0].billing?.bprovince}</span>
 
                           </li>
 
                           <li>
                             <strong>Country:</strong>
-                            {/* <span>{data?.getaOrderById?.shippingAddress_save?.country}</span> */}
-                            <span>{data?.getaOrderById?.shippingAddress_save?.country ? data?.getaOrderById?.shippingAddress_save?.country : data?.getaOrderById?.billingAddress?.country}</span>
+                            {/* <span>{data[0].shipping?.country}</span> */}
+                            <span>{data[0].shipping?.country ? data[0].shipping?.country : data[0].billing?.bcountry}</span>
 
                           </li>
 
                           <li>
                             <strong>Name:</strong>
-                            <span>{data?.getaOrderById?.shippingAddress_save?.firstname + " " + data?.getaOrderById?.shippingAddress_save?.lastname}</span>
+                            {/* <span>{data[0].shipping?.firstname + " " + data[0].shipping?.lastname}</span> */}
 
 
                           </li>
                           <li>
                             <strong>Email:</strong>
-                            <span>{data?.getaOrderById?.shippingAddress_save?.email ? data?.getaOrderById?.shippingAddress_save?.email : data?.getaOrderById?.billingAddress?.email}</span>
+                            <span>{data[0].shipping?.email ? data[0].shipping?.email : data[0].billing?.bemail}</span>
 
 
                           </li>
                           <li>
                             <strong>Phone:</strong>
-                            <span>{data?.getaOrderById?.shippingAddress_save?.phone ? data?.getaOrderById?.shippingAddress_save?.phone : data?.getaOrderById?.billingAddress?.phone}</span>
+                            <span>{data[0].shipping?.phone ? data[0].shipping?.phone : data[0].billing?.bphone}</span>
 
                           </li>
                         </ul>
@@ -544,48 +567,48 @@ function OrderDetails() {
 
                           <li>
                             <strong>PickUp Point Name:</strong>
-                            <span>{data?.getaOrderById.pickupAddress?.pickupPoint_name}</span>
+                            <span>{data[0].pickupAddress?.pickupPoint_name}</span>
 
                           </li>
                           <li>
                             <strong>PickUp Point sManager:</strong>
-                            {/* <span>{data?.getaOrderById.pickupAddress?.pickUpManagerSchema}</span> */}
+                            {/* <span>{data[0]pickupAddress?.pickUpManagerSchema}</span> */}
 
                           </li>
                           <li>
                             <strong>Address:</strong>
-                            <span>{data?.getaOrderById.pickupAddress?.address}</span>
+                            <span>{data[0].pickupAddress?.address}</span>
                           </li>
                           {/* <li>
                             <strong> Location : </strong>
-                            <span>{data?.getaOrderById.pickupAddress?.location}</span>
+                            <span>{data[0]pickupAddress?.location}</span>
 
                           </li> */}
                           <li>
                             <strong>Province:</strong>
-                            <span>{data?.getaOrderById.pickupAddress?.province}</span>
+                            <span>{data[0].pickupAddress?.province}</span>
 
                           </li>
                           <li>
                             <strong> Phone:</strong>
-                            <span>{data?.getaOrderById.pickupAddress?.phone}</span>
+                            <span>{data[0].pickupAddress?.phone}</span>
 
                           </li>
                           <li>
                             <strong>Email:</strong>
-                            <span>{data?.getaOrderById.pickupAddress?.email}</span>
+                            <span>{data[0].pickupAddress?.email}</span>
 
                           </li>
 
 
                           {/* <li>
                             <strong>PickUp Point Status:</strong>
-                            <span>{data?.getaOrderById.pickupAddress?.pickUpPointStatus}</span>
+                            <span>{data[0]pickupAddress?.pickUpPointStatus}</span>
 
                           </li> */}
                           {/* <li>
                             <strong>PickUp Manager Schema:</strong>
-                            <span>{data?.getaOrderById.pickupAddress?.pickUpManagerSchema}</span>
+                            <span>{data[0]pickupAddress?.pickUpManagerSchema}</span>
 
                           </li> */}
                         </ul>
@@ -603,8 +626,7 @@ function OrderDetails() {
 
                         <li>
                           <strong>Seller Name:</strong>
-                          <span>{data?.getaOrderById?.Seller[0]?.firstname} {data?.getaOrderById?.Seller[0]?.lastname}</span>
-
+                          {/* <span>{data[0].Seller[0]?.firstname} {data[0].Seller[0]?.lastname}</span> */}
                         </li>
                         <li>
                           <strong>Seller Company Name</strong>
@@ -671,7 +693,7 @@ function OrderDetails() {
                 <div className="col-lg-4">
                   <h6 className="heading-wrapper">Order Logs</h6>
                   <div className="order-date-sec">
-                    {data?.getaOrderById?.createdAt} Created
+                    {data[0].createdAt} Created
                   </div>
                 </div>
 
@@ -767,7 +789,7 @@ function OrderDetails() {
                     </thead>
                     <tbody>
                       {isSuccess &&
-                        data?.products?.map((item, i) => {
+                        data[0].products?.map((item, i) => {
                           return (
                             <tr key={i}>
                               <td
@@ -780,33 +802,33 @@ function OrderDetails() {
                                 <Link to="#">
                                   <img
                                     height={50}
-                                    src={item?.product_variant?.mainImage_url?.url}
+                                    src={item?.productId?.variations?.mainImage_url?.url}
                                   />
                                 </Link>
                               </td>
                               <td style={{ display: "table-cell" }}>
-                                <strong>{item.product_name}</strong>
+                                <strong>{item.productId?.name}</strong>
                                 <small></small>
                                 <br />
                               </td>
                               <td style={{ display: "table-cell" }}>
-                                <strong>{item.product_variant.weight}</strong>
+                                <strong>{item?.variantId}</strong>
                                 <small></small>
                                 <br />
                               </td>
 
                               <td style={{ display: "table-cell", textAlign: "right" }}>
-                                {item.product_count}
+                                {item?.qty}
                               </td>
                               <td style={{ display: "table-cell", textAlign: "right" }}>
-                                <small>{item.product_variant.sale_rate}</small>
+                                <small>{item?.price?.sale_rate}</small>
                               </td>
 
                               <td
                                 className="text-right"
                                 style={{ display: "table-cell" }}
                               >
-                                {data?.getaOrderById?.products[i]?.subTotal}
+                                {item?.subTotal}
                               </td>
 
 
@@ -814,33 +836,33 @@ function OrderDetails() {
                                 className="text-right footable-last-visible"
                                 style={{ display: "table-cell", textAlign: "right" }}
                               >
-                                {data?.getaOrderById?.products[i]?.tax}
+                                {item?.tax}
                               </td>
 
                               {/* <td
                                 className="text-right footable-last-visible"
                                 style={{ display: "table-cell" }}
                               >
-                                {data?.getaOrderById?.coupon_id?.code}
+                                {item[0].coupon_id?.code}
                               </td>
                               <td
                                 className="text-right footable-last-visible"
                                 style={{ display: "table-cell" }}
                               >
-                                {data?.getaOrderById?.coupon_id?.discount} in (  {data?.getaOrderById?.coupon_id?.discount_type})
+                                {item[0].coupon_id?.discount} in (  {item[0].coupon_id?.discount_type})
                               </td> */}
                               <td
                                 className="text-right footable-last-visible"
                                 style={{ display: "table-cell" }}
                               >
-                                {data?.getaOrderById?.products[i]?.subTotal + data?.getaOrderById?.products[i]?.tax}
+                                {item.total}
                               </td>
                               <td
                                 className="text-center footable-last-visible"
                                 style={{ display: "table-cell" }}
                               >
-                                {/* {data?.getaOrderById?.products?.[0].deliveryType} */}
-                                {data?.getaOrderById?.products[0]?.deliveryType}
+                                <span>{item.deliveryType}</span>
+                                {/* {data[0].products[0]?.deliveryType} */}
                               </td>
                             </tr>
                           );
@@ -858,31 +880,31 @@ function OrderDetails() {
 
                       <div className="subTotal" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                         <h6>Base Price</h6>
-                        <p> {data?.getaOrderById?.basePrice}</p>
+                        <p> {data[0].basePrice}</p>
                       </div>
 
 
                       <div className="subTotal" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                         <h6>Coupon</h6>
-                        <p> <span style={{ color: "rebeccapurple" }}>{data?.getaOrderById?.coupon_id?.code}</span> ( {data?.getaOrderById?.coupon_id?.discount} {data?.getaOrderById?.coupon_id?.discount_type === 'Percent' ? 'Percent' : 'Amount'} )</p>
+                        <p> <span style={{ color: "rebeccapurple" }}>{data[0].coupon_id?.code}</span> ( {data[0].coupon_id?.discount} {data[0].coupon_id?.discount_type === 'Percent' ? 'Percent' : 'Amount'} )</p>
                       </div>
                       <div className="subTotal" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                         <h6>Discount Amount </h6>
-                        <p> {data?.getaOrderById?.discount}</p>
+                        <p> {data[0].discount}</p>
                       </div>
 
                       <div className="subTotal" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                         <h6>Tax Amount</h6>
-                        <p> {data?.getaOrderById?.tax}</p>
+                        <p> {data[0].tax}</p>
                       </div>
                       <div className="subTotal" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                         <h6>Shipping</h6>
-                        <p> {data?.getaOrderById?.shippingCost}</p>
+                        <p> {data[0].shippingCost}</p>
                       </div>
                       <div style={{ margin: "4px 0", borderTop: "1px solid black" }}></div>
                       <div className="subTotal" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                         <h6>Grand Total</h6>
-                        <p> {data?.getaOrderById?.grandTotal}</p>
+                        <p> {data[0].grandTotal}</p>
                       </div>
 
 
@@ -894,14 +916,14 @@ function OrderDetails() {
 
 
                 {/* <div className="text-right">
-                  <h6 style={{ textAlign: "right" }}>Base Price : {data?.getaOrderById?.basePrice}</h6>
-                  {data?.getaOrderById?.coupon_id?.code && <div className="mb-2" style={{ textAlign: "end" }}>
-                    <div className="pr-2">COUPON CODE : <strong> {data?.getaOrderById?.coupon_id?.code} ( {data?.getaOrderById?.coupon_id?.discount} ({data?.getaOrderById?.coupon_id?.discount_type === 'Percent' ? 'Percent' : 'Amount'}) )</strong></div>
+                  <h6 style={{ textAlign: "right" }}>Base Price : {data[0].basePrice}</h6>
+                  {data[0].coupon_id?.code && <div className="mb-2" style={{ textAlign: "end" }}>
+                    <div className="pr-2">COUPON CODE : <strong> {data[0].coupon_id?.code} ( {data[0].coupon_id?.discount} ({data[0].coupon_id?.discount_type === 'Percent' ? 'Percent' : 'Amount'}) )</strong></div>
                   </div>}
-                  <h6 style={{ textAlign: "right" }}>Discount Amount : {data?.getaOrderById?.discount}</h6>
-                  <h6 style={{ textAlign: "right" }}>Tax Amount : {data?.getaOrderById?.tax}</h6>
-                  <div className="mb-2"><big className="pr-2">Shipping Cost:<strong> {data?.getaOrderById?.shippingCost}</strong></big></div>
-                  <div><big className="pr-2">Grand Total:  <strong>{data?.getaOrderById?.grandTotal}</strong></big></div>
+                  <h6 style={{ textAlign: "right" }}>Discount Amount : {data[0].discount}</h6>
+                  <h6 style={{ textAlign: "right" }}>Tax Amount : {data[0].tax}</h6>
+                  <div className="mb-2"><big className="pr-2">Shipping Cost:<strong> {data[0].shippingCost}</strong></big></div>
+                  <div><big className="pr-2">Grand Total:  <strong>{data[0].grandTotal}</strong></big></div>
                 </div> */}
 
               </div>

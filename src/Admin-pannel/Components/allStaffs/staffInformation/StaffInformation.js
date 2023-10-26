@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify';
 import { useAddStaffMutation, useGetRolesQuery, useGetTicketareaDQuery, useGetTicketBlockDQuery, useGetTicketBuildingDQuery, useGetTicketFloorDQuery, useGetTicketOfficeRoomDQuery, useGetTicketWardDQuery } from "../../all-products/allproductsApi/allProductsApi";
@@ -39,17 +39,16 @@ function StaffInformation() {
 
 
   const { data } = useGetRolesQuery(params.id);
-  console.log('role data', data);
 
   const [addAllStaffsD, response] = useAddStaffMutation();
 
 
+  const token = window.localStorage.getItem('token')
   const submitStaffData = (e) => {
     e.preventDefault();
     const clone = { ...inputVal }
-    addAllStaffsD(clone)
-    console.log(inputVal)
-    document.getElementById("create-course-form").reset();
+    addAllStaffsD({ data: clone, token: token })
+    // document.getElementById("create-course-form").reset();
   };
 
 
@@ -59,12 +58,14 @@ function StaffInformation() {
     })
   };
 
-  if (response.isSuccess === true) {
-    toastSuccessMessage()
-  };
-  console.log(response)
-  console.log(inputVal)
-
+  useEffect(() => {
+    if (response.isSuccess === true) {
+      toastSuccessMessage()
+    };
+    if (response.isError === true) {
+      alert('Staff Not aad')
+    };
+  }, [response])
 
   return (
     <>
