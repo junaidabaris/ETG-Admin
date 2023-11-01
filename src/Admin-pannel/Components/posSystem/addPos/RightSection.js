@@ -24,7 +24,7 @@ function RightSection() {
             <div className='rightside'>
 
                 <div className='list_wrapper'>
-                    <ul>
+                    <ul style={{cursor:"pointer"}}>
                         <li onClick={() => setShowCategoryBox(true)}>Category</li>
                         <li onClick={() => setShowSubCategoryBox(true)}>Sub Category</li>
                         <li onClick={() => setShowBrandsBox(true)}>Brands</li>

@@ -188,7 +188,7 @@ function OrderByStatus() {
 
                             <tbody>
 
-                                {pickData ? pickData && pickData.map((item, i) => {
+                                {pickData ? pickData?.length && pickData?.map((item, i) => {
                                     if (item?.orderId?.grandTotal) {
                                         allTotal = allTotal + +item?.orderId?.grandTotal
                                     }
@@ -257,7 +257,7 @@ function OrderByStatus() {
 
 
 
-                                    data && data.map((item, i) => {
+                                    data?.length && data?.map((item, i) => {
                                         if (item?.orderId?.grandTotal) {
                                             allTotal = allTotal + +item?.orderId?.grandTotal
                                         }

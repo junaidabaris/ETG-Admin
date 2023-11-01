@@ -73,7 +73,7 @@ function GenerateTr({ item, index, pickUp,DeleteRow, setShowData, showData }) {
             <input type="text" disabled value={item?.variant?.weight} name="sku" className="form-control" />
         </td>
         <td>
-            <input type="text" disabled value={item?.sku} name="sku" className="form-control" />
+            <input type="text" value={item?.sku} name="sku" className="form-control" />
         </td>
 
         {/* <td>

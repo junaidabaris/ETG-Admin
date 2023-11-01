@@ -193,7 +193,7 @@ function PickUpPointOrder() {
                       {
                         isLoginPickup ?
 
-                          pickData && pickData.map((item, i) => {
+                          pickData?.length && pickData?.map((item, i) => {
                             return <tr key={item._id}>
                               <td
                                 className="footable-first-visible"
@@ -256,7 +256,7 @@ function PickUpPointOrder() {
 
                           :
 
-                          data && data.map((item, i) => {
+                          data?.length && data?.map((item, i) => {
                             return <tr key={item._id}>
                               <td
                                 className="footable-first-visible"

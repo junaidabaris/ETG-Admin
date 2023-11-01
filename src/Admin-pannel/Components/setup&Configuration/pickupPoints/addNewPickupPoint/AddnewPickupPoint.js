@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAddPickUpPointMutation, useGetAllStaffsQuery } from "../../../all-products/allproductsApi/allProductsApi";
 import { toast, ToastContainer } from 'react-toastify';
 import ToggleStatus from "../../../toggleStatus/ToggleStatus";
@@ -62,9 +62,11 @@ function AddnewPickupPoint() {
     })
   };
 
-  if (response.isSuccess === true) {
-    toastSuccessMessage()
-  };
+  useEffect(()=>{
+    if (response.isSuccess === true) {
+      toastSuccessMessage()
+    };
+  },[response])
 
   return (
     <>

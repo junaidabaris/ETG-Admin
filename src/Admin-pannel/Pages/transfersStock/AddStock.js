@@ -13,7 +13,7 @@ function AddStock() {
     const { data: searchPro } = useGetProductSearchQuery({ token: token, paylode: searchs })
 
     const { data: pickUp } = useGetPickupPointQuery();
-    const { data: sellerD } = useGetSellersQuery()
+    const { data: sellerD } = useGetSellersQuery(token)
 
     const showMainadmin = window.localStorage.getItem('showMainadmin')
     const isSellerLogin = window.localStorage.getItem('isSellerLogin')
@@ -164,7 +164,7 @@ function AddStock() {
                                 <label for="basic-url" class="form-label">Supplier</label>
                                 <select className="form-select" name="supplier" onChange={onchangeHandle} aria-label="Default select example">
                                     <option selected>Open this select menu</option>
-                                    {sellerD && sellerD.map((item) => {
+                                    {sellerD && sellerD?.map((item) => {
                                         return <option value={item._id} key={item._id}>{item.firstname + " " + item.lastname}</option>
                                     })}
                                 </select>

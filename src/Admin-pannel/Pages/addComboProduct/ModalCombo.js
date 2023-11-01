@@ -4,7 +4,6 @@ import Form from 'react-bootstrap/Form';
 import { useState } from 'react';
 
 function ModalCombo(props) {
-    console.log(props?.cartData);
     let selectedVariants = []
     const [values, setValues] = useState(props?.cartData?.variations)
     const sendData = (data, i) => {
@@ -70,7 +69,6 @@ function ModalCombo(props) {
                 <tbody>
 
                     {values && values?.map((item, i) => {
-                        console.log(item);
                         return <tr>
                             <td>
                                 <Form>

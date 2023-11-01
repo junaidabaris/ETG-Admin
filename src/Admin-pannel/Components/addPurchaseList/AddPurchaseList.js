@@ -26,12 +26,12 @@ function AddPurchaseList() {
 
     const [searchs, setSearch] = useState('')
     const { data: searchPro } = useGetProductSearchQuery({ token: token, paylode: searchs })
-    const { data: sellers } = useGetSellersQuery()
+    const { data: sellers } = useGetSellersQuery(token)
 
     const [show, setShow] = useState(true)
     // const { data: orderStatusD } = useGetOrderStartByIdQuery();
     const [finalCatD, setFinalCatD] = useState();
-    const { data: pickUp } = useGetPickupPointQuery();
+    const { data: pickUp } = useGetPickupPointQuery(token);
 
     const [setCart, { isLoading, data: cartData, isError: isCartsError }] = useAddPurchaseCartMutation()
 
@@ -44,7 +44,7 @@ function AddPurchaseList() {
         if (isCartsError) {
             alert('Server Error Select Pickup Point and Try Again !')
         }
-        
+
     }, [isCartsError])
 
     const [storeValue, setStoreValue] = useState({
@@ -72,7 +72,7 @@ function AddPurchaseList() {
 
     const sendData = () => {
         const obj = { ...storeValue, products: showData, supplier: storeValue.seller_id }
-        addPurchaseList(obj);
+        addPurchaseList({ data: obj, token: token });
     }
 
     const handelChange = (e) => {
@@ -86,7 +86,6 @@ function AddPurchaseList() {
 
     const setTableItem = async (item) => {
         const obj = { purchase: showData, pickupPoints: finalCatD }
-
         setCart({ id: item._id, data: obj })
         setShow(false)
     }
@@ -196,7 +195,7 @@ function AddPurchaseList() {
                                     <label>Supplier</label>
                                     <select className="form-select" aria-label="Default select example" onChange={changeHandelVal} name="seller_id">
                                         {/* <option value={'64269f0df127906d53878d3d'}>ETG Seller</option> */}
-                                        {sellers && sellers.map((item) => {
+                                        {sellers && sellers?.map((item) => {
                                             return <option key={item._id} value={item._id}>{item.firstname + " " + item.lastname}</option>
                                         })}
 

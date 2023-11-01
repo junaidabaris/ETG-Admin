@@ -72,18 +72,17 @@ function PodEnteris(props) {
         }
     }
 
-    // useEffect(() => {
-    //     if (isDelevery === 'true') {
-    //         getData1()
-    //     } else {
-    //         getData()
-    //     }
-    // }, []);
+    useEffect(() => {
+        if (isDelevery === 'true') {
+            getData1()
+        } else {
+            getData()
+        }
+    }, []);
 
     const getPodEntryDataById = async () => {
         try {
             const res = await axios.get(`https://onlineparttimejobs.in/api/delivery/order/${props.data.getaOrderById._id}`)
-            console.log('podEntryDataMoin---', res.data)
             setState(res.data[0])
 
         } catch (error) {
@@ -97,14 +96,13 @@ function PodEnteris(props) {
 
     const [loader, setLoader] = useState(false)
     const [error, setError] = useState(false)
-
     const sendData = async () => {
         setLoader(true)
         const clone = { ...state, image: file }
         const formData = new FormData();
 
-        formData.append('customer_id', props.data.getaOrderById.user._id);
-        formData.append('order_id', props.data.getaOrderById._id);
+        formData.append('customer_id', props.data[0].user_id);
+        formData.append('order_id', props.data[0]._id);
         formData.append('createdBy', setId);
         formData.append('AwbNo', clone.AwbNo);
         formData.append('orderStatusId', clone.orderStatusId);

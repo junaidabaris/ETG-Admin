@@ -238,11 +238,21 @@ function OrderDetails() {
                       Order No - {data[0].order_referenceNo}
                     </h6>
                   </div>
+                  <div className="card-header topCardHeader">
+                    <h6 className="mb-0">
+                    Invoice Date  - {data[0]?.invoiceDate}
+                    </h6>
+                  </div>
+                  <div className="card-header topCardHeader">
+                    <h6 className="mb-0">
+                    Invoice No - {data[0]?.invoiceNo}
+                    </h6>
+                  </div>
                 </div>
                 <div className="col-lg-6">
                   <div className="card-header topCardHeader">
                     <h6 className="mb-0 order-creation-d">
-                      Order Created On - {data[0].createdAt}
+                      Order Created On - {data[0].date}
                     </h6>
                   </div>
                 </div>
@@ -280,8 +290,8 @@ function OrderDetails() {
                       <div className="customerName">
                         Customer Name:{" "}
                         <span>
-                          {data[0].user?.firstname + " " +
-                            data[0].user?.lastname}
+                          {data[0].user_firstname + " " +
+                            data[0].user_lastname}
                         </span>
                       </div>
                     </div>
@@ -812,7 +822,7 @@ function OrderDetails() {
                                 <br />
                               </td>
                               <td style={{ display: "table-cell" }}>
-                                <strong>{item?.variantId}</strong>
+                                <strong>{item?.productId?.variations?.weight}</strong>
                                 <small></small>
                                 <br />
                               </td>
@@ -821,7 +831,7 @@ function OrderDetails() {
                                 {item?.qty}
                               </td>
                               <td style={{ display: "table-cell", textAlign: "right" }}>
-                                <small>{item?.price?.sale_rate}</small>
+                                <strong>{item?.price?.sale_rate}</strong>
                               </td>
 
                               <td

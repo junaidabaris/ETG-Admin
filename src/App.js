@@ -669,6 +669,7 @@ import List_Subscribe from "./Admin-pannel/Pages/FAQ/list_Subscribe/List_Subscri
 import RoboticMaster from "./Admin-pannel/Components/roboticMaster/RoboticMaster";
 import RoboticMasterEdit from "./Admin-pannel/Components/roboticMaster/RoboticMasterEdit";
 import RoboticList from "./Admin-pannel/Components/roboticMaster/RoboticMasterList";
+import SellerFillupForm from "./Admin-pannel/Components/allSeller/SellerFillupForm";
 
 function App() {
   const [show, setshow] = useState(true);
@@ -855,7 +856,7 @@ function App() {
 
           <Route path="coupon" element={<CouponPage />} />
           <Route path="coupon/create" element={<CouponInformationAddingPage />} />
-          <Route path="coupon/edit/:id" element={<EditCoupon />} />
+          <Route path="coupon/edit/:id" element={<CouponInformationAddingPage />} />
           <Route path="support_ticket" element={<TicketPage />} />
           <Route path="support_ticket/edit/:id" element={<EditSupportTicket />} />
           <Route path="support_ticket/detail/:id" element={<SupportTicketDetailPage />} />
@@ -950,7 +951,9 @@ function App() {
           {/* junaid routes */}
 
           <Route path="seller" element={<AllSellerPage />} />
-          <Route path="add-seller-product" element={<AddsellerProductPage />} />
+          <Route path="seller/detail-fillup/:id" element={<SellerFillupForm />} />
+
+          <Route path="add-seller-product" element={<AddNewProductsPage />} />
           <Route path="seller/form" element={<SellerAddEditForm />} />
           <Route path="seller/edit/:id" element={<SellerAddEditForm />} />
           <Route path="seller/detail/:id" element={<SellerDetail />} />

@@ -2,13 +2,15 @@ import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useParams } from 'react-router';
-import { useAddSellerListMutation, useEditSellerListMutation, useGetSellerDetailQuery } from '../../Components/all-products/allproductsApi/allProductsApi';
+import { useAddSellerListMutation, useEditSellerListMutation, useGetSellerDetailQuery, useGetSellerUpDetailQuery } from '../../Components/all-products/allproductsApi/allProductsApi';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 
 function SellerAddEditForm() {
     const params = useParams()
-    const { data, isSuccess } = useGetSellerDetailQuery(params.id)
+    const token = window.localStorage.getItem('adminToken')
+    const { data, isSuccess } = useGetSellerUpDetailQuery({id:params.id,token:token})
+    
 
     // const getData = async ()=>{
     //     try {
@@ -52,6 +54,8 @@ function SellerAddEditForm() {
         amount_type: "Debit",
         AccLedgerGroupId: "",
         OpeningBalance: "",
+        ifsc_code: "",
+        billing_company: "",
         asonDate: "",
         bank_payment_status: false
     }
@@ -87,7 +91,7 @@ function SellerAddEditForm() {
 
     }, [adsus, adder, upSuss, uperr])
 
-    const token = window.localStorage.getItem('adminToken')
+    
     const [unders, setUneders] = useState(null)
     const getAllData = async () => {
         const res1 = await axios.get(`https://onlineparttimejobs.in/api/accountGroup`, {
@@ -129,8 +133,14 @@ function SellerAddEditForm() {
         const images = new FormData();
         images.append('image', photos);
         setValidated(true);
-        const res = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
-        const mergData = { ...state, ...status, location: { long: state.long, lat: state.lat }, image: res.data }
+        let obhs  ;
+        try {
+            const res = await axios.post(`https://onlineparttimejobs.in/api/cloudinaryImage/addImage`, images)
+            obhs = res.data
+        } catch (error) {
+            
+        }
+        const mergData = { ...state, ...status, location: { long: state.long, lat: state.lat }, image:obhs }
         if (params.id) {
             update({ data: mergData, id: params.id, token: token })
         } else {
@@ -140,44 +150,45 @@ function SellerAddEditForm() {
 
     useEffect(() => {
         if (params.id) {
-            const obj = {
-                firstname: data?.firstname,
-                lastname: data?.lastname,
-                long: data?.lat,
-                lat: data?.lat,
-                addressLine1: data?.addressLine1,
-                addressLine2: data?.addressLine2,
-                country: data?.country,
-                state: data?.state,
-                city: data?.city,
-                landmark: data?.landmark,
-                province: data?.province,
-                remaining_uploads: "",
-                email: data?.email,
-                mobile: data?.mobile,
-                remaining_digital_uploads: "",
-                invalid_at: "",
-                remaining_auction_uploads: "",
-                rating: "",
-                num_of_reviews: "",
-                num_of_sale: "",
-                verification_status: false,
-                cash_on_delivery_status: false,
-                admin_to_pay: "",
-                bank_name: data?.bank_name,
-                tax_number: data?.tax_number,
-                bank_acc_no: data?.bank_acc_no,
-                bank_payment_status: false
-            }
-            setState(obj)
+            // const obj = {
+            //     firstname: data?.firstname,
+            //     lastname: data?.lastname,
+            //     long: data?.lat,
+            //     lat: data?.lat,
+            //     addressLine1: data?.addressLine1,
+            //     addressLine2: data?.addressLine2,
+            //     country: data?.country,
+            //     state: data?.state,
+            //     city: data?.city,
+            //     landmark: data?.landmark,
+            //     province: data?.province,
+            //     remaining_uploads: "",
+            //     email: data?.email,
+            //     mobile: data?.mobile,
+            //     remaining_digital_uploads: "",
+            //     invalid_at: "",
+            //     remaining_auction_uploads: "",
+            //     rating: "",
+            //     num_of_reviews: "",
+            //     num_of_sale: "",
+            //     verification_status: false,
+            //     cash_on_delivery_status: false,
+            //     admin_to_pay: "",
+            //     bank_name: data?.bank_name,
+            //     tax_number: data?.tax_number,
+            //     bank_acc_no: data?.bank_acc_no,
+            //     bank_payment_status: false
+            // }
+            setState(data)
         }
+        getAllData()
     }, [params, isSuccess])
 
 
 
     return <div className='container'>
         <ToastContainer />
-        {params.id ? <h2>Update Seller</h2> : <h2>Add Seller</h2>}
+        {params.id ? <h2>Update Vendor</h2> : <h2>Add Vendor</h2>}
         <Form noValidate validated={validated} onSubmit={sendData}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>First Name</Form.Label>
@@ -190,7 +201,7 @@ function SellerAddEditForm() {
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Image</Form.Label>
-                <Form.Control type="file" name='lastname' onChange={(e) => { setchangePhoto(e.target.files[0]) }} value={state?.lastname} style={{ width: "50%" }} placeholder="Last Name" required />
+                <Form.Control type="file" name='lastname' onChange={(e) => { setchangePhoto(e.target.files[0]) }} style={{ width: "50%" }} placeholder="Last Name" required />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Under Group</Form.Label>
@@ -203,16 +214,9 @@ function SellerAddEditForm() {
             </Form.Group>
 
 
-
-            {/* 
-            <label className="col-sm-3 col-from-label" htmlFor="last name"></label>
-            <div className="col-sm-9">
-
-            </div> */}
-
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Password</Form.Label>
-                <Form.Control type="text" name='password' onChange={onChangeHandle} value={state?.password} style={{ width: "50%" }} placeholder="password" required />
+                <Form.Control type="text" name='password' onChange={onChangeHandle} style={{ width: "50%" }} placeholder="password" required />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Longitutde</Form.Label>
@@ -294,7 +298,7 @@ function SellerAddEditForm() {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Tax Number </Form.Label>
+                <Form.Label>Tax Number ( GSt I GST CGST  )</Form.Label>
                 <Form.Control type="text" name='tax_number' onChange={onChangeHandle} value={state?.tax_number} style={{ width: "50%" }} placeholder="tax_number" required />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -305,6 +309,14 @@ function SellerAddEditForm() {
             <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Bank Acount Number</Form.Label>
                 <Form.Control name='bank_acc_no' type="text" onChange={onChangeHandle} value={state?.bank_acc_no} style={{ width: "50%" }} placeholder="Bank Acount Number" required />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Label>IFSC Code *</Form.Label>
+                <Form.Control name='ifsc_code' type="text" onChange={onChangeHandle} value={state?.ifsc_code} style={{ width: "50%" }} placeholder="IFSC Code" required />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Label>Billing Company *</Form.Label>
+                <Form.Control name='billing_company' type="text" onChange={onChangeHandle} value={state?.billing_company} style={{ width: "50%" }} placeholder="Billing Company" required />
             </Form.Group>
 
 

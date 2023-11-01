@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 function SystemSettingPrefix() {
 
     const [inputVal, setInputval] = useState({
-        SalesReferencePrefix: '', ReturnSalePrefix: '', PaymentReferencePrefix: '', PurchasePaymentPrefix: '', DeliveryReferencePrefix: '', QuotationReferencePrefix: '', PurchaseReferencePrefix: '', ReturnPurchasePrefix: '', TransferReferencePrefix: '', ExpensePrefix: '', QuantityAdjustmentPrefix: ''
+        SalesReferencePrefix: '', ReturnSalePrefix: '', PaymentReferencePrefix: '', PurchasePaymentPrefix: '', DeliveryReferencePrefix: '', QuotationReferencePrefix: '', PurchaseReferencePrefix: '', ReturnPurchasePrefix: '', TransferReferencePrefix: '', ExpensePrefix: '', QuantityAdjustmentPrefix: '',ticketPrefix:''
     });
     const token = window.localStorage.getItem('token')
 
@@ -73,6 +73,10 @@ function SystemSettingPrefix() {
                     <div className="col-lg-4">
                         <label htmlFor="site_name">Sales Reference Prefix</label>
                         <input type="text" name='SalesReferencePrefix' value={inputVal?.SalesReferencePrefix} className="form-control tip" onChange={onChangeHandler} />
+                    </div>
+                    <div className="col-lg-4">
+                        <label htmlFor="site_name">Ticket Prefix</label>
+                        <input type="text" name='ticketPrefix' value={inputVal?.ticketPrefix} className="form-control tip" onChange={onChangeHandler} />
                     </div>
                     <div className="col-lg-4">
                         <label htmlFor="site_name">Return Sale Prefix</label>

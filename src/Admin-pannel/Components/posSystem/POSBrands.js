@@ -4,10 +4,11 @@ import { useGetPOSBrandByIdQuery, useGetPOSBrandsQuery } from '../all-products/a
 function POSBrands({ showBrandsBox, setShowBrandsBox }) {
     const [abc, setAbc] = useState(false);
     const [getPosBrandId, setGetPosBrandId] = useState();
+    const token = window.localStorage.getItem('token')
 
-    const { isLoading, data } = useGetPOSBrandsQuery();
+    const { isLoading, data } = useGetPOSBrandsQuery(token);
     // console.log('PosBrandData-----', data);
-    const { data: PosBrandData } = useGetPOSBrandByIdQuery(getPosBrandId);
+    const { data: PosBrandData } = useGetPOSBrandByIdQuery({ id: getPosBrandId, token: token });
 
 
     const showPosBrand = (id) => {
@@ -15,6 +16,7 @@ function POSBrands({ showBrandsBox, setShowBrandsBox }) {
         setShowBrandsBox(false)
         setAbc(true)
     }
+    console.log(PosBrandData);
 
     return (
         <>
@@ -24,7 +26,7 @@ function POSBrands({ showBrandsBox, setShowBrandsBox }) {
                         {data && data.map((item, i) => {
                             return <li key={i} onClick={() => showPosBrand(item._id)}>
                                 <figure>
-                                    <img src={item.logo} alt='brand-image'></img>
+                                    <img src={item.logo.url} alt='brand-image'></img>
                                 </figure>
                                 <figcaption>
                                     <p>{item.name}</p>
@@ -38,7 +40,7 @@ function POSBrands({ showBrandsBox, setShowBrandsBox }) {
 
             {abc && <div>
                 <ul className='categ_prod_wrapper'>
-                    {PosBrandData && PosBrandData.map((item, i) => {
+                    {PosBrandData && PosBrandData?.map((item, i) => {
                         return <li key={i} onClick={() => showPosBrand(item._id)}>
                             <figure>
                                 <img src={item.mainimage_url?.url} alt='brand-image'></img>

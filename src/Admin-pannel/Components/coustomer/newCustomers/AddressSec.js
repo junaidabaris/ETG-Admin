@@ -28,8 +28,11 @@ function AddressSec() {
 
     const [selectedBilliingAddress , setselectedBilliingAddress] = useState()
     const getDatas = async () => {
-        const res = await axios.get(`https://onlineparttimejobs.in/api/user/billAddress/${params.id}`,{
-            
+        const res = await axios.get(`https://onlineparttimejobs.in/api/shippingAddress/billing/user/${params.id}`,{
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+            },
         })
         setselectedBilliingAddress(res.data)
     }
@@ -59,7 +62,12 @@ function AddressSec() {
         const obj = {...billings , userid : params.id}
       if (updates) {
         try {
-            const res = await axios.put(`https://onlineparttimejobs.in/api/shippingAddress/update_shippingAddresss/${UpdateId}`, obj)
+            const res = await axios.put(`https://onlineparttimejobs.in/api/shippingAddress/update_shippingAddresss/${UpdateId}`, obj,{
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+                },
+            })
             alert('Address Upated Successfull')
            setTimeout(() => {
             getDatas()
@@ -84,7 +92,12 @@ function AddressSec() {
         }
       } else {
         try {
-            const res = await axios.post(`https://onlineparttimejobs.in/api/shippingAddress/add_shippingAddresss`, obj)
+            const res = await axios.post(`https://onlineparttimejobs.in/api/shippingAddress/add_shippingAddresss`, obj,{
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+                },
+            })
             toastSuccessMessage()
            setTimeout(() => {
             getDatas()
@@ -281,7 +294,7 @@ function AddressSec() {
                 <h5>Adddress List</h5>
                 <hr />
                 <div>
-                    {selectedBilliingAddress?.address.map((item) => {
+                    {selectedBilliingAddress?.map((item) => {
                         return <div className="innerAddr" style={{ margin: "10px 0" }}>
                             <div className="editoresec">
                                 <a className="btn btn-soft-primary btn-icon btn-circle btn-sm" title="Edit" onClick={()=>{sendDatas(item)}} ><i class="las la-edit"></i></a>

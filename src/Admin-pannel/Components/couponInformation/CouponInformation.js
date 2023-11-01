@@ -1,22 +1,24 @@
 import { Link } from "react-router-dom";
 import { useDeleteCouponMutation, useGetCouponsQuery } from "../all-products/allproductsApi/allProductsApi";
+import { useEffect } from "react";
 
 function CouponInformation() {
 
-    const { isLoading, data } = useGetCouponsQuery();
-    console.log(data);
+    const token = window.localStorage.getItem('token')
+    const { isLoading, data } = useGetCouponsQuery(token);
 
     const [deleteCoupon, response] = useDeleteCouponMutation();
 
 
     const deleteCuoponData = (id) => {
-        deleteCoupon(id)
+        deleteCoupon({id:id ,token:token})
     };
 
-    console.log(response)
-    if (response.isSuccess === true) {
-        alert('Coupons Succesfully deleted')
-    }
+    useEffect(() => {
+        if (response.isSuccess === true) {
+            alert('Coupons Succesfully deleted')
+        }
+    }, [response])
 
 
     return (
@@ -34,6 +36,7 @@ function CouponInformation() {
                                     <th >Code</th>
                                     <th  >Category</th>
                                     <th  >Discount</th>
+                                    <th  >Description</th>
                                     <th  >Discount Type</th>
                                     <th >Start Date</th>
                                     <th >End Date</th>
@@ -47,6 +50,7 @@ function CouponInformation() {
                                         <td>{item.code}</td>
                                         <td>{item.type}</td>
                                         <td>{item.discount}</td>
+                                        <td>{item.description}</td>
                                         <td>{item.discount_type}</td>
                                         <td >{item.start_date}</td>
                                         <td >{item.end_date}</td>

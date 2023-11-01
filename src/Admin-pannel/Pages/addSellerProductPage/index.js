@@ -134,8 +134,6 @@ function AddNewProductsPage() {
                     Authorization: `Bearer ${token}`,
                 },
             })
-            // const resData = await reqData.json();
-            // 
             for (let i = 0; i < resData.data.length; i++) {
                 getCategoryName.push({ name: resData.data[i].name, _id: resData.data[i]._id })
 
@@ -143,6 +141,7 @@ function AddNewProductsPage() {
             if (getCategoryName.length) {
                 setCateg(getCategoryName);
             }
+            console.log(getCategoryName)
         }
         getCatData();
     }, [])
@@ -624,7 +623,6 @@ function AddNewProductsPage() {
                                                                     <Multiselect
                                                                         isObject={true}
                                                                         displayValue="name"
-
                                                                         options={categ}
                                                                         showCheckbox
                                                                         selectedValues={finalCatD}
@@ -650,7 +648,7 @@ function AddNewProductsPage() {
                                                                 <div className="col-md-8">
                                                                     <select className="form-select" aria-label="Default select example" value={item?.seller_id} name="seller_id" onChange={(e) => { onChangeHandler(e, item.language_id) }} >
                                                                         <option>Select Seller</option>
-                                                                        {sellerD && sellerD.map((item) => {
+                                                                        {sellerD?.length && sellerD?.map((item) => {
                                                                             return <option value={item._id} key={item._id}>{item.firstname + " " + item.lastname}</option>
                                                                         })}
                                                                     </select>
@@ -663,7 +661,7 @@ function AddNewProductsPage() {
                                                                 <div className="col-md-8">
                                                                     <select className="form-select" value={item?.brand_id} aria-label="Default select example" name="brand_id" onChange={(e) => { onChangeHandler(e, item.language_id) }} >
                                                                         <option>Select Brand</option>
-                                                                        {brandData.data && brandData.data.map((item) => {
+                                                                        {brandData?.data?.length && brandData?.data?.map((item) => {
                                                                             return <option value={item._id} key={item._id}>{item.name || item._id}</option>
                                                                         })}
                                                                     </select>
@@ -675,7 +673,7 @@ function AddNewProductsPage() {
                                                                 <div className="col-md-8">
                                                                     <select className="form-select" value={item?.unit} aria-label="Default select example" name="unit" onChange={(e) => { onChangeHandler(e, item.language_id) }} >
                                                                         <option value={1}>Select Unit</option>
-                                                                        {unitMast && unitMast.map((item) => {
+                                                                        {unitMast?.length && unitMast?.map((item) => {
                                                                             return <option value={item.name} key={item._id}>{item.name}</option>
                                                                         })}
                                                                     </select>
@@ -704,7 +702,7 @@ function AddNewProductsPage() {
                                                                 <div className="col-md-8">
                                                                     <div className="tags_inp_wrapper">
                                                                         <div className='tags-input-container'>
-                                                                            {tags.map((tag, index) => {
+                                                                            {tags?.map((tag, index) => {
                                                                                 return <div className='tag-item' key={index}>
                                                                                     <span className='text'>{tag}</span>
                                                                                     <span className='close' onClick={() => removetagTag(index)}>&times;</span>
@@ -743,7 +741,7 @@ function AddNewProductsPage() {
                                                                 <div className="col-md-8">
                                                                     <select className="form-select" aria-label="Default select example" name="unit" onChange={changettriPro}>
                                                                         <option value={1}>Select Unit</option>
-                                                                        {data1 && data1.map((item) => {
+                                                                        {data1?.length && data1.map((item) => {
                                                                             return <option value={item._id} key={item._id} id={item._id}>{item.name}</option>
                                                                         })}
                                                                     </select>
@@ -752,7 +750,7 @@ function AddNewProductsPage() {
                                                             {proAtt && <div className="form-group row">
                                                                 <label className="col-md-3 col-from-label">Set Attribute Values</label>
                                                                 <div className="col-md-8">
-                                                                    {proAtt?.values && proAtt.values.map((item, i) => {
+                                                                    {proAtt?.values?.length && proAtt.values.map((item, i) => {
                                                                         return <div style={{ display: "flex", margin: "5px 0" }} key={i}>
                                                                             <label className="col-md-3 col-from-label">{item?.name}</label>
                                                                             <input placeholder="Value" name={item?._id} className="form-control" onChange={changeValues} />

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useGetCurrencyQuery, useGetLanguagesQuery, useGetSellerDetailQuery, useUpdateSellerMutation, useUpdateSellerProMutation } from "../../Components/all-products/allproductsApi/allProductsApi";
-import { token } from "../../common/TokenArea";
 
 
 function Profile() {
@@ -10,8 +9,8 @@ function Profile() {
     const isDeleveryBoy = window.localStorage.getItem('isDeleveryBoy')
     const isSellerLogin = window.localStorage.getItem('isSellerLogin')
     const adminId = window.localStorage.getItem('adminId')
-    const tokenD = window.localStorage.getItem('token')
-    const { data: detailSeller } = useGetSellerDetailQuery(tokenD)
+    const token = window.localStorage.getItem('token')
+    const { data: detailSeller } = useGetSellerDetailQuery(token)
     const [update, { isLoading }] = useUpdateSellerMutation()
 
     const [show, setShow] = useState(false)
@@ -29,7 +28,7 @@ function Profile() {
         lastname: "",
         email: "",
         mobile: "",
-        currency_id: "",
+        country_id: "",
         language_id: "",
         addressLine1: "",
         addressLine2: "",
@@ -44,7 +43,7 @@ function Profile() {
     const onchengeHandle = (e) => {
         const clone = { ...state }
         clone[e.target.name] = e.target.value
-        if (e.target.name === 'language_id' || e.target.name === 'currency_id') {
+        if (e.target.name === 'language_id' || e.target.name === 'country_id') {
             clone[e.target.id] = e.target.value
         }
         setState(clone)
@@ -57,7 +56,7 @@ function Profile() {
             //     lastname: detailSeller?.lastname,
             //     email: detailSeller?.email,
             //     mobile: detailSeller?.mobile,
-            //     currency_id: "",
+            //     country_id: "",
             //     language_id: "",
             //     addressLine1: detailSeller?.addressLine1,
             //     addressLine2: detailSeller?.addressLine2,
@@ -67,7 +66,7 @@ function Profile() {
             //     country: detailSeller?.country,
             //     state: detailSeller?.state,
             //     city: detailSeller?.city,
-            //     currency_id: detailSeller?.currency_id,
+            //     country_id: detailSeller?.country_id,
             //     language_id: detailSeller?.language_id,
             //     sellerid: window.localStorage.getItem('isSellerId'),
             // }
@@ -79,7 +78,7 @@ function Profile() {
                 lastname: detailSeller?.lastname,
                 email: detailSeller?.email,
                 mobile: detailSeller?.mobile,
-                currency_id: "",
+                country_id: "",
                 language_id: "",
                 addressLine1: detailSeller?.addressLine1,
                 addressLine2: detailSeller?.addressLine2,
@@ -89,7 +88,7 @@ function Profile() {
                 country: detailSeller?.country,
                 state: detailSeller?.state,
                 city: detailSeller?.city,
-                currency_id: detailSeller?.currency_id,
+                country_id: detailSeller?.country_id,
                 language_id: detailSeller?.language_id,
                 sellerid: window.localStorage.getItem('isSellerId'),
             }
@@ -100,7 +99,8 @@ function Profile() {
     const [senDSeller] = useUpdateSellerProMutation()
     const sendData = async () => {
         if (isSellerLogin) {
-            senDSeller({ data: state, token: token })
+            update({ data: state, token: token })
+            // senDSeller({ data: state, token: token })
             setShow(true)
             setTimeout(() => {
                 setShow(false)
@@ -344,7 +344,7 @@ function Profile() {
                                                 Your Currency
                                             </label>
                                             <div className="col-md-10">
-                                                <select className="form-select" name="currency_id" value={state?.currency_id} id="currId" onChange={onchengeHandle} aria-label="Default select example">
+                                                <select className="form-select" name="country_id" value={state?.country_id} id="currId" onChange={onchengeHandle} aria-label="Default select example">
                                                     <option selected>Select Currency</option>
                                                     {currency && currency.map((item) => {
                                                         return <option key={item._id} value={item._id}>{item.name}</option>

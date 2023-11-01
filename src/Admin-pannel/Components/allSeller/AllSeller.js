@@ -287,6 +287,10 @@ function AllSeller() {
                           <Link className="btn btn-soft-primary btn-icon btn-circle btn-sm" title="View" to={`detail/${item._id}`}>
                             <i className="las la-eye"></i>
                           </Link>
+                          <Link className="btn btn-soft-primary btn-icon btn-circle btn-sm" title="View" to={`detail-fillup/${item._id}`}>
+                            <i className="las la-fill"></i>
+                            {/* <i class="fa-solid fa-fill fa-flip" style={{color: #20437e}}></i> */}
+                          </Link>
                           <Link className="btn btn-soft-info btn-icon btn-circle btn-sm" to={`edit/${item._id}`} title="Approved">
                             <i className="las la-edit"></i>
                           </Link>

@@ -6,7 +6,7 @@ import { token } from '../../../common/TokenArea';
 function SystemSalesConfiguration() {
 
     const [inputVal, setInputval] = useState({
-        OverSelling: null, ReferenceFormat: '', DefaultCurrency: '', ProductLevelDiscount: null, ProductSerial: null, InvoiceView: '', ksaQrcode: null, CartItemAddition: '', ProductsCountfixbarcode: '', AutoDetectBarcode: null, OrderTax: '', referenceNo: ''
+        OverSelling: null, ReferenceFormat: '', DefaultCurrency: '', ProductLevelDiscount: null, ProductSerial: null, InvoiceView: '', ksaQrcode: null, CartItemAddition: '', ProductsCountfixbarcode: '', AutoDetectBarcode: null, OrderTax: '', referenceNo: '',ticketSequenceNo:""
     });
 
     const { data: SalesData } = useGetSettingSalesDataQuery(token);
@@ -83,6 +83,10 @@ function SystemSalesConfiguration() {
                         </select>
                     </div>
 
+                    <div className="col-lg-4">
+                        <label htmlFor="site_name">Ticket Sequence No</label>
+                        <input type="number" className="form-control tip" value={inputVal.ticketSequenceNo} name='ticketSequenceNo' onChange={onChangeHandler} />
+                    </div>
                     <div className="col-lg-4">
                         <label htmlFor="site_name">Order Reference No</label>
                         <input type="number" className="form-control tip" value={inputVal.referenceNo} name='referenceNo' onChange={onChangeHandler} />

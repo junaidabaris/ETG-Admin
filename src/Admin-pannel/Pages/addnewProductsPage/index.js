@@ -49,6 +49,7 @@ function AddNewProductsPage() {
         discount: '',
     })
     const token = window.localStorage.getItem('token')
+    const isSellerLogin = window.localStorage.getItem('isSellerLogin')
 
     const params = useParams();
     const { data: unitMast } = useGetUnitMasterQuery(token)
@@ -662,18 +663,19 @@ function AddNewProductsPage() {
                                                                 </div>
                                                             </div>
 
-
-                                                            <div className="form-group row" id="seller">
+                                                            {isSellerLogin == 'false' && <div className="form-group row" id="seller">
                                                                 <label className="col-md-3 col-from-label">Seller</label>
                                                                 <div className="col-md-8">
                                                                     <select className="form-select" aria-label="Default select example" value={item?.seller_id} name="seller_id" onChange={(e) => { onChangeHandler(e, item.language_id) }} >
                                                                         <option>Select Seller</option>
-                                                                        {sellerD && sellerD.map((item) => {
+                                                                        {sellerD?.length && sellerD?.map((item) => {
                                                                             return <option value={item._id} key={item._id}>{item.firstname + " " + item.lastname}</option>
                                                                         })}
                                                                     </select>
                                                                 </div>
-                                                            </div>
+                                                            </div>}
+
+
 
 
                                                             <div className="form-group row" id="brand">
@@ -681,7 +683,7 @@ function AddNewProductsPage() {
                                                                 <div className="col-md-8">
                                                                     <select className="form-select" value={item?.brand_id} aria-label="Default select example" name="brand_id" onChange={(e) => { onChangeHandler(e, item.language_id) }} >
                                                                         <option>Select Brand</option>
-                                                                        {brandData.data && brandData.data.map((item) => {
+                                                                        {brandData.data?.length && brandData.data.map((item) => {
                                                                             return <option value={item._id} key={item._id}>{item.name || item._id}</option>
                                                                         })}
                                                                     </select>
@@ -693,7 +695,7 @@ function AddNewProductsPage() {
                                                                 <div className="col-md-8">
                                                                     <select className="form-select" value={item?.unit} aria-label="Default select example" name="unit" onChange={(e) => { onChangeHandler(e, item.language_id) }} >
                                                                         <option value={1}>Select Unit</option>
-                                                                        {unitMast && unitMast.map((item) => {
+                                                                        {unitMast?.length && unitMast?.map((item) => {
                                                                             return <option value={item.name} key={item._id}>{item.name}</option>
                                                                         })}
                                                                     </select>

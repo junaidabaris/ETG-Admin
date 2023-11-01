@@ -35,7 +35,6 @@ function AssighOrderStatus() {
         if (isDelevery === 'true') {
             getDataDelevry()
         } else {
-
             getData()
         }
     }, [params])
@@ -201,7 +200,7 @@ function AssighOrderStatus() {
                                 <tbody>
 
 
-                                    {data && data.map((item, i) => {
+                                    {data?.length && data?.map((item, i) => {
                                         return <tr key={i}>
                                             <td
                                                 className="footable-first-visible"

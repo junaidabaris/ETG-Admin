@@ -10,7 +10,7 @@ function ViewComp({ viewCustomerD }) {
     const handleCloseSec = () => setShowSec(false);
     const handleShowSec = () => setShowSec(true);
 
-    const { isLoading, data: CustomerDetailData } = useGetPOSUserDetailIdQuery(viewCustomerD && viewCustomerD[0]?._id);
+    const { isLoading, data: CustomerDetailData } = useGetPOSUserDetailIdQuery({ id: viewCustomerD && viewCustomerD[0]?._id, token: window.localStorage.getItem('token') });
 
     return (
         <>

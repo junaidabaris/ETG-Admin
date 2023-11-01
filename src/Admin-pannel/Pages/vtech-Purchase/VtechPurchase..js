@@ -54,6 +54,10 @@ function VtechPurchase() {
         referenceNo: "",
         seller_id: "",
         shipping: "",
+        purchase_No: "",
+        purchase_Date: "",
+        invoice_No: "",
+        invoice_Date: "",
         staff: window.localStorage.getItem('adminId')
     })
 
@@ -188,6 +192,30 @@ function VtechPurchase() {
                                     <div>
                                         <label>Reference No</label>
                                         <input name="referenceNo" value={storeValue.referenceNo} onChange={changeHandelVal} className="form-control" type="text" />
+                                    </div>
+                                </div>
+                                <div className="col-4">
+                                    <div>
+                                        <label>PO No</label>
+                                        <input name="purchase_No" value={storeValue.purchase_No} onChange={changeHandelVal} className="form-control" type="text" />
+                                    </div>
+                                </div>
+                                <div className="col-4">
+                                    <div>
+                                        <label>PO Date</label>
+                                        <input name="purchase_Date" value={storeValue.purchase_Date} onChange={changeHandelVal} className="form-control" type="date" />
+                                    </div>
+                                </div>
+                                <div className="col-4">
+                                    <div>
+                                        <label>Invoice No</label>
+                                        <input name="invoice_No" value={storeValue.invoice_No} onChange={changeHandelVal} className="form-control" type="text" />
+                                    </div>
+                                </div>
+                                <div className="col-4">
+                                    <div>
+                                        <label>Invoice Date</label>
+                                        <input name="invoice_Date" value={storeValue.invoice_Date} onChange={changeHandelVal} className="form-control" type="date" />
                                     </div>
                                 </div>
 

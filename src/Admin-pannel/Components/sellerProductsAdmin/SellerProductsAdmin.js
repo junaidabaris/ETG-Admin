@@ -33,7 +33,7 @@ function SellerProductsAdmin() {
     const [showDrop, setShowDrop] = useState(false)
 
     const { isLoading, data, isFetching } = useGetSellerProductQuery(idProduct.id || idProduct.sellerid);
-    const { data: sellerData } = useGetSellersQuery()
+    const { data: sellerData } = useGetSellersQuery(window.localStorage.getItem('token'))
 
     const [deleteSellerPro] = useDeleteSellerProductMutation()
     const deletePro = (id) => {
@@ -100,7 +100,7 @@ function SellerProductsAdmin() {
                                         <div className={`dropdown-menu ${showDrop && 'show'}`}>
                                             <div className="inner show" role="listbox" id="bs-select-1" tabIndex={-1} aria-activedescendant="bs-select-1-0" style={{ overflowY: 'auto' }}>
                                                 <ul className="dropdown-menu inner show" role="presentation" style={{ marginTop: 0, marginBottom: 0 }}>
-                                                    {sellerData?.map((item) => {
+                                                    {sellerData?.length && sellerData?.map((item) => {
                                                         return <li key={item._id} className="selected" onClick={() => onchangeClick(item)}>
                                                             <a role="option" className="dropdown-item" id="bs-select-1-0" tabIndex={0} aria-setsize={2} aria-posinset={1} aria-selected="true">
                                                                 <span className="text">{item?.firstname} {item.lastname}</span>

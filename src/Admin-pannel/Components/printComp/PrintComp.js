@@ -32,11 +32,11 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
                         return <tr key={i}>
                             <td>{i + 1}</td>
                             <td style={{ display: 'table-cell' }}>
-                                <span className='txt-bold ps-1'>{item.product_id[0]?.name}</span>
+                                <span className='txt-bold ps-1'>{item?.name}</span>
                             </td>
-                            <td className='txt-bold' style={{ display: 'table-cell' }}>{item.variant_id?.sale_rate}</td>
-                            <td className='txt-bold' style={{ display: 'table-cell' }}>{item.count}</td>
-                            <td className='txt-bold' style={{ display: 'table-cell' }}>{item.subTotal}</td>
+                            <td className='txt-bold' style={{ display: 'table-cell' }}>{item.price?.sale_rate}</td>
+                            <td className='txt-bold' style={{ display: 'table-cell' }}>{item.qty}</td>
+                            <td className='txt-bold' style={{ display: 'table-cell' }}>{item.subtotal}</td>
                             <td className='txt-bold' style={{ display: 'table-cell' }}></td>
                         </tr>
                     })}

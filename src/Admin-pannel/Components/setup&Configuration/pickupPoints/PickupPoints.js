@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import john from "../../../../assets/img/blog-details/1.jpg"
 import { useDeletePickupPointMutation, useGetPickupPointQuery } from "../../all-products/allproductsApi/allProductsApi";
+import { useEffect } from "react";
 
 
 function PickupPoints() {
@@ -13,9 +14,11 @@ function PickupPoints() {
     deletePickupPoint(id)
   };
 
-  if (res.isSuccess === true) {
-    alert("PickupPoint deleted Successfully")
-  };
+  useEffect(() => {
+    if (res.isSuccess === true) {
+      alert("PickupPoint deleted Successfully")
+    };
+  }, [res])
 
 
   return (

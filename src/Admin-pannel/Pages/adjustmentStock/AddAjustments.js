@@ -96,7 +96,7 @@ function AddAdjustments() {
                                 <label for="basic-url" class="form-label">Attach Document</label>
                                 <input type="file" name="filePath" onChange={handleInputChange} className="form-control" />
                             </div>
-                            <div className="container-fluid">
+                            <div className="container">
                                 <div className="row">
                                     <div className="col">
                                         <div>
